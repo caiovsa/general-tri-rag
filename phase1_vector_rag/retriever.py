@@ -3,12 +3,14 @@ from llama_index.core import VectorStoreIndex
 from llama_index.vector_stores.qdrant import QdrantVectorStore
 import llama_index.core
 from shared.config import settings, get_llamaindex_settings
+from llama_index.core.postprocessor import SimilarityPostprocessor
+from llama_index.core import QueryBundle
 
 # We only need the embedding model here to vectorize the user's query
 _, embed_model = get_llamaindex_settings()
 llama_index.core.Settings.embed_model = embed_model
 
-def retrieve_chunks(user_query: str, top_k: int = 8):
+def retrieve_chunks(user_query: str, top_k: int = 8, node_threshold: float = 0.4):
     """
     Queries Qdrant and returns the retrieved nodes (including text and scores).
     """
@@ -26,17 +28,18 @@ def retrieve_chunks(user_query: str, top_k: int = 8):
 
     # This executes the similarity search and returns NodeWithScore objects
     nodes = retriever.retrieve(user_query)
-
-    return nodes
+    postprocessor = SimilarityPostprocessor(similarity_cutoff=node_threshold)
+    filtered_nodes = postprocessor.postprocess_nodes(nodes, query_bundle=QueryBundle(user_query))
+        
+    return filtered_nodes
 
 if __name__ == "__main__":
     # --- CHANGE YOUR QUERY HERE ---
-    test_query = "Quem é Harry Potter?"
-    # ------------------------------
+    test_query = "Onde o Sr. Dursley trabalha?" #"Quem é Mike Tyson?"
 
     print(f"\nSearching for: '{test_query}' in {settings.QDRANT_COLLECTION_NAME}...\n")
 
-    results = retrieve_chunks(test_query, top_k=8)
+    results = retrieve_chunks(test_query, top_k=8, node_threshold=0.4)
 
     if not results:
         print("No relevant chunks found.")

@@ -1,17 +1,30 @@
 from litellm import completion
+from litellm.exceptions import APIError, AuthenticationError, RateLimitError
 from shared.config import settings
 
-def generate_completion(prompt: str, system_message: str = "You are a helpful assistant.") -> str:
-    """Invokes the LLM using LiteLLM for universal model switching."""
+def generate_completion(
+    prompt: str,
+    system_message: str = "You are a helpful assistant.",
+    temperature: float = 0.3,  # Low temp for RAG — you want factual, not creative
+    #max_tokens: int = 1024,
+) -> str:
     messages = [
         {"role": "system", "content": system_message},
         {"role": "user", "content": prompt}
     ]
-    
-    # LiteLLM automatically uses the OPENAI_API_KEY from the environment
-    response = completion(
-        model=settings.GENERATION_MODEL, # e.g., "openai/gpt-4o-mini"
-        messages=messages,
-    )
-    
-    return response.choices[0].message.content
+
+    try:
+        response = completion(
+            model=settings.GENERATION_MODEL,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=max_tokens,
+        )
+        return response.choices[0].message.content
+
+    except AuthenticationError:
+        raise RuntimeError(f"Invalid API key for model: {settings.GENERATION_MODEL}")
+    except RateLimitError:
+        raise RuntimeError("Rate limit hit — consider retry logic or switching models.")
+    except APIError as e:
+        raise RuntimeError(f"LLM API error: {e}")
