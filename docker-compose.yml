@@ -1,0 +1,38 @@
+services:
+  # Vector Database for Phase 1
+  qdrant:
+    image: qdrant/qdrant:latest
+    restart: unless-stopped
+    container_name: qdrant
+    ports:
+      - "6333:6333" # REST API & Dashboard
+      - "6334:6334" # gRPC
+    expose:
+      - "6333"
+      - "6334"
+      - "6335" # For internal communication (optional)
+    volumes:
+      - ./qdrant_data:/qdrant/storage
+    
+
+  # Graph Database for Phase 2 & 3
+  neo4j:
+    image: neo4j:5
+    restart: unless-stopped
+    container_name: neo4j
+    ports:
+      - "7474:7474" # HTTP Browser/Dashboard
+      - "7687:7687" # Bolt protocol (for your Python driver)
+    environment:
+      - NEO4J_AUTH=neo4j/testpass123 # You'll need this for the Python client
+      - NEO4J_PLUGINS=["apoc"] 
+    volumes:
+      - ./neo4j_data:/data
+      - ./neo4j_logs:/logs
+      - ./neo4j_plugins:/plugins
+
+volumes:
+  qdrant_data:
+  neo4j_data:
+  neo4j_logs:
+  neo4j_plugins:

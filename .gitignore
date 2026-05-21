@@ -1,0 +1,6 @@
+neo4j_data
+neo4j_logs
+neo4j_plugins
+qdrant_data
+.env
+.vscode
