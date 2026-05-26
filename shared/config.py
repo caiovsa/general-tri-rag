@@ -25,6 +25,10 @@ class Settings:
     
     # RAG parameters
     QDRANT_COLLECTION_NAME: str = os.getenv("QDRANT_COLLECTION_NAME", "rag_phase_1_baseline")
+    
+    #MARITACA CONFIGS
+    MARITACA_API_KEY: str = os.getenv("MARITACA_API_KEY", "")
+    MARITACA_API_BASE: str = os.getenv("MARITACA_API_BASE", "")
 
 # Instantiate settings
 settings = Settings()

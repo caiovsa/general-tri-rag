@@ -4,3 +4,4 @@ neo4j_plugins
 qdrant_data
 .env
 .vscode
+/data_finance

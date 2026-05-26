@@ -35,7 +35,7 @@ def retrieve_chunks(user_query: str, top_k: int = 8, node_threshold: float = 0.4
 
 if __name__ == "__main__":
     # --- CHANGE YOUR QUERY HERE ---
-    test_query = "Onde o Sr. Dursley trabalha?" #"Quem é Mike Tyson?"
+    test_query = "The Coca-Cola system sold how many unit cases of products in 2019, 2018 and 2017, respectively." #"Onde o Sr. Dursley trabalha?" #"Quem é Mike Tyson?"
 
     print(f"\nSearching for: '{test_query}' in {settings.QDRANT_COLLECTION_NAME}...\n")
 

@@ -81,6 +81,7 @@ def run_rag_pipeline(user_query: str):
 
 
 if __name__ == "__main__":
-    run_rag_pipeline("Onde o Sr. Dursley trabalha?")
+    # run_rag_pipeline("Onde o Sr. Dursley trabalha?")
+    run_rag_pipeline("The Coca-Cola system sold how many unit cases of products in 2019, 2018 and 2017, respectively.?")
 
 # python -m phase1_vector_rag.rag

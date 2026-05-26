@@ -5,7 +5,7 @@ from shared.config import settings
 def generate_completion(
     prompt: str,
     system_message: str = "You are a helpful assistant.",
-    temperature: float = 0.3,  # Low temp for RAG — you want factual, not creative
+    temperature: float = 1,  # Low temp for RAG — you want factual, not creative
     #max_tokens: int = 1024,
 ) -> str:
     messages = [
@@ -18,7 +18,9 @@ def generate_completion(
             model=settings.GENERATION_MODEL,
             messages=messages,
             temperature=temperature,
-            max_tokens=max_tokens,
+            #max_tokens=max_tokens,
+            api_key=settings.MARITACA_API_KEY or None,
+            api_base=settings.MARITACA_API_BASE or None,
         )
         return response.choices[0].message.content
 
