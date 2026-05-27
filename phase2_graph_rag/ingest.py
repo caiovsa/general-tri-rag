@@ -3,18 +3,17 @@ nest_asyncio.apply()
 
 import asyncio
 import os
+import json
 
-import qdrant_client
 import llama_index.core
-from llama_index.core import SimpleDirectoryReader, PropertyGraphIndex
+from llama_index.core import SimpleDirectoryReader
 from llama_index.core.node_parser import TokenTextSplitter
 from llama_index.core.indices.property_graph import (
-    ImplicitPathExtractor,       # FREE: pure NLP, zero LLM calls
-    SimpleLLMPathExtractor,      # CHEAP: simple prompt, much faster than Dynamic
+    ImplicitPathExtractor,
+    SimpleLLMPathExtractor,
 )
 from llama_index.graph_stores.neo4j import Neo4jPropertyGraphStore
-from llama_index.vector_stores.qdrant import QdrantVectorStore
-from llama_index.llms.openai import OpenAI  # or swap for your provider
+from llama_index.llms.openai import OpenAI
 
 from shared.config import settings, get_llamaindex_settings
 
@@ -22,64 +21,58 @@ llm, embed_model = get_llamaindex_settings()
 llama_index.core.Settings.llm = llm
 llama_index.core.Settings.embed_model = embed_model
 
-# Use a cheap, FAST model just for KG extraction.
-# gpt-4o-mini is ~10–20× cheaper and 3–5× faster than gpt-4o for this task.
 EXTRACTION_LLM = OpenAI(model="gpt-4o-mini", temperature=0)
 
-# 2. Chunker
 def get_extraction_chunker() -> TokenTextSplitter:
     return TokenTextSplitter(chunk_size=1024, chunk_overlap=128)
 
 
-# 3. Stores
-def build_stores():
+def build_graph_store():
     print("Connecting to Neo4j...")
     graph_store = Neo4jPropertyGraphStore(
         username=settings.NEO4J_USER,
         password=settings.NEO4J_PASSWORD,
         url=settings.NEO4J_URI,
+        database=settings.NEO4J_DATABASE,
     )
+    return graph_store
 
-    print("Connecting to Qdrant...")
-    client = qdrant_client.QdrantClient(url=settings.QDRANT_URL)
-    vector_store = QdrantVectorStore(
-        client=client,
-        collection_name=settings.QDRANT_COLLECTION_NAME_PHASE2,
+
+def create_vector_index(graph_store):
+    """Create a vector index on Chunk nodes for similarity search."""
+    print("Creating vector index on Chunk nodes...")
+    graph_store.structured_query("""
+        CREATE VECTOR INDEX chunk_embeddings IF NOT EXISTS
+        FOR (c:Chunk) ON c.embedding
+        OPTIONS {indexConfig: {
+            `vector.dimensions`: 1536,
+            `vector.similarity_function`: 'cosine'
+        }}
+    """)
+    import time
+    time.sleep(2)
+    result = graph_store.structured_query(
+        "SHOW VECTOR INDEXES YIELD name, state WHERE name = 'chunk_embeddings' RETURN state"
     )
-    return graph_store, vector_store
+    if result:
+        state = result[0].get('state', 'unknown')
+        print(f"  Vector index state: {state}")
+    else:
+        print("  Warning: Could not verify index state")
 
 
-# 4. Extractors
-# Two-extractor strategy:
-#
-# ImplicitPathExtractor  — zero cost, catches ~30% of relations via noun-chunk
-#                          NLP without any LLM call.
-#
-# SimpleLLMPathExtractor — simple, short prompt (vs Dynamic which re-infers
-#                          the ontology every chunk). Uses the cheap model and
-#                          8 async workers so many chunks fly in parallel.
-#
-# Together they match or exceed DynamicLLMPathExtractor quality at a fraction
-# of the time and cost.
 def build_extractors():
     return [
         ImplicitPathExtractor(),
         SimpleLLMPathExtractor(
             llm=EXTRACTION_LLM,
-            num_workers=8,          # parallel async workers — tune to your API rate limit
-            max_paths_per_chunk=8,  # slightly more than your old max_triplets to compensate
-                                    # for the simpler prompt
+            num_workers=8,
+            max_paths_per_chunk=8,
         ),
     ]
 
 
-# 5. Document batching
 def iter_document_batches(data_dir: str, batch_size: int = 20):
-    """
-    Yield SimpleDirectoryReader-loaded batches of `batch_size` PDFs.
-    This keeps memory flat regardless of corpus size and lets you resume
-    from a checkpoint if the process is interrupted.
-    """
     all_files = sorted(
         os.path.join(data_dir, f)
         for f in os.listdir(data_dir)
@@ -96,40 +89,38 @@ def iter_document_batches(data_dir: str, batch_size: int = 20):
         yield SimpleDirectoryReader(input_files=batch_files).load_data()
 
 
-# 6. Main async ingestion
 async def ingest_phase_2_graph(data_dir: str, batch_size: int = 20):
     """
-    Optimized Phase 2 hybrid Graph + Vector ingestion.
-
-    Key improvements over the original:
-      • ImplicitPathExtractor  — free NLP-based relation extraction
-      • SimpleLLMPathExtractor — simpler prompt, cheap model, 8 workers
-      • afrom_documents        — fully async, maximises API concurrency
-      • Larger chunks          — halves the number of LLM calls
-      • Batching               — flat memory, resumable
+    Pure Graph RAG ingestion: Neo4j only (no Qdrant).
+    
+    Stores chunks with embeddings in Neo4j, extracts graph relationships,
+    and creates a vector index on Chunk nodes for similarity search.
     """
-    graph_store, vector_store = build_stores()
+    graph_store = build_graph_store()
     extractors = build_extractors()
     chunker = get_extraction_chunker()
 
+    # Create the vector index on Chunk nodes
+    create_vector_index(graph_store)
+
+    from llama_index.core import PropertyGraphIndex
+    
     index = None
 
     for batch_docs in iter_document_batches(data_dir, batch_size):
         if index is None:
-            # First batch: create the index and both stores from scratch.
-            print("Building index from first batch (async)...")
+            print("Building PropertyGraphIndex from first batch...")
             index = PropertyGraphIndex.from_documents(
                 batch_docs,
                 property_graph_store=graph_store,
-                vector_store=vector_store,
                 kg_extractors=extractors,
                 transformations=[chunker],
-                show_progress=True,     # tqdm bar so you can see progress
+                embed_model=embed_model,
+                embed_kg_nodes=True,
+                show_progress=True,
             )
         else:
-            # Subsequent batches: insert into the existing index.
-            # Each insert reuses the already-open store connections.
-            print("Inserting batch into existing index (async)...")
+            print("Inserting batch into existing index...")
             insert_tasks = [
                 asyncio.create_task(index.ainsert(doc))
                 for doc in batch_docs
@@ -138,12 +129,24 @@ async def ingest_phase_2_graph(data_dir: str, batch_size: int = 20):
 
         print(f"Batch complete. {len(batch_docs)} document(s) ingested.")
 
-    print("\nPhase 2 ingestion complete! Data is in Neo4j and Qdrant.")
+    # Verify ingestion
+    print("\nVerifying ingestion...")
+    result = graph_store.structured_query(
+        "MATCH (c:Chunk) WHERE c.embedding IS NOT NULL RETURN count(c) AS chunk_count"
+    )
+    chunk_count = result[0]['chunk_count'] if result else 0
+    
+    result = graph_store.structured_query(
+        "MATCH ()-[r]->() RETURN count(r) AS rel_count"
+    )
+    rel_count = result[0]['rel_count'] if result else 0
+    
+    print(f"  Chunks with embeddings: {chunk_count}")
+    print(f"  Total relationships: {rel_count}")
+    print("\nPhase 2 ingestion complete! Data is in Neo4j.")
     return index
 
 
-# 7. Entry point
 if __name__ == "__main__":
-    # Point at your full data folder — batching keeps memory and cost safe.
-    asyncio.run(ingest_phase_2_graph("data", batch_size=20))
+    asyncio.run(ingest_phase_2_graph("data", batch_size=2))
     # python -m phase2_graph_rag.ingest

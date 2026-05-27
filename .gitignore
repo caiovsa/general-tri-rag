@@ -5,3 +5,8 @@ qdrant_data
 .env
 .vscode
 /data_finance
+AGENTS.md
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class

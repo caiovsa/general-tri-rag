@@ -13,9 +13,10 @@ load_dotenv(dotenv_path=env_path)
 class Settings:
     # Database Configs
     QDRANT_URL: str = os.getenv("QDRANT_URL", "http://localhost:6333")
-    NEO4J_URI: str = os.getenv("NEO4J_URI", "bolt://localhost:7687")
+    NEO4J_URI: str = os.getenv("NEO4J_URI", "neo4j://127.0.0.1:7687")
     NEO4J_USER: str = os.getenv("NEO4J_USER", "neo4j")
-    NEO4J_PASSWORD: str = os.getenv("NEO4J_PASSWORD", "testpassword123")
+    NEO4J_PASSWORD: str = os.getenv("NEO4J_PASSWORD", "testpass123")
+    NEO4J_DATABASE: str = os.getenv("NEO4J_DATABASE", "harry-potter")
     
     # Models & Keys
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
@@ -25,7 +26,6 @@ class Settings:
     
     # RAG parameters
     QDRANT_COLLECTION_NAME: str = os.getenv("QDRANT_COLLECTION_NAME", "rag_phase_1_baseline")
-    QDRANT_COLLECTION_NAME_PHASE2 = os.getenv("QDRANT_COLLECTION_NAME_PHASE2", "rag_phase_2_graph")
     
     #MARITACA CONFIGS
     MARITACA_API_KEY: str = os.getenv("MARITACA_API_KEY", "")
