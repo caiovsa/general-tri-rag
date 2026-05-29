@@ -57,7 +57,7 @@ def run_graph_rag_pipeline(user_query: str):
     return {"answer": answer, "contexts": chunks}
 
 if __name__ == "__main__":
-    test_question = "Harry potter é da casa Sonserina?"
+    test_question = "Quando se tornou proibido criar Dragões?"#"Qual o modelo da vassoura que harry ganhou?" #"Qual a casa de harry potter?"
     run_graph_rag_pipeline(test_question)
     
 # python -m phase2_graph_rag.rag

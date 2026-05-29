@@ -22,7 +22,7 @@ class Settings:
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
     EMBEDDING_DIMENSION: int = int(os.getenv("EMBEDDING_DIMENSION", "1536"))
-    GENERATION_MODEL: str = os.getenv("GENERATION_MODEL", "gpt-5-mini")
+    GENERATION_MODEL: str = os.getenv("GENERATION_MODEL", "gpt-4o-mini")
     
     # RAG parameters
     QDRANT_COLLECTION_NAME: str = os.getenv("QDRANT_COLLECTION_NAME", "rag_phase_1_baseline")
@@ -48,5 +48,5 @@ def get_openai_client() -> OpenAI:
 def get_llamaindex_settings():
     """Configures LlamaIndex global settings for LLM and Embeddings."""
     llm = LlamaOpenAI(model=settings.GENERATION_MODEL, api_key=settings.OPENAI_API_KEY)
-    embed_model = OpenAIEmbedding(model=settings.EMBEDDING_MODEL, api_key=settings.OPENAI_API_KEY)
+    embed_model = OpenAIEmbedding(model=settings.EMBEDDING_MODEL, api_key=settings.OPENAI_API_KEY, embed_batch_size=100)
     return llm, embed_model

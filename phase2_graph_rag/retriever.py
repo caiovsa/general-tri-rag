@@ -130,7 +130,7 @@ def retrieve_graph_chunks(user_query: str, top_k: int = 5, max_rel_depth: int = 
 
 
 if __name__ == "__main__":
-    test_question = "Qual a casa de harry potter?"
+    test_question = "Qual o modelo da vassoura que harry ganhou?" #"Qual a casa de harry potter?"
     
     results = retrieve_graph_chunks(test_question, top_k=5)
     

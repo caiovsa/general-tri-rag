@@ -21,7 +21,7 @@ llm, embed_model = get_llamaindex_settings()
 llama_index.core.Settings.llm = llm
 llama_index.core.Settings.embed_model = embed_model
 
-EXTRACTION_LLM = OpenAI(model="gpt-4o-mini", temperature=0)
+EXTRACTION_LLM = OpenAI(model="gpt-5-mini")
 
 def get_extraction_chunker() -> TokenTextSplitter:
     return TokenTextSplitter(chunk_size=1024, chunk_overlap=128)

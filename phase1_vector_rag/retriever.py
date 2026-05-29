@@ -10,7 +10,7 @@ from llama_index.core import QueryBundle
 _, embed_model = get_llamaindex_settings()
 llama_index.core.Settings.embed_model = embed_model
 
-def retrieve_chunks(user_query: str, top_k: int = 8, node_threshold: float = 0.4):
+def retrieve_chunks(user_query: str, top_k: int = 8, node_threshold: float = 0.3):
     """
     Queries Qdrant and returns the retrieved nodes (including text and scores).
     """
@@ -35,7 +35,7 @@ def retrieve_chunks(user_query: str, top_k: int = 8, node_threshold: float = 0.4
 
 if __name__ == "__main__":
     # --- CHANGE YOUR QUERY HERE ---
-    test_query = "The Coca-Cola system sold how many unit cases of products in 2019, 2018 and 2017, respectively." #"Onde o Sr. Dursley trabalha?" #"Quem é Mike Tyson?"
+    test_query = "The 41st International 500-Mile Sweepstakes was held at which location?" #The Coca-Cola system sold how many unit cases of products in 2019, 2018 and 2017, respectively." #"Onde o Sr. Dursley trabalha?" #"Quem é Mike Tyson?"
 
     print(f"\nSearching for: '{test_query}' in {settings.QDRANT_COLLECTION_NAME}...\n")
 

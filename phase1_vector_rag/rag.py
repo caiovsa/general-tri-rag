@@ -84,6 +84,7 @@ if __name__ == "__main__":
     # run_rag_pipeline("Onde o Sr. Dursley trabalha?")
     # run_rag_pipeline("The Coca-Cola system sold how many unit cases of products in 2019, 2018 and 2017, respectively.?")
     # run_rag_pipeline("What is the FY2018 capital expenditure amount (in USD millions) for 3M? Give a response to the question by relying on the details shown in the cash flow statement.")
-    run_rag_pipeline("Assume that you are a public equities analyst. Answer the following question by primarily using information that is shown in the balance sheet: what is the year end FY2018 net PPNE for 3M? Answer in USD billions.")
-
+    # run_rag_pipeline("Assume that you are a public equities analyst. Answer the following question by primarily using information that is shown in the balance sheet: what is the year end FY2018 net PPNE for 3M? Answer in USD billions.")
+    run_rag_pipeline("Tysons Galleria is located in what county?")
+    
 # python -m phase1_vector_rag.rag
