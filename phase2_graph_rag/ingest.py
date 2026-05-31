@@ -21,14 +21,19 @@ llm, embed_model = get_llamaindex_settings()
 llama_index.core.Settings.llm = llm
 llama_index.core.Settings.embed_model = embed_model
 
-EXTRACTION_LLM = OpenAI(model="gpt-5-mini")
+EXTRACTION_LLM = OpenAI(model="gpt-5-mini", temperature=0.0)
 
 def get_extraction_chunker() -> TokenTextSplitter:
-    return TokenTextSplitter(chunk_size=1024, chunk_overlap=128)
+    # CRITICAL CHANGE: Dropped chunk_size from 1024 to 256.
+    # HotpotQA paragraphs are ~100-200 tokens. A 1024 chunk mashes multiple
+    # documents together, ruining the multi-hop separation test!
+    return TokenTextSplitter(chunk_size=256, chunk_overlap=20)
 
 
 def build_graph_store():
     print("Connecting to Neo4j...")
+    # Note: Make sure your .env NEO4J_DATABASE is set to something like "hotpot-graph"
+    # so it doesn't mix with your finance data!
     graph_store = Neo4jPropertyGraphStore(
         username=settings.NEO4J_USER,
         password=settings.NEO4J_PASSWORD,
@@ -66,20 +71,23 @@ def build_extractors():
         ImplicitPathExtractor(),
         SimpleLLMPathExtractor(
             llm=EXTRACTION_LLM,
-            num_workers=8,
-            max_paths_per_chunk=8,
+            num_workers=8, # Parallel LLM calls for extraction
+            max_paths_per_chunk=12, # Increased slightly because chunks are smaller and focused
         ),
     ]
 
 
-def iter_document_batches(data_dir: str, batch_size: int = 20):
+def iter_document_batches(data_dir: str, batch_size: int = 50):
+    # CHANGE: Looking for .txt files instead of .pdf
     all_files = sorted(
         os.path.join(data_dir, f)
         for f in os.listdir(data_dir)
-        if f.lower().endswith(".pdf")
+        if f.lower().endswith(".txt")
     )
     total = len(all_files)
-    print(f"Found {total} PDF(s) — processing in batches of {batch_size}")
+    
+    # CHANGE: Increased batch_size default to 50 because .txt files are tiny compared to PDFs
+    print(f"Found {total} TXT(s) — processing in batches of {batch_size}")
 
     for start in range(0, total, batch_size):
         batch_files = all_files[start : start + batch_size]
@@ -89,7 +97,7 @@ def iter_document_batches(data_dir: str, batch_size: int = 20):
         yield SimpleDirectoryReader(input_files=batch_files).load_data()
 
 
-async def ingest_phase_2_graph(data_dir: str, batch_size: int = 20):
+async def ingest_phase_2_graph(data_dir: str, batch_size: int = 50):
     """
     Pure Graph RAG ingestion: Neo4j only (no Qdrant).
     
@@ -148,5 +156,5 @@ async def ingest_phase_2_graph(data_dir: str, batch_size: int = 20):
 
 
 if __name__ == "__main__":
-    asyncio.run(ingest_phase_2_graph("data", batch_size=2))
+    asyncio.run(ingest_phase_2_graph("data_hotpot", batch_size=2000))
     # python -m phase2_graph_rag.ingest
