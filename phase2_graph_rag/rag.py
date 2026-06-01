@@ -57,7 +57,7 @@ def run_graph_rag_pipeline(user_query: str):
     return {"answer": answer, "contexts": chunks}
 
 if __name__ == "__main__":
-    test_question = "What is the inhabitant of the city where  122nd SS-Standarte was formed in 2014?" #"Quando se tornou proibido criar Dragões?"#"Qual o modelo da vassoura que harry ganhou?" #"Qual a casa de harry potter?"
+    test_question = "What government position was held by the woman who portrayed Corliss Archer in the film Kiss and Tell?" #"Quando se tornou proibido criar Dragões?"#"Qual o modelo da vassoura que harry ganhou?" #"Qual a casa de harry potter?"
     run_graph_rag_pipeline(test_question)
     
 # python -m phase2_graph_rag.rag
