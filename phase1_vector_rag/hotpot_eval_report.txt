@@ -1,0 +1,621 @@
+================================================================================
+  Phase 1 (Vector RAG) — HotpotQA Evaluation Report
+================================================================================
+
+SUMMARY
+----------------------------------------
+  Total questions     : 100
+  Exact Match         : 0.12
+  Relaxed EM          : 0.68
+  Extracted EM        : 0.13
+  Token F1            : 0.308
+  Semantic Similarity : 0.4919
+  LLM-as-Judge        : 0.8
+  RAGAS Answer Corr   : 0.429
+  RAGAS Faithfulness  : 0.7334
+  RAGAS Context Recall: 0.7758
+
+PER-QUESTION BREAKDOWN
+----------------------------------------
+
+Q1: Were Scott Derrickson and Ed Wood of the same nationality?
+  Ground truth   : yes
+  LLM answer     : Yes. Both Scott Derrickson and Edward D. "Ed" Wood Jr. were American.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1538
+  Semantic=0.2365  Judge=CORRECT  AnswerCorr=0.1930  Faith=0.6667  CtxRecall=1.0000
+
+Q2: What government position was held by the woman who portrayed Corliss Archer in the film Kiss and Tell?
+  Ground truth   : Chief of Protocol
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0907  Judge=INCORRECT  AnswerCorr=0.1813  Faith=0.5000  CtxRecall=0.0000
+
+Q3: What science fantasy young adult series, told in first person, has a set of companion books narrating the stories of enslaved worlds and alien species?
+  Ground truth   : Animorphs
+  LLM answer     : Animorphs — a science fantasy young adult series told in first person; its companion books (e.g., The Hork-Bajir Chronicles) recount the enslavement of alien species and related stories.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.0769
+  Semantic=0.7597  Judge=CORRECT  AnswerCorr=0.2298  Faith=1.0000  CtxRecall=1.0000
+
+Q4: Are the Laleli Mosque and Esma Sultan Mansion located in the same neighborhood?
+  Ground truth   : no
+  LLM answer     : No. The Laleli Mosque is in Laleli (Fatih), while the Esma Sultan Mansion is in the Ortaköy neighborhood on the Bosphorus.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1111
+  Semantic=0.1594  Judge=CORRECT  AnswerCorr=0.1897  Faith=0.6667  CtxRecall=0.6667
+
+Q5: The director of the romantic comedy "Big Stone Gap" is based in what New York city?
+  Ground truth   : Greenwich Village, New York City
+  LLM answer     : She is based in Greenwich Village, New York City.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.7143
+  Semantic=0.6782  Judge=CORRECT  AnswerCorr=0.2233  Faith=1.0000  CtxRecall=1.0000
+
+Q6: 2014 S/S is the debut album of a South Korean boy group that was formed by who?
+  Ground truth   : YG Entertainment
+  LLM answer     : YG Entertainment.
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=0.9508  Judge=CORRECT  AnswerCorr=0.2466  Faith=1.0000  CtxRecall=1.0000
+
+Q7: Who was known by his stage name Aladin and helped organizations improve their performance as a consultant?
+  Ground truth   : Eenasul Fateh
+  LLM answer     : Eenasul Fateh — known by his stage name Aladin — a Bangladeshi-British cultural practitioner and former international management consultant.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.2000
+  Semantic=0.5964  Judge=CORRECT  AnswerCorr=0.8186  Faith=1.0000  CtxRecall=1.0000
+
+Q8: The arena where the Lewiston Maineiacs played their home games can seat how many people?
+  Ground truth   : 3,677 seated
+  LLM answer     : The Androscoggin Bank Colisée seats 3,677 people (about a 4,000 total capacity).
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.1667
+  Semantic=0.4935  Judge=CORRECT  AnswerCorr=0.7118  Faith=1.0000  CtxRecall=1.0000
+
+Q9: Who is older, Annie Morton or Terry Richardson?
+  Ground truth   : Terry Richardson
+  LLM answer     : Terry Richardson is older. Richardson was born August 14, 1965; Annie Morton was born October 8, 1970 — Richardson is about five years older.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1538
+  Semantic=0.6307  Judge=CORRECT  AnswerCorr=0.5188  Faith=1.0000  CtxRecall=0.6667
+
+Q10: Are Local H and For Against both from the United States?
+  Ground truth   : yes
+  LLM answer     : Yes. For Against is from Lincoln, Nebraska, and Local H is an American band formed in Zion, Illinois.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1111
+  Semantic=0.1938  Judge=CORRECT  AnswerCorr=0.1939  Faith=0.7500  CtxRecall=1.0000
+
+Q11: What is the name of the fight song of the university whose main campus is in Lawrence, Kansas and whose branch campuses are in the Kansas City metropolitan area?
+  Ground truth   : Kansas Song
+  LLM answer     : Kansas Song (We're From Kansas).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.5714
+  Semantic=0.7797  Judge=CORRECT  AnswerCorr=0.2342  Faith=1.0000  CtxRecall=1.0000
+
+Q12: What screenwriter with credits for "Evolution" co-wrote a film starring Nicolas Cage and Téa Leoni?
+  Ground truth   : David Weissman
+  LLM answer     : David Weissman — he co-wrote The Family Man (2000), which stars Nicolas Cage and Téa Leoni.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.2353
+  Semantic=0.4815  Judge=CORRECT  AnswerCorr=0.2178  Faith=1.0000  CtxRecall=1.0000
+
+Q13: What year did Guns N Roses perform a promo for a movie starring Arnold Schwarzenegger as a former New York Police detective?
+  Ground truth   : 1999
+  LLM answer     : 1999 — Guns N' Roses' "Oh My God" was sent to radio stations in November 1999 as a promo for the End of Days soundtrack.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.0833
+  Semantic=0.3900  Judge=CORRECT  AnswerCorr=0.4977  Faith=0.6667  CtxRecall=1.0000
+
+Q14: Are Random House Tower and 888 7th Avenue both used for real estate?
+  Ground truth   : no
+  LLM answer     : Yes. Random House Tower is a 52‑story mixed‑use building serving as Random House's headquarters and a luxury apartment complex, and 888 7th Avenue is a 46‑floor office skyscraper housing corporate offices (and street‑level retail), so both are real estate buildings.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1680  Judge=CORRECT  AnswerCorr=0.1848  Faith=0.8750  CtxRecall=0.7500
+
+Q15: The football manager who recruited David Beckham managed Manchester United during what timeframe?
+  Ground truth   : from 1986 to 2013
+  LLM answer     : He managed Manchester United from 1986 to 2013.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.6667
+  Semantic=0.5008  Judge=CORRECT  AnswerCorr=0.9642  Faith=1.0000  CtxRecall=1.0000
+
+Q16: Brown State Fishing Lake is in a country that has a population of how many inhabitants ?
+  Ground truth   : 9,984
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1123  Judge=INCORRECT  AnswerCorr=0.1892  Faith=0.0000  CtxRecall=0.0000
+
+Q17: The Vermont Catamounts men's soccer team currently competes in a conference that was formerly known as what from 1988 to 1996?
+  Ground truth   : the North Atlantic Conference
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0703  Judge=INCORRECT  AnswerCorr=0.1856  Faith=0.0000  CtxRecall=0.0000
+
+Q18: Are Giuseppe Verdi and Ambroise Thomas both Opera composers ?
+  Ground truth   : yes
+  LLM answer     : Yes. Giuseppe Verdi is described as an Italian opera composer, and Ambroise Thomas is described as a French composer best known for his operas.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.0870
+  Semantic=0.1227  Judge=CORRECT  AnswerCorr=0.6938  Faith=0.7500  CtxRecall=1.0000
+
+Q19: Roger O. Egeberg was Assistant Secretary for Health and Scientific Affairs during the administration of a president that served during what years?
+  Ground truth   : 1969 until 1974
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0833  Judge=INCORRECT  AnswerCorr=0.1854  Faith=0.0000  CtxRecall=0.5000
+
+Q20: Which writer was from England, Henry Roth or Robert Erskine Childers?
+  Ground truth   : Robert Erskine Childers DSC
+  LLM answer     : Robert Erskine Childers. The context identifies Childers as a British writer, while Henry Roth is described as an American novelist.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.2857
+  Semantic=0.6757  Judge=CORRECT  AnswerCorr=0.8598  Faith=0.6667  CtxRecall=1.0000
+
+Q21: Which other Mexican Formula One race car driver has held the podium besides the Force India driver born in 1990?
+  Ground truth   : Pedro Rodríguez
+  LLM answer     : Pedro Rodríguez.
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=0.9310  Judge=CORRECT  AnswerCorr=0.2446  Faith=0.0000  CtxRecall=1.0000
+
+Q22: This singer of A Rather Blustery Day also voiced what hedgehog?
+  Ground truth   : Sonic
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1161  Judge=INCORRECT  AnswerCorr=0.1887  Faith=0.0000  CtxRecall=1.0000
+
+Q23: Aside from the Apple Remote, what other device can control the program Apple Remote was originally designed to interact with?
+  Ground truth   : keyboard function keys
+  LLM answer     : The keyboard function keys (on the Mac).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.7500
+  Semantic=0.6963  Judge=CORRECT  AnswerCorr=0.2270  Faith=1.0000  CtxRecall=1.0000
+
+Q24: Which performance act has a higher instrument to person ratio, Badly Drawn Boy or Wolf Alice? 
+  Ground truth   : Badly Drawn Boy
+  LLM answer     : Badly Drawn Boy. The context says Badly Drawn Boy (Damon Gough) is a multi-instrumentalist performing solo, while Wolf Alice is a four-piece band — so one person playing multiple instruments yields a higher instrument-to-person ratio than four members each playing (roughly) one instrument.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1429
+  Semantic=0.6278  Judge=CORRECT  AnswerCorr=0.7152  Faith=0.5000  CtxRecall=0.0000
+
+Q25: What was the father of Kasper Schmeichel voted to be by the IFFHS in 1992?
+  Ground truth   : World's Best Goalkeeper
+  LLM answer     : He was voted the IFFHS World's Best Goalkeeper.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.6000
+  Semantic=0.7539  Judge=CORRECT  AnswerCorr=0.7316  Faith=1.0000  CtxRecall=1.0000
+
+Q26: Who was the writer of These Boots Are Made for Walkin' and who died in 2007?
+  Ground truth   : Barton Lee Hazlewood
+  LLM answer     : The song was written by Lee Hazlewood — Barton Lee Hazlewood (July 9, 1929 – August 4, 2007) died in 2007.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.2609
+  Semantic=0.7784  Judge=CORRECT  AnswerCorr=0.2279  Faith=1.0000  CtxRecall=1.0000
+
+Q27: The 2011–12 VCU Rams men's basketball team, led by third year head coach Shaka Smart, represented Virginia Commonwealth University which was founded in what year?
+  Ground truth   : 1838
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0679  Judge=INCORRECT  AnswerCorr=0.1856  Faith=0.0000  CtxRecall=0.0000
+
+Q28: Are both Dictyosperma, and Huernia described as a genus?
+  Ground truth   : yes
+  LLM answer     : Yes. Dictyosperma is described as a monotypic genus, and Huernia is described as a genus (first described in 1810).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1111
+  Semantic=0.1724  Judge=CORRECT  AnswerCorr=0.1894  Faith=0.7500  CtxRecall=1.0000
+
+Q29: Kaiser Ventures corporation was founded by an American industrialist who became known as the father of modern American shipbuilding?
+  Ground truth   : Henry J. Kaiser
+  LLM answer     : Henry J. Kaiser (Henry John Kaiser, May 9, 1882 – August 24, 1967).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.3750
+  Semantic=0.8453  Judge=CORRECT  AnswerCorr=0.2358  Faith=1.0000  CtxRecall=1.0000
+
+Q30: What is the name for the adventure in "Tunnels and Trolls", a game designed by Ken St. Andre?
+  Ground truth   : Arena of Khazan
+  LLM answer     : Arena of Khazan.
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=0.9642  Judge=CORRECT  AnswerCorr=0.2472  Faith=1.0000  CtxRecall=1.0000
+
+Q31: When was Poison's album "Shut Up, Make Love" released?
+  Ground truth   : 2000
+  LLM answer     : I don't know based on the provided context. The context states that "Shut Up, Make Love" is a song released in 2000 and that the album Crack a Smile...and More! was released on March 14, 2000, but it does not give a release date for an album titled "Shut Up, Make Love."
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.0435
+  Semantic=0.2847  Judge=INCORRECT  AnswerCorr=0.1937  Faith=1.0000  CtxRecall=1.0000
+
+Q32: Hayden is a singer-songwriter from Canada, but where does Buck-Tick hail from?
+  Ground truth   : Fujioka, Gunma
+  LLM answer     : Buck-Tick are from Fujioka in Gunma Prefecture, Japan.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.4000
+  Semantic=0.5970  Judge=CORRECT  AnswerCorr=0.9705  Faith=1.0000  CtxRecall=1.0000
+
+Q33: Which  French ace pilot and adventurer fly L'Oiseau Blanc
+  Ground truth   : Charles Eugène
+  LLM answer     : Charles Eugène Jules Marie Nungesser (commonly Charles Nungesser).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.4000
+  Semantic=0.4936  Judge=CORRECT  AnswerCorr=0.7196  Faith=1.0000  CtxRecall=1.0000
+
+Q34: Are Freakonomics and In the Realm of the Hackers both American documentaries?
+  Ground truth   : no
+  LLM answer     : No. Freakonomics is an American documentary, while In the Realm of the Hackers is an Australian documentary.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1429
+  Semantic=0.1743  Judge=CORRECT  AnswerCorr=0.7918  Faith=0.3333  CtxRecall=0.6667
+
+Q35: Which band, Letters to Cleo or Screaming Trees, had more members?
+  Ground truth   : Letters to Cleo
+  LLM answer     : Letters to Cleo — they have six members (Kay Hanley, Greg McKenna, Michael Eisenstein, Stacy Jones, Scott Riebling, and Tom Polce) while Screaming Trees were formed by four members (Mark Lanegan, Gary Lee Conner, Van Conner, and Mark Pickerel).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1429
+  Semantic=0.6637  Judge=CORRECT  AnswerCorr=0.2124  Faith=1.0000  CtxRecall=0.0000
+
+Q36: Alexander Kerensky was defeated and destroyed by the Bolsheviks in the course of a civil war that ended when ?
+  Ground truth   : October 1922
+  LLM answer     : It ended in 1923, when Red control of the newly formed Soviet Union was effectively assured.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.3557  Judge=CORRECT  AnswerCorr=0.2003  Faith=1.0000  CtxRecall=1.0000
+
+Q37: Seven Brief Lessons on Physics was written by an Italian physicist that has worked in France since what year?
+  Ground truth   : 2000
+  LLM answer     : Since 2000.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.6667
+  Semantic=0.5545  Judge=CORRECT  AnswerCorr=0.2295  Faith=0.0000  CtxRecall=1.0000
+
+Q38: The Livesey Hal War Memorial commemorates the fallen of which war, that had over 60 million casualties?
+  Ground truth   : World War II
+  LLM answer     : World War II.
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=0.9016  Judge=CORRECT  AnswerCorr=0.2412  Faith=1.0000  CtxRecall=1.0000
+
+Q39: Are both Elko Regional Airport and Gerald R. Ford International Airport located in Michigan?
+  Ground truth   : no
+  LLM answer     : No. Gerald R. Ford International Airport is in Cascade Township near Grand Rapids, Michigan; Elko Regional Airport is in Elko County, Nevada.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.0870
+  Semantic=0.1885  Judge=CORRECT  AnswerCorr=0.1822  Faith=0.6667  CtxRecall=0.0000
+
+Q40: Ralph Hefferline was a psychology professor at a university that is located in what city?
+  Ground truth   : New York City
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0608  Judge=INCORRECT  AnswerCorr=0.1860  Faith=0.0000  CtxRecall=1.0000
+
+Q41: Which dog's ancestors include Gordon and Irish Setters: the Manchester Terrier or the Scotch Collie?
+  Ground truth   : Scotch Collie
+  LLM answer     : The Scotch Collie. Its ancestry is said to include Gordon and Irish Setters.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.2857
+  Semantic=0.7478  Judge=CORRECT  AnswerCorr=0.8304  Faith=1.0000  CtxRecall=1.0000
+
+Q42: Where is the company that Sachin Warrier worked for as a software engineer headquartered? 
+  Ground truth   : Mumbai
+  LLM answer     : Tata Consultancy Services is headquartered in Mumbai, Maharashtra (India).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.2000
+  Semantic=0.5014  Judge=CORRECT  AnswerCorr=0.5882  Faith=1.0000  CtxRecall=1.0000
+
+Q43: A Japanese manga series based on a 16 year old high school student Ichitaka Seto, is written and illustrated by someone born in what year?
+  Ground truth   : 1962
+  LLM answer     : 1962
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  AnswerCorr=1.0000  Faith=nan  CtxRecall=1.0000
+
+Q44: The battle in which Giuseppe Arimondi lost his life secured what for Ethiopia?
+  Ground truth   : sovereignty
+  LLM answer     : It secured Ethiopian sovereignty (i.e., Ethiopia's independence).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.2500
+  Semantic=0.3934  Judge=CORRECT  AnswerCorr=0.9555  Faith=0.5000  CtxRecall=1.0000
+
+Q45: Alfred Balk served as the secretary of the Committee on the Employment of Minority Groups in the News Media under which United States Vice President?
+  Ground truth   : Nelson Rockefeller
+  LLM answer     : He served under Vice President Nelson A. Rockefeller (Nelson Rockefeller).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.3636
+  Semantic=0.7274  Judge=CORRECT  AnswerCorr=0.2252  Faith=0.0000  CtxRecall=1.0000
+
+Q46: A medieval fortress in Dirleton, East Lothian, Scotland borders on the south side of what coastal area?
+  Ground truth   : Yellowcraig
+  LLM answer     : Yellowcraig (also known as Broad Sands Bay).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.2500
+  Semantic=0.7529  Judge=CORRECT  AnswerCorr=0.2271  Faith=1.0000  CtxRecall=1.0000
+
+Q47: Who is the writer of this song that was inspired by words on a tombstone and was the first track on the box set Back to Mono?
+  Ground truth   : Phil Spector
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0906  Judge=INCORRECT  AnswerCorr=0.1838  Faith=0.0000  CtxRecall=1.0000
+
+Q48: What type of forum did a former Soviet statesman initiate?
+  Ground truth   : Organizations could come together to address global issues
+  LLM answer     : He initiated the World Summit of Nobel Peace Laureates — a forum bringing Nobel Peace Laureates and Peace Laureate organizations together to address global issues and promote peace and human well‑being.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.3243
+  Semantic=0.3590  Judge=CORRECT  AnswerCorr=0.9588  Faith=1.0000  CtxRecall=1.0000
+
+Q49: Are Ferocactus and Silene both types of plant?
+  Ground truth   : yes
+  LLM answer     : Yes. Ferocactus is a genus of barrel-shaped cacti, and Silene is a genus of flowering plants.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1333
+  Semantic=0.2252  Judge=CORRECT  AnswerCorr=0.5675  Faith=0.6667  CtxRecall=1.0000
+
+Q50: Which British first-generation jet-powered medium bomber was used in the South West Pacific theatre of World War II?
+  Ground truth   : English Electric Canberra
+  LLM answer     : English Electric Canberra.
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=0.9631  Judge=CORRECT  AnswerCorr=0.2477  Faith=1.0000  CtxRecall=1.0000
+
+Q51: Which year and which conference was the 14th season for this conference as part of the NCAA Division that the Colorado Buffaloes played in with a record of 2-6 in conference play?
+  Ground truth   : 2009 Big 12 Conference
+  LLM answer     : The team went 2–6 in Big 12 play in 2009. I don't know based on the provided context whether that year was the conference's 14th season as part of the NCAA Division.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.1875
+  Semantic=0.6169  Judge=INCORRECT  AnswerCorr=0.8214  Faith=0.6667  CtxRecall=1.0000
+
+Q52: In 1991 Euromarché was bought by a chain that operated how any hypermarkets at the end of 2016?
+  Ground truth   : 1,462
+  LLM answer     : Carrefour operated 1,462 hypermarkets at the end of 2016.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.2222
+  Semantic=0.2940  Judge=CORRECT  AnswerCorr=0.2011  Faith=1.0000  CtxRecall=1.0000
+
+Q53: What race track in the midwest hosts a 500 mile race eavery May?
+  Ground truth   : Indianapolis Motor Speedway
+  LLM answer     : The Indianapolis Motor Speedway in Speedway, Indiana — home of the Indianapolis 500, a 500-mile race held each May.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.3158
+  Semantic=0.7662  Judge=CORRECT  AnswerCorr=0.8321  Faith=0.6667  CtxRecall=1.0000
+
+Q54: In what city did the "Prince of tenors" star in a film based on an opera by Giacomo Puccini?
+  Ground truth   : Rome
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1162  Judge=INCORRECT  AnswerCorr=0.1892  Faith=0.5000  CtxRecall=1.0000
+
+Q55: Ellie Goulding worked with what other writers on her third studio album, Delirium?
+  Ground truth   : Max Martin, Savan Kotecha and Ilya Salmanzadeh
+  LLM answer     : According to the provided context, she worked with Max Martin, Savan Kotecha, Ilya Salmanzadeh, Tove Lo and Ali Payami.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.5600
+  Semantic=0.6084  Judge=CORRECT  AnswerCorr=0.7812  Faith=1.0000  CtxRecall=1.0000
+
+Q56: Which Australian city founded in 1838 contains a boarding school opened by a Prime Minister of Australia and named after a school in London of the same name.
+  Ground truth   : Marion, South Australia
+  LLM answer     : I don't know based on the provided context.
+
+The context notes Westminster School is at Marion, South Australia (12 km south of Adelaide) and was opened by Prime Minister Robert Menzies, but it does not identify any Australian city founded in 1838 that contains this boarding school.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1250
+  Semantic=0.5055  Judge=INCORRECT  AnswerCorr=0.2090  Faith=0.8000  CtxRecall=0.0000
+
+Q57: D1NZ is a series based on what oversteering technique?
+  Ground truth   : Drifting
+  LLM answer     : D1NZ is based on drifting — the intentional oversteering technique where the driver induces rear-wheel (or all-tire) slip while maintaining control through a corner.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.0909
+  Semantic=0.5231  Judge=CORRECT  AnswerCorr=0.2142  Faith=1.0000  CtxRecall=1.0000
+
+Q58: who is younger Keith Bostic or Jerry Glanville ?
+  Ground truth   : Keith Bostic
+  LLM answer     : Keith Bostic is younger — he was born January 17, 1961, while Jerry Glanville was born October 14, 1941.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1905
+  Semantic=0.6505  Judge=CORRECT  AnswerCorr=0.5933  Faith=1.0000  CtxRecall=1.0000
+
+Q59: According to the 2001 census, what was the population of the city in which Kirton End is located?
+  Ground truth   : 35,124
+  LLM answer     : According to the 2001 census, the town of Boston had a population of 35,124.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1667
+  Semantic=0.4244  Judge=CORRECT  AnswerCorr=0.2013  Faith=1.0000  CtxRecall=1.0000
+
+Q60: Are both Cypress and Ajuga genera?
+  Ground truth   : no
+  LLM answer     : No. Ajuga is a plant genus, but "cypress" is a common name applied to several genera (for example Cupressus); it is not a single genus itself.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.0833
+  Semantic=0.1773  Judge=CORRECT  AnswerCorr=0.1879  Faith=0.8000  CtxRecall=0.0000
+
+Q61: What distinction is held by the former NBA player who was a member of the Charlotte Hornets during their 1992-93 season and was head coach for the WNBA team Charlotte Sting?
+  Ground truth   : shortest player ever to play in the National Basketball Association
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=-0.0239  Judge=INCORRECT  AnswerCorr=0.1774  Faith=0.0000  CtxRecall=0.0000
+
+Q62: What is the name of the executive producer of the film that has a score composed by Jerry Goldsmith?
+  Ground truth   : Ronald Shusett
+  LLM answer     : The film's executive producer was Francis Ford Coppola (along with Talia Shire's husband, Jack Schwartzman).
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1982  Judge=CORRECT  AnswerCorr=0.1998  Faith=1.0000  CtxRecall=0.0000
+
+Q63: Who was born earlier, Emma Bull or Virginia Woolf?
+  Ground truth   : Adeline Virginia Woolf
+  LLM answer     : Virginia Woolf was born earlier (1882) — Emma Bull was born in 1954.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.2500
+  Semantic=0.5235  Judge=CORRECT  AnswerCorr=0.5127  Faith=1.0000  CtxRecall=0.6667
+
+Q64: What was the Roud Folk Song Index of the nursery rhyme inspiring What Are Little Girls Made Of?
+  Ground truth   : 821
+  LLM answer     : The Roud Folk Song Index number is 821.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.2500
+  Semantic=0.2955  Judge=CORRECT  AnswerCorr=0.2059  Faith=1.0000  CtxRecall=1.0000
+
+Q65: Scott Parkin has been a vocal critic of Exxonmobil and another corporation that has operations in how many countries ?
+  Ground truth   : more than 70 countries
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0459  Judge=INCORRECT  AnswerCorr=0.1820  Faith=0.0000  CtxRecall=0.0000
+
+Q66: What WB supernatrual drama series was Jawbreaker star Rose Mcgowan best known for being in?
+  Ground truth   : Charmed
+  LLM answer     : She was best known for the WB supernatural drama series Charmed.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1818
+  Semantic=0.6050  Judge=CORRECT  AnswerCorr=0.7241  Faith=1.0000  CtxRecall=1.0000
+
+Q67: Vince Phillips held a junior welterweight title by an organization recognized by what larger Hall of Fame?
+  Ground truth   : International Boxing Hall of Fame
+  LLM answer     : The International Boxing Hall of Fame (IBHOF).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.9091
+  Semantic=0.8490  Judge=CORRECT  AnswerCorr=0.2378  Faith=1.0000  CtxRecall=1.0000
+
+Q68: What is the name of the singer who's song was released as the lead single from the album "Confessions", and that had popular song stuck behind for eight consecutive weeks?
+  Ground truth   : Usher
+  LLM answer     : Usher
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  AnswerCorr=1.0000  Faith=nan  CtxRecall=1.0000
+
+Q69: who is the younger brother of The episode guest stars of The Hard Easy 
+  Ground truth   : Bill Murray
+  LLM answer     : Bill Murray.
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=0.9341  Judge=CORRECT  AnswerCorr=0.9952  Faith=0.0000  CtxRecall=0.0000
+
+Q70: The 2017–18 Wigan Athletic F.C. season will be a year in which the team competes in the league cup known as what for sponsorship reasons?
+  Ground truth   : Carabao Cup
+  LLM answer     : The Carabao Cup.
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=0.8866  Judge=CORRECT  AnswerCorr=0.2421  Faith=1.0000  CtxRecall=1.0000
+
+Q71: Which of Tara Strong major voice role in animated series is an American animated television series based on the DC Comics fictional superhero team, the "Teen Titans"?
+  Ground truth   : Teen Titans Go!
+  LLM answer     : Teen Titans — (and its spin‑off Teen Titans Go!) — Tara Strong voiced Raven in Teen Titans and reprised the role in Teen Titans Go!, both animated series based on the DC Comics Teen Titans.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1667
+  Semantic=0.6253  Judge=CORRECT  AnswerCorr=0.5944  Faith=1.0000  CtxRecall=1.0000
+
+Q72: What is the inhabitant of the city where  122nd SS-Standarte was formed in2014
+  Ground truth   : 276,170 inhabitants
+  LLM answer     : The Eurodistrict Strasbourg-Ortenau (covering Strasbourg) had 915,000 inhabitants in 2014.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.1818
+  Semantic=0.3943  Judge=CORRECT  AnswerCorr=0.2093  Faith=0.5000  CtxRecall=1.0000
+
+Q73: What color clothing do people of the Netherlands wear during Oranjegekte or to celebrate the national holiday Koningsdag? 
+  Ground truth   : orange
+  LLM answer     : They wear orange—e.g., orange T-shirts, caps and scarves (the national/royal color of the House of Orange-Nassau).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1333
+  Semantic=0.3960  Judge=CORRECT  AnswerCorr=0.7067  Faith=1.0000  CtxRecall=1.0000
+
+Q74: What was the name of the 1996 loose adaptation of William Shakespeare's "Romeo & Juliet" written by James Gunn?
+  Ground truth   : Tromeo and Juliet
+  LLM answer     : Tromeo and Juliet
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  AnswerCorr=1.0000  Faith=nan  CtxRecall=1.0000
+
+Q75: Robert Suettinger was the national intelligence officer under which former Governor of Arkansas?
+  Ground truth   : William Jefferson Clinton
+  LLM answer     : Bill Clinton.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.4000
+  Semantic=0.7287  Judge=CORRECT  AnswerCorr=0.2314  Faith=1.0000  CtxRecall=1.0000
+
+Q76: What American professional Hawaiian surfer born 18 October 1992 won the Rip Curl Pro Portugal?
+  Ground truth   : John John Florence
+  LLM answer     : John "John John" Florence (John Alexander Florence).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.6000
+  Semantic=0.8125  Judge=CORRECT  AnswerCorr=0.2368  Faith=1.0000  CtxRecall=1.0000
+
+Q77: What is the middle name of the actress who plays Bobbi Bacha in Suburban Madness?
+  Ground truth   : Ann
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1385  Judge=INCORRECT  AnswerCorr=0.1886  Faith=0.5000  CtxRecall=0.0000
+
+Q78: Alvaro Mexia had a diplomatic mission with which tribe of indigenous people?
+  Ground truth   : Apalachees
+  LLM answer     : He had a diplomatic mission with the Ais (the Ais native population).
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.3033  Judge=CORRECT  AnswerCorr=0.1959  Faith=1.0000  CtxRecall=0.0000
+
+Q79: What nationality were social anthropologists Alfred Gell and Edmund Leach?
+  Ground truth   : British
+  LLM answer     : Both Alfred Gell and Edmund Leach were British.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.2222
+  Semantic=0.3797  Judge=CORRECT  AnswerCorr=0.9524  Faith=1.0000  CtxRecall=1.0000
+
+Q80: In which year was the King who made the 1925 Birthday Honours born?
+  Ground truth   : 1865
+  LLM answer     : The 1925 Birthday Honours were made by King George V, but I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2629  Judge=INCORRECT  AnswerCorr=0.1956  Faith=1.0000  CtxRecall=0.0000
+
+Q81: What is the county seat of the county where East Lempster, New Hampshire is located?
+  Ground truth   : Newport
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0796  Judge=INCORRECT  AnswerCorr=0.1869  Faith=0.0000  CtxRecall=0.0000
+
+Q82: The Album Against the Wind was the 11th Album of a Rock singer Robert C Seger born may 6 1945. What was the Rock singers stage name ?
+  Ground truth   : Bob Seger
+  LLM answer     : Bob Seger.
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=0.9578  Judge=CORRECT  AnswerCorr=0.2456  Faith=1.0000  CtxRecall=1.0000
+
+Q83: Rostker v. Goldberg held that the practice of what way of filling armed forces vacancies was consitutional?
+  Ground truth   : Conscription
+  LLM answer     : Requiring only men to register for the draft — i.e., a male-only conscription/Selective Service registration.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.0000
+  Semantic=0.5650  Judge=CORRECT  AnswerCorr=0.2186  Faith=1.0000  CtxRecall=1.0000
+
+Q84: Handi-Snacks are a snack food product line sold by what American multinational confectionery, food, and beverage company that is based in Illinois?
+  Ground truth   : Mondelez International, Inc.
+  LLM answer     : Mondelez International (styled Mondelēz).
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.5714
+  Semantic=0.8923  Judge=CORRECT  AnswerCorr=0.7379  Faith=1.0000  CtxRecall=1.0000
+
+Q85: What was the name of a woman from the book titled "Their Lives: The Women Targeted by the Clinton Machine " and was also a former white house intern?
+  Ground truth   : Monica Lewinsky
+  LLM answer     : Monica Lewinsky (Monica Samille Lewinsky).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.5714
+  Semantic=0.8975  Judge=CORRECT  AnswerCorr=0.2408  Faith=1.0000  CtxRecall=1.0000
+
+Q86: When was the American lawyer, lobbyist and political consultant who was a senior member of the presidential campaign of Donald Trump born?
+  Ground truth   : April 1, 1949
+  LLM answer     : He was born on April 1, 1949.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.6000
+  Semantic=0.6602  Judge=CORRECT  AnswerCorr=0.9827  Faith=1.0000  CtxRecall=1.0000
+
+Q87: In what year was the novel that Lourenço Mutarelli based "Nina" on based first published?
+  Ground truth   : 1866
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0972  Judge=INCORRECT  AnswerCorr=0.1849  Faith=0.0000  CtxRecall=0.0000
+
+Q88: Where are Teide National Park and Garajonay National Park located?
+  Ground truth   : Canary Islands, Spain
+  LLM answer     : Teide National Park is located on Tenerife (the Canary Islands, Spain). Garajonay National Park is on La Gomera (the centre and north of that Canary Island, Spain).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.2143
+  Semantic=0.5231  Judge=CORRECT  AnswerCorr=0.7734  Faith=1.0000  CtxRecall=1.0000
+
+Q89: How many copies of Roald Dahl's variation on a popular anecdote sold?
+  Ground truth   : 250 million
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1280  Judge=INCORRECT  AnswerCorr=0.1819  Faith=0.5000  CtxRecall=1.0000
+
+Q90: What occupation do Chris Menges and Aram Avakian share?
+  Ground truth   : director
+  LLM answer     : They were both film directors.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.0000
+  Semantic=0.4075  Judge=CORRECT  AnswerCorr=0.8052  Faith=1.0000  CtxRecall=1.0000
+
+Q91: Andrew Jaspan was the co-founder of what not-for-profit media outlet?
+  Ground truth   : The Conversation
+  LLM answer     : Andrew Jaspan was the co‑founder of The Conversation, an independent not‑for‑profit website of analysis and news from the university and research sector.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1053
+  Semantic=0.4704  Judge=CORRECT  AnswerCorr=0.9618  Faith=1.0000  CtxRecall=1.0000
+
+Q92: Which American film director hosted the 18th Independent Spirit Awards in 2002?
+  Ground truth   : John Waters
+  LLM answer     : John Waters.
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=0.9514  Judge=CORRECT  AnswerCorr=0.2463  Faith=0.0000  CtxRecall=1.0000
+
+Q93: Where does the hotel and casino located in which Bill Cosby's third album was recorded?
+  Ground truth   : Las Vegas Strip in Paradise
+  LLM answer     : The Flamingo Hotel and Casino is located in Las Vegas, Nevada.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.4000
+  Semantic=0.5044  Judge=CORRECT  AnswerCorr=0.2143  Faith=1.0000  CtxRecall=1.0000
+
+Q94: Do the drinks Gibson and Zurracapote both contain gin?
+  Ground truth   : no
+  LLM answer     : No. The Gibson is made with gin and vermouth, while zurracapote (zurra) is made with red wine, fruit, sugar, and cinnamon (no gin mentioned).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.0833
+  Semantic=0.2145  Judge=CORRECT  AnswerCorr=0.1905  Faith=0.7500  CtxRecall=0.6667
+
+Q95: In what month is the annual documentary film festival, that is presented by the fortnightly published British journal of literary essays, held? 
+  Ground truth   : March and April
+  LLM answer     : It is held in March and April.
+  EM=0  RelaxedEM=1  ExtractedEM=1  F1=0.6000
+  Semantic=0.6191  Judge=CORRECT  AnswerCorr=0.2301  Faith=1.0000  CtxRecall=1.0000
+
+Q96: Tysons Galleria is located in what county?
+  Ground truth   : Fairfax County
+  LLM answer     : Tysons Galleria is located in Fairfax County, Virginia.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.4000
+  Semantic=0.5673  Judge=CORRECT  AnswerCorr=0.7115  Faith=1.0000  CtxRecall=1.0000
+
+Q97: Bordan Tkachuk was the CEO of a company that provides what sort of products?
+  Ground truth   : IT products and services
+  LLM answer     : I don't know based on the provided context.
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1355  Judge=INCORRECT  AnswerCorr=0.1835  Faith=0.0000  CtxRecall=0.0000
+
+Q98: Which filmmaker was known for animation, Lev Yilmaz or Pamela B. Green?
+  Ground truth   : Levni Yilmaz
+  LLM answer     : Lev Yilmaz — he (Levni Yilmaz) is best known for the “Tales of Mere Existence” animated comic series.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.2105
+  Semantic=0.6204  Judge=CORRECT  AnswerCorr=0.7200  Faith=1.0000  CtxRecall=1.0000
+
+Q99: In which city is the ambassador of the Rabat-Salé-Kénitra administrative region to China based?
+  Ground truth   : Beijing
+  LLM answer     : Beijing. The Moroccan ambassador in Beijing represents the government of Rabat (the capital of the Rabat-Salé-Kénitra region) to China.
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1250
+  Semantic=0.5311  Judge=CORRECT  AnswerCorr=0.8558  Faith=0.7500  CtxRecall=0.0000
+
+Q100: Are Yingkou and Fuding the same level of city?
+  Ground truth   : no
+  LLM answer     : No. Yingkou is a prefecture-level city, whereas Fuding is a county-level city (under the Ningde prefecture-level city).
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.1333
+  Semantic=0.1688  Judge=CORRECT  AnswerCorr=0.1873  Faith=0.7500  CtxRecall=1.0000
