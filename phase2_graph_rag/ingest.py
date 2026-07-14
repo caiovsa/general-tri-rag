@@ -3,7 +3,6 @@ nest_asyncio.apply()
 
 import asyncio
 import os
-import json
 
 import llama_index.core
 from llama_index.core import SimpleDirectoryReader
@@ -46,13 +45,13 @@ def build_graph_store():
 def create_vector_index(graph_store):
     """Create a vector index on Chunk nodes for similarity search."""
     print("Creating vector index on Chunk nodes...")
-    graph_store.structured_query("""
+    graph_store.structured_query(f"""
         CREATE VECTOR INDEX chunk_embeddings IF NOT EXISTS
         FOR (c:Chunk) ON c.embedding
-        OPTIONS {indexConfig: {
-            `vector.dimensions`: 1536,
+        OPTIONS {{indexConfig: {{
+            `vector.dimensions`: {settings.EMBEDDING_DIMENSION},
             `vector.similarity_function`: 'cosine'
-        }}
+        }}}}
     """)
     import time
     time.sleep(2)

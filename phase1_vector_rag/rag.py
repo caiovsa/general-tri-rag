@@ -2,6 +2,8 @@ from phase1_vector_rag.retriever import retrieve_chunks
 from shared.llm import generate_completion
 from shared.config import settings
 
+import textwrap
+
 def extract_chunk_text(chunk) -> str:
     if isinstance(chunk, str):
         return chunk
@@ -20,10 +22,10 @@ def extract_chunk_text(chunk) -> str:
 
 def build_prompt(query: str, chunks: list[str], scores: list[float] = None) -> str:
     if scores:
-        # Annotate each chunk with its confidence score
         annotated = [
             f"[Relevance: {score:.2f}]\n{chunk}"
             for chunk, score in zip(chunks, scores)
+            if score is not None
         ]
         context_str = "\n\n---\n\n".join(annotated)
         confidence_note = (
@@ -35,15 +37,15 @@ def build_prompt(query: str, chunks: list[str], scores: list[float] = None) -> s
         confidence_note = ""
 
     prompt = f"""You are an expert academic research assistant.
-                Use the following pieces of retrieved context to answer the user's question.
-                If the answer is not explicitly contained in the context, say "I don't know based on the provided context."
-                {confidence_note}
+Use the following pieces of retrieved context to answer the user's question.
+If the answer is not explicitly contained in the context, say "I don't know based on the provided context."
+{confidence_note}
 
-                Context:
-                {context_str}
+Context:
+{context_str}
 
-                Question: {query}
-                Answer:"""
+Question: {query}
+Answer:"""
     return prompt
 
 def run_rag_pipeline(user_query: str):
@@ -53,7 +55,7 @@ def run_rag_pipeline(user_query: str):
     print("1. Retrieving chunks from Qdrant...")
     nodes = retrieve_chunks(user_query)
     chunks = [extract_chunk_text(node) for node in nodes]
-    scores = [node.score for node in nodes]
+    scores = [node.score for node in nodes if node.score is not None]
     print(f"-> Retrieved {len(chunks)} chunks.\n")
 
     # 2. Early exit if nothing passed the threshold

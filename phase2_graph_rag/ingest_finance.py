@@ -1,3 +1,16 @@
+"""
+EXPERIMENTAL — LightRAG Finance Ingestion
+==========================================
+
+WARNING: This is an alternative ingestion path using LightRAG (not LlamaIndex
+PropertyGraphIndex). It bypasses shared/config.py and has NO retriever yet.
+Data ingested via this script CANNOT be retrieved by phase2_graph_rag/retriever.py
+(which expects LlamaIndex's Chunk node schema with MENTIONS relationships).
+
+Use phase2_graph_rag/ingest.py for the main Graph RAG pipeline.
+This script is kept for future exploration of LightRAG as an alternative framework.
+"""
+
 import os
 import asyncio
 import logging

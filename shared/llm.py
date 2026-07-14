@@ -5,7 +5,7 @@ from shared.config import settings
 def generate_completion(
     prompt: str,
     system_message: str = "You are a helpful assistant.",
-    temperature: float = 1,  # Low temp for RAG — you want factual, not creative
+    temperature: float = 0,  # Low temp for RAG — you want factual, not creative
     #max_tokens: int = 1024,
 ) -> str:
     messages = [
