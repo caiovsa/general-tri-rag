@@ -3,6 +3,7 @@ nest_asyncio.apply()
 
 import asyncio
 import os
+import time
 
 import llama_index.core
 from llama_index.core import SimpleDirectoryReader
@@ -53,7 +54,6 @@ def create_vector_index(graph_store):
             `vector.similarity_function`: 'cosine'
         }}}}
     """)
-    import time
     time.sleep(2)
     result = graph_store.structured_query(
         "SHOW VECTOR INDEXES YIELD name, state WHERE name = 'chunk_embeddings' RETURN state"

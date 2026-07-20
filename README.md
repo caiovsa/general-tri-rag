@@ -45,13 +45,21 @@ A 3-phase research project comparing **Retrieval-Augmented Generation (RAG)** ap
 
 ### 1. Prerequisites
 
-- Python 3.11+
+- Python 3.11 or 3.12
+- [UV](https://docs.astral.sh/uv/) package manager (`brew install uv` or `curl -LsSf https://astral.sh/uv/install.sh | sh`)
 - Docker (for Qdrant)
 - Neo4j Desktop or Neo4j Docker (for Phase 2)
 - OpenAI API key
+- (Optional) Maritaca Key (For PT/BR use cases) 
 
 ### 2. Install dependencies
 
+**With UV (recommended):**
+```bash
+uv sync
+```
+
+**With pip (fallback):**
 ```bash
 pip install -r requirements.txt
 ```
@@ -71,7 +79,7 @@ docker compose up -d qdrant
 
 ### 5. Start Neo4j (for Phase 2)
 
-Use Neo4j Desktop (recommended for multiple databases) or:
+`Use Neo4j Desktop (recommended for multiple databases) or:`
 
 ```bash
 docker compose up -d neo4j
@@ -80,6 +88,8 @@ docker compose up -d neo4j
 Create a database named `hotpot-graph` in Neo4j.
 
 ## Usage
+
+> **Tip:** With UV, prefix any command with `uv run` to execute it in the project's virtual environment automatically. Example: `uv run python -m phase1_vector_rag.rag`
 
 ### Prepare HotpotQA dataset
 
@@ -206,16 +216,16 @@ rag-trilogy/
 - **Collection/database isolation**: Phase 1 uses `rag_phase_1_baseline` in Qdrant; Phase 2 uses a separate Neo4j database
 - **HotpotQA for benchmarking**: 100 questions with golden answers and supporting facts — small enough for fast iteration, diverse enough for meaningful evaluation
 
-## Future Migration to UV
+## Dependency Management
 
-The `requirements.txt` is structured for a future `uv` migration:
+This project uses [UV](https://docs.astral.sh/uv/) for dependency management with `pyproject.toml` as the source of truth. A fully-pinned `requirements.txt` is kept as a fallback for pip users.
 
+**Adding a new dependency:**
 ```bash
-# Future: switch to uv
-uv venv
-uv pip install -r requirements.txt
-# Or convert to pyproject.toml with dependency groups:
-# [project.dependencies]        → base
-# [project.optional-deps.eval]  → ragas, datasets
-# [project.optional-deps.lightrag] → lightrag-hku
+uv add <package-name>
+```
+
+**Regenerating requirements.txt after changes:**
+```bash
+uv pip compile pyproject.toml -o requirements.txt --python-version 3.11
 ```

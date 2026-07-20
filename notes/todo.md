@@ -40,9 +40,23 @@
 - [x] Add None-score guard in `phase1/rag.py`
 - [x] Fix `preapre_hotpot.py` append bug (duplicates on re-run)
 - [x] Add `__main__` guard to `preapre_hotpot.py`
-- [x] Remove dead imports (`json` in ingest.py, `time` in hotpot_answers)
+- [x] Remove dead imports (`json` in ingest.py, `time` in hotpot_answers, `textwrap` in rag.py, `QueryParam` in ingest_finance.py)
 - [x] Use `settings.EMBEDDING_DIMENSION` in `create_vector_index`
 - [x] Document `ingest_finance.py` as experimental
+- [x] Add `nest-asyncio` to requirements.txt
+- [x] Fix llama-index integration package version ranges
+- [x] Move `import time` to top-level in `phase2/ingest.py`
+
+## UV Migration (Done)
+- [x] Create `pyproject.toml` via `uv init --bare`
+- [x] Add all dependencies via `uv add -r requirements.txt`
+- [x] Run `uv sync` — all 132 packages installed successfully
+- [x] Regenerate `requirements.txt` as fully-pinned fallback via `uv pip compile`
+- [x] Update `.gitignore` for `.venv`
+- [x] Update `README.md` with UV quickstart
+- [x] Update `AGENTS.md` with UV commands
+- [x] Verify Phase 1 retriever with `uv run` — works
+- [x] Verify Phase 2 retriever with `uv run` — works
 
 ## Future Improvements
 - [ ] Add prompt variants (generalist + finance) for Phase 1 and Phase 2
@@ -52,7 +66,6 @@
 - [ ] Create Neo4j full-text index for keyword anchor search
 - [ ] Standardize `top_k` and threshold parameters across phases
 - [ ] Extract shared ingest helper (dedup `ingest_pdf.py` and `ingest_hot.py`)
-- [ ] Migrate from `requirements.txt` to `uv` with `pyproject.toml` dependency groups
 - [ ] Add `Makefile` with common commands
 - [ ] Create cross-phase comparison notebook (`notebooks/benchmark_comparison.ipynb`)
 - [ ] Add LLM-as-Judge with confidence scores (not just CORRECT/INCORRECT)

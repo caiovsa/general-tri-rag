@@ -2,8 +2,6 @@ from phase1_vector_rag.retriever import retrieve_chunks
 from shared.llm import generate_completion
 from shared.config import settings
 
-import textwrap
-
 def extract_chunk_text(chunk) -> str:
     if isinstance(chunk, str):
         return chunk
@@ -55,7 +53,7 @@ def run_rag_pipeline(user_query: str):
     print("1. Retrieving chunks from Qdrant...")
     nodes = retrieve_chunks(user_query)
     chunks = [extract_chunk_text(node) for node in nodes]
-    scores = [node.score for node in nodes if node.score is not None]
+    scores = [node.score for node in nodes]
     print(f"-> Retrieved {len(chunks)} chunks.\n")
 
     # 2. Early exit if nothing passed the threshold

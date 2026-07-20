@@ -24,7 +24,7 @@ from dotenv import load_dotenv
 from llama_index.core import SimpleDirectoryReader
 
 # LightRAG Imports
-from lightrag import LightRAG, QueryParam
+from lightrag import LightRAG
 from lightrag.llm.openai import gpt_4o_mini_complete, openai_embed
 from lightrag.kg.shared_storage import initialize_pipeline_status
 from lightrag.utils import setup_logger
