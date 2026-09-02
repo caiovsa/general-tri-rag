@@ -3,9 +3,10 @@ EXPERIMENTAL — LightRAG Finance Ingestion
 ==========================================
 
 WARNING: This is an alternative ingestion path using LightRAG (not LlamaIndex
-PropertyGraphIndex). It bypasses shared/config.py and has NO retriever yet.
-Data ingested via this script CANNOT be retrieved by phase2_graph_rag/retriever.py
-(which expects LlamaIndex's Chunk node schema with MENTIONS relationships).
+PropertyGraphIndex). It now reuses shared/config.py for env/Dotenv but still has
+NO retriever yet. Data ingested via this script CANNOT be retrieved by
+phase2_graph_rag/retriever.py (which expects LlamaIndex's Chunk node schema with
+MENTIONS relationships).
 
 Use phase2_graph_rag/ingest.py for the main Graph RAG pipeline.
 This script is kept for future exploration of LightRAG as an alternative framework.
@@ -18,7 +19,6 @@ import json
 import time
 from pathlib import Path
 from typing import Set
-from dotenv import load_dotenv
 
 # Keep using LlamaIndex just for fast PDF text extraction
 from llama_index.core import SimpleDirectoryReader
@@ -29,19 +29,18 @@ from lightrag.llm.openai import gpt_4o_mini_complete, openai_embed
 from lightrag.kg.shared_storage import initialize_pipeline_status
 from lightrag.utils import setup_logger
 
-# Load your existing .env
-env_path = Path(__file__).parent.parent / ".env"
-load_dotenv(dotenv_path=env_path)
+# Load env via shared config so all phases share the same source of truth
+from shared.config import settings  # triggers dotenv load + central defaults
 
-# ----------------------------------------------------------------------------
-# Setup Neo4j for LightRAG (It reads these from env vars automatically)
-# ----------------------------------------------------------------------------
-os.environ["NEO4J_URI"] = os.getenv("NEO4J_URI", "neo4j://127.0.0.1:7687")
-os.environ["NEO4J_USER"] = os.getenv("NEO4J_USER", "neo4j")
-os.environ["NEO4J_USERNAME"] = os.getenv("NEO4J_USER", "neo4j")  # Fallback for some versions
-os.environ["NEO4J_PASSWORD"] = os.getenv("NEO4J_PASSWORD", "testpass123")
+# Keep LightRAG compatibility: it reads Neo4j/OpenAI from env vars directly,
+# so mirror shared settings into os.environ (preserving any existing env overrides).
+os.environ["NEO4J_URI"] = os.getenv("NEO4J_URI", settings.NEO4J_URI)
+os.environ["NEO4J_USER"] = os.getenv("NEO4J_USER", settings.NEO4J_USER)
+os.environ["NEO4J_USERNAME"] = os.getenv("NEO4J_USER", settings.NEO4J_USER)  # Fallback for some versions
+os.environ["NEO4J_PASSWORD"] = os.getenv("NEO4J_PASSWORD", settings.NEO4J_PASSWORD)
+# LightRAG finance path defaults to finance-bench if NEO4J_DATABASE not set explicitly
 os.environ["NEO4J_DATABASE"] = os.getenv("NEO4J_DATABASE", "finance-bench")
-os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY", "")
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY", settings.OPENAI_API_KEY)
 
 WORKING_DIR = "./lightrag_storage"
 os.makedirs(WORKING_DIR, exist_ok=True)

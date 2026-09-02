@@ -15,7 +15,7 @@ def load_questions():
     questions = []
     if not EVAL_FILE.exists():
         print(f"File not found: {EVAL_FILE}")
-        print("Run 'python -m preapre_hotpot' first.")
+        print("Run 'python -m prepare_hotpot' first. (legacy: python -m preapre_hotpot)")
         return questions
     with open(EVAL_FILE, "r", encoding="utf-8") as f:
         for line in f:

@@ -96,7 +96,8 @@ Create a database named `hotpot-graph` in Neo4j.
 Downloads 100 HotpotQA questions + context documents:
 
 ```bash
-python -m preapre_hotpot
+python -m prepare_hotpot
+# legacy alias still works: python -m preapre_hotpot
 ```
 
 Creates:
@@ -202,7 +203,7 @@ rag-trilogy/
 ├── notebooks/                 # Exploratory notebooks
 ├── notes/                     # Local notes and TODO
 ├── plans/                     # Detailed task plans
-├── preapre_hotpot.py          # Download + prepare HotpotQA data
+├── prepare_hotpot.py          # Download + prepare HotpotQA data (preapre_hotpot.py is deprecated shim)
 ├── hotpot_eval.jsonl          # 100 questions with golden answers
 ├── docker-compose.yml         # Qdrant + Neo4j services
 ├── requirements.txt           # Python dependencies

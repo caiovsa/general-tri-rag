@@ -10,13 +10,31 @@ from llama_index.core import QueryBundle
 _, embed_model = get_llamaindex_settings()
 llama_index.core.Settings.embed_model = embed_model
 
-def retrieve_chunks(user_query: str, top_k: int = 8, node_threshold: float = 0.3):
+def retrieve_chunks(user_query: str, top_k: int = None, node_threshold: float = None):
     """
     Queries Qdrant and returns the retrieved nodes (including text and scores).
+
+    Defaults come from shared/config.py so Phase 1 and Phase 2 stay comparable.
     """
-    client = qdrant_client.QdrantClient(url=settings.QDRANT_URL)
+    if not user_query or not user_query.strip():
+        print("Warning: empty query — returning no results.")
+        return []
+    if top_k is None:
+        top_k = settings.DEFAULT_TOP_K
+    if node_threshold is None:
+        node_threshold = settings.DEFAULT_SIMILARITY_THRESHOLD
+
+    # Preflight: is Qdrant reachable?
+    try:
+        client = qdrant_client.QdrantClient(url=settings.QDRANT_URL)
+        client.get_collections()  # cheap health check
+    except Exception as e:
+        print(f"Error: Qdrant not reachable at {settings.QDRANT_URL}: {e}")
+        print("Hint: run `docker compose up -d qdrant` and ensure the collection was ingested.")
+        return []
+
     vector_store = QdrantVectorStore(
-        client=client, 
+        client=client,
         collection_name=settings.QDRANT_COLLECTION_NAME
     )
 

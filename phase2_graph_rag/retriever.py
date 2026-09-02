@@ -1,4 +1,5 @@
 import json
+
 import llama_index.core
 from llama_index.graph_stores.neo4j import Neo4jPropertyGraphStore
 
@@ -7,6 +8,9 @@ from shared.config import settings, get_llamaindex_settings
 llm, embed_model = get_llamaindex_settings()
 llama_index.core.Settings.llm = llm
 llama_index.core.Settings.embed_model = embed_model
+
+# Simple in-memory cache for entity extraction (avoids LLM call per identical query)
+_ENTITY_CACHE: dict[str, list[str]] = {}
 
 
 # ─────────────────────────────────────────────
@@ -17,7 +21,15 @@ def extract_entities_from_query(user_query: str) -> list[str]:
     Uses the LLM to extract key named entities (titles, people, places)
     from the user query. These are used as keyword anchors to guarantee
     the right seed chunks are retrieved even when vector search misses them.
+    Results are cached per query string to avoid duplicate LLM calls.
     """
+    if not user_query or not user_query.strip():
+        return []
+    # Cache hit?
+    if user_query in _ENTITY_CACHE:
+        print(f"-> Extracted entities (cached): {_ENTITY_CACHE[user_query]}")
+        return _ENTITY_CACHE[user_query]
+
     response = llm.complete(
         f"""Extract the key named entities (people, places, episode titles, movie titles, show titles) 
 from this question. Return ONLY a comma-separated list of entity names, nothing else.
@@ -29,6 +41,7 @@ Entities:"""
     raw = response.text.strip()
     entities = [e.strip() for e in raw.split(",") if e.strip()]
     print(f"-> Extracted entities: {entities}")
+    _ENTITY_CACHE[user_query] = entities
     return entities
 
 
@@ -60,15 +73,25 @@ def retrieve_graph_chunks(user_query: str, top_k: int = 5) -> list[str]:
     3. 1-hop traversal — neighbor chunks via shared entity mentions
     4. Deduplication  — clean, non-redundant context for the LLM
     """
+    if not user_query or not user_query.strip():
+        print("Warning: empty query — returning no results.")
+        return []
 
     # ── Connect ──────────────────────────────
     print("Connecting to Neo4j...")
-    graph_store = Neo4jPropertyGraphStore(
-        username=settings.NEO4J_USER,
-        password=settings.NEO4J_PASSWORD,
-        url=settings.NEO4J_URI,
-        database=settings.NEO4J_DATABASE,
-    )
+    try:
+        graph_store = Neo4jPropertyGraphStore(
+            username=settings.NEO4J_USER,
+            password=settings.NEO4J_PASSWORD,
+            url=settings.NEO4J_URI,
+            database=settings.NEO4J_DATABASE,
+        )
+        # cheap preflight
+        graph_store.structured_query("RETURN 1 AS ok")
+    except Exception as e:
+        print(f"Error: Neo4j not reachable at {settings.NEO4J_URI} (db={settings.NEO4J_DATABASE}): {e}")
+        print("Hint: run `docker compose up -d neo4j` or check Neo4j Desktop and NEO4J_DATABASE in .env")
+        return []
 
     # ── Step 1: Vector search ─────────────────
     print(f"Embedding query: '{user_query}'")
@@ -94,20 +117,39 @@ def retrieve_graph_chunks(user_query: str, top_k: int = 5) -> list[str]:
     keyword_results = []
     for entity in entities:
         print(f"Running keyword anchor search for: '{entity}'...")
-        results = graph_store.structured_query(
-            f"""
-            MATCH (seed_chunk)
-            WHERE seed_chunk.text IS NOT NULL
-              AND toLower(seed_chunk.text) CONTAINS toLower($keyword)
-            WITH seed_chunk, 1.0 AS score
-            {NEIGHBOR_QUERY}
-            LIMIT $limit
-            """,
-            param_map={
-                "keyword": entity,
-                "limit": 3,  # a few anchor chunks per entity is enough
-            },
-        )
+        # Prefer full-text index (fast) if available; fallback to CONTAINS scan
+        try:
+            results = graph_store.structured_query(
+                f"""
+                CALL db.index.fulltext.queryNodes('chunk_text_fulltext', $keyword)
+                YIELD node AS seed_chunk, score
+                {NEIGHBOR_QUERY}
+                LIMIT $limit
+                """,
+                param_map={
+                    "keyword": entity,
+                    "limit": 3,
+                },
+            )
+            # If index missing, Neo4j returns error — caught below
+            if results is None:
+                raise RuntimeError("fulltext returned None")
+        except Exception:
+            # Fallback: CONTAINS scan (correct but slower)
+            results = graph_store.structured_query(
+                f"""
+                MATCH (seed_chunk)
+                WHERE seed_chunk.text IS NOT NULL
+                  AND toLower(seed_chunk.text) CONTAINS toLower($keyword)
+                WITH seed_chunk, 1.0 AS score
+                {NEIGHBOR_QUERY}
+                LIMIT $limit
+                """,
+                param_map={
+                    "keyword": entity,
+                    "limit": 3,
+                },
+            )
         found = len(results or [])
         print(f"-> Keyword anchor '{entity}' returned {found} chunks.")
         keyword_results.extend(results or [])

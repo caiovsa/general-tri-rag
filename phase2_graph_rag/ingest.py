@@ -21,13 +21,15 @@ llm, embed_model = get_llamaindex_settings()
 llama_index.core.Settings.llm = llm
 llama_index.core.Settings.embed_model = embed_model
 
-EXTRACTION_LLM = OpenAI(model="gpt-5-mini", temperature=0.0)
+EXTRACTION_LLM = OpenAI(model=settings.EXTRACTION_MODEL, temperature=0.0)
 
 def get_extraction_chunker() -> TokenTextSplitter:
-    # CRITICAL CHANGE: Dropped chunk_size from 1024 to 256.
-    # HotpotQA paragraphs are ~100-200 tokens. A 1024 chunk mashes multiple
-    # documents together, ruining the multi-hop separation test!
-    return TokenTextSplitter(chunk_size=256, chunk_overlap=20)
+    # HotpotQA paragraphs are ~100-200 tokens. 256 keeps multi-hop separation;
+    # 1024 would mash multiple docs together. Sizes now come from shared/config.py.
+    return TokenTextSplitter(
+        chunk_size=settings.CHUNK_SIZE_GRAPH,
+        chunk_overlap=settings.CHUNK_OVERLAP_GRAPH,
+    )
 
 
 def build_graph_store():
@@ -44,7 +46,7 @@ def build_graph_store():
 
 
 def create_vector_index(graph_store):
-    """Create a vector index on Chunk nodes for similarity search."""
+    """Create vector + full-text indexes on Chunk nodes for similarity + keyword search."""
     print("Creating vector index on Chunk nodes...")
     graph_store.structured_query(f"""
         CREATE VECTOR INDEX chunk_embeddings IF NOT EXISTS
@@ -62,7 +64,24 @@ def create_vector_index(graph_store):
         state = result[0].get('state', 'unknown')
         print(f"  Vector index state: {state}")
     else:
-        print("  Warning: Could not verify index state")
+        print("  Warning: Could not verify vector index state")
+
+    # Full-text index for fast keyword anchor search (replaces CONTAINS scan)
+    print("Creating full-text index on Chunk.text (if not exists)...")
+    try:
+        graph_store.structured_query("""
+            CREATE FULLTEXT INDEX chunk_text_fulltext IF NOT EXISTS
+            FOR (c:Chunk) ON EACH [c.text]
+        """)
+        time.sleep(1)
+        ft = graph_store.structured_query(
+            "SHOW FULLTEXT INDEXES YIELD name, state WHERE name = 'chunk_text_fulltext' RETURN state"
+        )
+        if ft:
+            print(f"  Full-text index state: {ft[0].get('state', 'unknown')}")
+    except Exception as e:
+        # Neo4j <5 or permission issue — keyword search will fall back to CONTAINS
+        print(f"  Warning: full-text index not created ({e}) — retriever will use CONTAINS fallback")
 
 
 def build_extractors():

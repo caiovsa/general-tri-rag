@@ -16,7 +16,7 @@
 - [x] Full RAG pipeline (retrieve → prompt → generate)
 - [x] HotpotQA answer generation (100 questions)
 - [x] Benchmark evaluation (same metrics as Phase 1)
-- [ ] Rename `preapre_hotpot.py` → `prepare_hotpot.py` (requires updating all references)
+- [x] Rename `preapre_hotpot.py` → `prepare_hotpot.py` (requires updating all references) — done via `prepare_hotpot.py` + deprecated shim `preapre_hotpot.py`
 - [ ] Create LightRAG retriever for `ingest_finance.py` (or remove if not needed)
 
 ## Phase 3 — Ontology RAG (Not Implemented)

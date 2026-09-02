@@ -12,3 +12,21 @@ __pycache__/
 *$py.class
 /data_hotpot
 .venv
+
+# Hygiene: runtime & generated artifacts
+lightrag_storage/
+checkpoint_lightrag.json
+checkpoint_lightrag.json.bak
+digest.txt
+.DS_Store
+
+# HotpotQA generated outputs (currently tracked for reference — uncomment to ignore future runs)
+# hotpot_eval.jsonl
+# hotpot_results.json
+# hotpot_results_detailed.json
+# hotpot_eval_results.json
+# hotpot_eval_report.txt
+# phase1_vector_rag/hotpot_*.json
+# phase1_vector_rag/hotpot_*.txt
+# phase2_graph_rag/hotpot_*.json
+# phase2_graph_rag/hotpot_*.txt

@@ -16,16 +16,27 @@ class Settings:
     NEO4J_URI: str = os.getenv("NEO4J_URI", "neo4j://127.0.0.1:7687")
     NEO4J_USER: str = os.getenv("NEO4J_USER", "neo4j")
     NEO4J_PASSWORD: str = os.getenv("NEO4J_PASSWORD", "testpass123")
-    NEO4J_DATABASE: str = os.getenv("NEO4J_DATABASE", "harry-potter")
+    NEO4J_DATABASE: str = os.getenv("NEO4J_DATABASE", "hotpot-graph")
     
     # Models & Keys
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
     EMBEDDING_DIMENSION: int = int(os.getenv("EMBEDDING_DIMENSION", "1536"))
     GENERATION_MODEL: str = os.getenv("GENERATION_MODEL", "gpt-4o-mini")
-    
+    EXTRACTION_MODEL: str = os.getenv("EXTRACTION_MODEL", "gpt-5-mini")
+
     # RAG parameters
     QDRANT_COLLECTION_NAME: str = os.getenv("QDRANT_COLLECTION_NAME", "rag_phase_1_baseline")
+    # Standardized RAG retrieval defaults (shared across phases)
+    DEFAULT_TOP_K: int = int(os.getenv("DEFAULT_TOP_K", "8"))
+    DEFAULT_SIMILARITY_THRESHOLD: float = float(os.getenv("DEFAULT_SIMILARITY_THRESHOLD", "0.3"))
+    # Canonical chunk sizes (override per-phase only if experiment requires)
+    CHUNK_SIZE_HOTPOT: int = int(os.getenv("CHUNK_SIZE_HOTPOT", "200"))
+    CHUNK_OVERLAP_HOTPOT: int = int(os.getenv("CHUNK_OVERLAP_HOTPOT", "20"))
+    CHUNK_SIZE_PDF: int = int(os.getenv("CHUNK_SIZE_PDF", "512"))
+    CHUNK_OVERLAP_PDF: int = int(os.getenv("CHUNK_OVERLAP_PDF", "64"))
+    CHUNK_SIZE_GRAPH: int = int(os.getenv("CHUNK_SIZE_GRAPH", "256"))
+    CHUNK_OVERLAP_GRAPH: int = int(os.getenv("CHUNK_OVERLAP_GRAPH", "20"))
     
     #MARITACA CONFIGS
     MARITACA_API_KEY: str = os.getenv("MARITACA_API_KEY", "")
