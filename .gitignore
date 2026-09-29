@@ -19,6 +19,7 @@ checkpoint_lightrag.json
 checkpoint_lightrag.json.bak
 digest.txt
 .DS_Store
+MetaQA
 
 # HotpotQA generated outputs (currently tracked for reference — uncomment to ignore future runs)
 # hotpot_eval.jsonl
