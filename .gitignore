@@ -31,3 +31,5 @@ MetaQA
 # phase1_vector_rag/hotpot_*.txt
 # phase2_graph_rag/hotpot_*.json
 # phase2_graph_rag/hotpot_*.txt
+# MetaQA/phase run outputs (generated)
+results/

@@ -14,6 +14,7 @@ import numpy as np
 from numpy.linalg import norm
 
 from shared.config import settings
+from shared.ingest import MOVIE_TAG
 
 FILLER_PATTERNS = [
     r"^(yes|no),?\s*",
@@ -46,6 +47,27 @@ Question: {question}
 Ground Truth: {ground_truth}
 Predicted Answer: {answer}
 Judgment:"""
+
+# Set-answer variant (MetaQA): the gold list may be incomplete, so extra correct
+# items in the prediction are fine — but every gold item must be present.
+SET_JUDGE_PROMPT = """You are a strict evaluator for question-answering systems.
+You are given a question, a list of gold answers, and a model's predicted answer.
+
+Rules:
+- The gold list may be incomplete: the prediction may legitimately contain extra correct items.
+- Judge CORRECT only if EVERY gold item is present in the prediction (an equivalent
+  spelling or paraphrase counts as present).
+- A missing gold item makes the answer INCORRECT, even if everything else is right.
+- If the predicted answer is "I don't know", "not in context", "unknown", or similar — it is INCORRECT.
+
+Respond with ONLY "CORRECT" or "INCORRECT". Nothing else.
+
+Question: {question}
+Gold answers: {ground_truth}
+Predicted Answer: {answer}
+Judgment:"""
+
+EVIDENCE_BUCKETS = ((1, 1, "1"), (2, 2, "2"), (3, 5, "3-5"), (6, 10 ** 9, "6+"))
 
 
 def normalize_answer(s: str) -> str:
@@ -87,6 +109,118 @@ def token_f1(prediction: str, ground_truth: str) -> float:
     precision = num_same / len(pred_tokens)
     recall = num_same / len(truth_tokens)
     return (2 * precision * recall) / (precision + recall)
+
+
+def contains_word(haystack: str, needle: str) -> bool:
+    """Word-boundary containment on already-normalized strings."""
+    if not needle:
+        return False
+    return re.search(rf"(?<!\w){re.escape(needle)}(?!\w)", haystack) is not None
+
+
+def loose_normalize(text: str) -> str:
+    """Lowercase/punctuation-strip WITHOUT dropping articles.
+
+    Fallback for gold items that normalize_answer() empties out (e.g. the item
+    "A"), which would otherwise never match anything.
+    """
+    return " ".join(re.sub(r"[^\w\s]", " ", str(text).lower()).split())
+
+
+def gold_recall(prediction: str, answers) -> float | None:
+    """Fraction of gold `answers` present in the prediction (word-boundary, normalized)."""
+    if not answers:
+        return None
+    normalized = normalize_answer(prediction)
+    loose = loose_normalize(prediction)
+    found = 0
+    for item in answers:
+        needle = normalize_answer(str(item))
+        if needle:
+            found += contains_word(normalized, needle)
+        else:  # degenerate item (article-only) — compare without article stripping
+            found += contains_word(loose, loose_normalize(str(item)))
+    return found / len(answers)
+
+
+def evidence_recall(contexts, titles) -> float | None:
+    """Fraction of evidence movies whose [Movie: <title>] tag is in some retrieved context."""
+    if not titles:
+        return None
+    blob = "\n".join(contexts or []).lower()
+    found = sum(1 for title in titles if MOVIE_TAG.format(title=title).lower() in blob)
+    return found / len(titles)
+
+
+def evidence_bucket(size: int) -> str:
+    for low, high, label in EVIDENCE_BUCKETS:
+        if low <= size <= high:
+            return label
+    return EVIDENCE_BUCKETS[-1][2]
+
+
+def compute_set_metrics(data, tagged: bool = False):
+    """MetaQA-style metrics: gold_recall / all_found / evidence_recall.
+
+    Returns (gold_recall_scores, all_found_scores, evidence_recall_scores), each
+    a list with None where the field does not apply (e.g. HotpotQA has no `answers`
+    and its docs are not movie-tagged, so evidence_recall is not meaningful).
+    """
+    recall_scores, all_found_scores, evidence_scores = [], [], []
+    for item in data:
+        recall = gold_recall(item.get("answer", ""), item.get("answers"))
+        recall_scores.append(recall)
+        all_found_scores.append(None if recall is None else int(recall == 1))
+        evidence_scores.append(
+            evidence_recall(item.get("contexts", []),
+                            item.get("supporting_facts", []) or item.get("supporting_facts_titles", []))
+            if tagged else None
+        )
+
+    if recall_scores and recall_scores[0] is not None:
+        mean_recall = sum(recall_scores) / len(recall_scores)
+        mean_all_found = sum(all_found_scores) / len(all_found_scores)
+        print(f"  Gold Recall (set)  : {mean_recall:.4f}")
+        print(f"  All Found          : {mean_all_found:.4f}  ({sum(all_found_scores)}/{len(all_found_scores)})")
+    else:
+        print("  Gold Recall (set)  : n/a (no `answers` list — single-answer dataset)")
+    if evidence_scores and evidence_scores[0] is not None:
+        print(f"  Evidence Recall    : {sum(evidence_scores) / len(evidence_scores):.4f}")
+    else:
+        print("  Evidence Recall    : n/a (contexts are not movie-tagged)")
+    return recall_scores, all_found_scores, evidence_scores
+
+
+def grouped_table(data, gold_recall_scores, all_found_scores, evidence_scores, judge_scores):
+    """Per hop, per evidence-size bucket and pooled hop 2+3, each with n."""
+    if not any(score is not None for score in gold_recall_scores):
+        return []
+
+    groups: list[tuple[str, list[int]]] = []
+    hops = sorted({item.get("hop") for item in data if item.get("hop") is not None})
+    for hop in hops:
+        groups.append((f"hop {hop}", [i for i, item in enumerate(data) if item.get("hop") == hop]))
+    if any(hop >= 2 for hop in hops):
+        groups.append(("hop 2+3", [i for i, item in enumerate(data) if (item.get("hop") or 0) >= 2]))
+    for low, high, label in EVIDENCE_BUCKETS:
+        idx = [i for i, item in enumerate(data)
+               if item.get("supporting_facts") and low <= len(item["supporting_facts"]) <= high]
+        if idx:
+            groups.append((f"evidence {label}", idx))
+
+    def mean(values):
+        values = [v for v in values if v is not None]
+        return None if not values else sum(values) / len(values)
+
+    lines = [f"{'group':<14} {'n':>4} {'gold_recall':>12} {'all_found':>10} {'evid_recall':>12} {'judge':>7}"]
+    for name, idx in groups:
+        gold = mean([gold_recall_scores[i] for i in idx])
+        found = mean([all_found_scores[i] for i in idx])
+        evidence = mean([evidence_scores[i] for i in idx])
+        judge = mean([judge_scores[i] for i in idx])
+        fmt = lambda v: "n/a" if v is None else f"{v:.3f}"
+        lines.append(f"{name:<14} {len(idx):>4} {fmt(gold):>12} {fmt(found):>10} {fmt(evidence):>12} {fmt(judge):>7}")
+    return lines
 
 
 def compute_em_f1(data):
@@ -208,11 +342,10 @@ def compute_llm_judge(data):
                     print(f"    Judged {i + 1}/{len(data)} ...")
                 continue
 
-            prompt = JUDGE_PROMPT.format(
-                question=item["question"],
-                ground_truth=item["ground_truth"],
-                answer=ans,
-            )
+            prompt = (SET_JUDGE_PROMPT.format(question=item["question"],
+                                              ground_truth="; ".join(item["answers"]), answer=ans)
+                      if item.get("answers") else
+                      JUDGE_PROMPT.format(question=item["question"], ground_truth=item["ground_truth"], answer=ans))
 
             resp = client.chat.completions.create(
                 model=settings.GENERATION_MODEL,
@@ -279,10 +412,11 @@ def compute_ragas(data):
         return None, False
 
 
-def generate_report(phase_name, summary, per_question, ragas_ok, ragas_df, semantic_scores, judge_scores):
+def generate_report(phase_name, summary, per_question, ragas_ok, ragas_df, semantic_scores, judge_scores,
+                    grouped_lines=None):
     lines = []
     lines.append("=" * 80)
-    lines.append(f"  {phase_name} — HotpotQA Evaluation Report")
+    lines.append(f"  {phase_name} — Evaluation Report")
     lines.append("=" * 80)
     lines.append("")
     lines.append("SUMMARY")
@@ -292,6 +426,11 @@ def generate_report(phase_name, summary, per_question, ragas_ok, ragas_df, seman
     lines.append(f"  Relaxed EM          : {summary['relaxed_em']}")
     lines.append(f"  Extracted EM        : {summary['extracted_em']}")
     lines.append(f"  Token F1            : {summary['token_f1']}")
+    if summary.get("gold_recall") is not None:
+        lines.append(f"  Gold Recall (set)   : {summary['gold_recall']}")
+        lines.append(f"  All Found           : {summary['all_found']}")
+    if summary.get("evidence_recall") is not None:
+        lines.append(f"  Evidence Recall     : {summary['evidence_recall']}")
     if summary.get("semantic_similarity") is not None:
         lines.append(f"  Semantic Similarity : {summary['semantic_similarity']}")
     if summary.get("llm_judge") is not None:
@@ -300,6 +439,11 @@ def generate_report(phase_name, summary, per_question, ragas_ok, ragas_df, seman
         lines.append(f"  RAGAS Answer Corr   : {summary['ragas_answer_correctness']}")
         lines.append(f"  RAGAS Faithfulness  : {summary['ragas_faithfulness']}")
         lines.append(f"  RAGAS Context Recall: {summary['ragas_context_recall']}")
+    if grouped_lines:
+        lines.append("")
+        lines.append("BY GROUP (hop / evidence size)")
+        lines.append("-" * 40)
+        lines.extend(f"  {line}" for line in grouped_lines)
     lines.append("")
     lines.append("PER-QUESTION BREAKDOWN")
     lines.append("-" * 40)
@@ -328,10 +472,13 @@ def generate_report(phase_name, summary, per_question, ragas_ok, ragas_df, seman
     return "\n".join(lines)
 
 
-def run_benchmark(phase_name, data_file, output_file, report_file, runner_command):
+def run_benchmark(phase_name, data_file, output_file, report_file, runner_command,
+                  dataset=None, phase=None, per_question_file=None):
     """Run the full benchmark pipeline for a phase."""
     print("=" * 60)
-    print(f"  {phase_name} — HotpotQA Evaluation")
+    print(f"  {phase_name} — Evaluation")
+    if dataset is not None:
+        print(f"  dataset={dataset.name} | top_k={dataset.top_k} | eval={dataset.eval_file}")
     print("=" * 60)
 
     if not Path(data_file).exists():
@@ -359,6 +506,15 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
 
     print("\n--- RAGAS (LLM-based metrics) ---")
     ragas_results, ragas_ok = compute_ragas(data)
+
+    print("\n--- Set answers (gold recall / evidence recall) ---")
+    gold_recall_scores, all_found_scores, evidence_scores = compute_set_metrics(
+        data, tagged=bool(getattr(dataset, "tag_movies", False)))
+    grouped_lines = grouped_table(data, gold_recall_scores, all_found_scores, evidence_scores, judge_scores)
+    if grouped_lines:
+        print("\n--- By group (hop / evidence size) ---")
+        for line in grouped_lines:
+            print(f"  {line}")
 
     print("\n--- Per-question breakdown ---")
     ragas_df = ragas_results.to_pandas() if ragas_ok else None
@@ -406,6 +562,14 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
         "llm_judge": round(avg_judge, 4) if judge_ok else None,
     }
 
+    def _mean(values):
+        values = [v for v in values if v is not None]
+        return round(sum(values) / len(values), 4) if values else None
+
+    summary["gold_recall"] = _mean(gold_recall_scores)
+    summary["all_found"] = _mean(all_found_scores)
+    summary["evidence_recall"] = _mean(evidence_scores)
+
     if ragas_ok:
         summary["ragas_answer_correctness"] = round(float(ragas_results["answer_correctness"]), 4)
         summary["ragas_faithfulness"] = round(float(ragas_results["faithfulness"]), 4)
@@ -413,8 +577,18 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
 
     print(json.dumps(summary, indent=2))
 
+    metadata = {
+        "dataset": getattr(dataset, "name", None),
+        "phase": phase,
+        "top_k": getattr(dataset, "top_k", None),
+        "eval_file": str(getattr(dataset, "eval_file", "")),
+        "data_file": str(data_file),
+        "runner": runner_command,
+    }
+
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump({
+            "metadata": metadata,
             "summary": summary,
             "per_question": [
                 {
@@ -440,9 +614,31 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
             ],
         }, f, indent=2, ensure_ascii=False)
 
-    report = generate_report(phase_name, summary, per_question, ragas_ok, ragas_df, semantic_scores, judge_scores)
+    report = generate_report(phase_name, summary, per_question, ragas_ok, ragas_df, semantic_scores, judge_scores,
+                             grouped_lines=grouped_lines)
     with open(report_file, "w", encoding="utf-8") as f:
         f.write(report)
+
+    if per_question_file:
+        # One row per question, so two runs can be compared PAIRED later.
+        Path(per_question_file).parent.mkdir(parents=True, exist_ok=True)
+        with open(per_question_file, "w", encoding="utf-8") as f:
+            for i, item in enumerate(data):
+                f.write(json.dumps({
+                    "id": item.get("id"),
+                    "phase": phase,
+                    "dataset": metadata["dataset"],
+                    "top_k": metadata["top_k"],
+                    "hop": item.get("hop"),
+                    "evidence_n": len(item.get("supporting_facts", []) or []),
+                    "gold_recall": gold_recall_scores[i],
+                    "all_found": all_found_scores[i],
+                    "evidence_recall": evidence_scores[i],
+                    "judge": None if judge_scores[i] is None else int(judge_scores[i]),
+                    "EM": per_question[i]["EM"],
+                    "F1": round(per_question[i]["F1"], 4),
+                }, ensure_ascii=False) + "\n")
+        print(f"Per-question metrics saved to: {per_question_file}")
 
     print(f"\nJSON results saved to: {output_file}")
     print(f"Text report saved to:  {report_file}")

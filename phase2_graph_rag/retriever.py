@@ -3,7 +3,7 @@ import json
 import llama_index.core
 from llama_index.graph_stores.neo4j import Neo4jPropertyGraphStore
 
-from shared.config import settings, get_llamaindex_settings
+from shared.config import dataset_config, settings, get_llamaindex_settings
 
 llm, embed_model = get_llamaindex_settings()
 llama_index.core.Settings.llm = llm
@@ -65,7 +65,7 @@ NEIGHBOR_QUERY = """
 # ─────────────────────────────────────────────
 # MAIN RETRIEVER
 # ─────────────────────────────────────────────
-def retrieve_graph_chunks(user_query: str, top_k: int = 5) -> list[str]:
+def retrieve_graph_chunks(user_query: str, top_k: int = None) -> list[str]:
     """
     Hybrid Graph RAG retrieval:
     1. Vector search  — semantic similarity to catch related chunks
@@ -73,23 +73,26 @@ def retrieve_graph_chunks(user_query: str, top_k: int = 5) -> list[str]:
     3. 1-hop traversal — neighbor chunks via shared entity mentions
     4. Deduplication  — clean, non-redundant context for the LLM
     """
+    dataset = dataset_config(phase=2)
+    if top_k is None:
+        top_k = dataset.top_k
     if not user_query or not user_query.strip():
         print("Warning: empty query — returning no results.")
         return []
 
     # ── Connect ──────────────────────────────
-    print("Connecting to Neo4j...")
+    print(f"Connecting to Neo4j at {dataset.neo4j_uri} (database={dataset.neo4j_database})...")
     try:
         graph_store = Neo4jPropertyGraphStore(
             username=settings.NEO4J_USER,
             password=settings.NEO4J_PASSWORD,
-            url=settings.NEO4J_URI,
-            database=settings.NEO4J_DATABASE,
+            url=dataset.neo4j_uri,
+            database=dataset.neo4j_database,
         )
         # cheap preflight
         graph_store.structured_query("RETURN 1 AS ok")
     except Exception as e:
-        print(f"Error: Neo4j not reachable at {settings.NEO4J_URI} (db={settings.NEO4J_DATABASE}): {e}")
+        print(f"Error: Neo4j not reachable at {dataset.neo4j_uri} (db={dataset.neo4j_database}): {e}")
         print("Hint: run `docker compose up -d neo4j` or check Neo4j Desktop and NEO4J_DATABASE in .env")
         return []
 

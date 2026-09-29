@@ -31,6 +31,26 @@ services:
       - ./neo4j_logs:/logs
       - ./neo4j_plugins:/plugins
 
+  # Isolated graph store for the MetaQA track: Phase 2 MetaQA ingest must never
+  # touch the HotpotQA graph. Use this when your Neo4j server does not support
+  # multiple databases, and point the config at it:
+  #   NEO4J_METAQA_URI=neo4j://127.0.0.1:7688
+  #   NEO4J_METAQA_DATABASE=neo4j
+  neo4j-metaqa:
+    image: neo4j:5
+    restart: unless-stopped
+    container_name: neo4j-metaqa
+    ports:
+      - "7475:7474" # HTTP Browser/Dashboard
+      - "7688:7687" # Bolt protocol
+    environment:
+      - NEO4J_AUTH=neo4j/testpass123
+      - NEO4J_PLUGINS=["apoc"]
+    volumes:
+      - ./neo4j_metaqa_data:/data
+      - ./neo4j_metaqa_logs:/logs
+      - ./neo4j_metaqa_plugins:/plugins
+
 volumes:
   qdrant_data:
   neo4j_data:

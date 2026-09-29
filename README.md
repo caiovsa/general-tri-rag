@@ -235,16 +235,55 @@ Re-running steps 2–4 is deterministic (fixed seeds); re-running step 4 on the
 frozen corpus reproduces `metaqa_eval.jsonl` byte-identically to
 `metaqa_eval_v1.jsonl`.
 
-### Using MetaQA with Phases 1–2
+### Running the phases on MetaQA
 
-`metaqa_eval.jsonl` uses the `hotpot_eval.jsonl` shape — `question`, `answer`,
-`supporting_facts_titles` (= evidence movie titles) plus `answers`, `hop`,
-`qtype`, `id`, `evidence_triples` — so the shared runner and benchmark engine can
-consume it as-is. Two things to wire when the MetaQA ingest is written:
+The harness is dataset-agnostic. `DATASET=hotpot` (the default) keeps every
+historical path, collection, chunk size and database untouched; `DATASET=metaqa`
+switches the eval file, corpus, stores and results directory:
+
+| | `DATASET=hotpot` (default) | `DATASET=metaqa` |
+|---|---|---|
+| Eval file | `hotpot_eval.jsonl` (100) | `MetaQA/metaqa_eval_v1.jsonl` (212) |
+| Corpus | `data_hotpot/*.txt` (glob) | `MetaQA/corpus_manifest.txt` (994 — the manifest is read, never a glob) |
+| Qdrant | `rag_phase_1_baseline` | `<QDRANT_COLLECTION_NAME>_metaqa` |
+| Neo4j | `NEO4J_URI` / `NEO4J_DATABASE` | `NEO4J_METAQA_URI` / `NEO4J_METAQA_DATABASE` (refuses to start on the HotpotQA database) |
+| Chunk size | 200/20 (P1), 256/20 (P2) | **256/32 for every phase** |
+| Results | `phaseN_*/hotpot_*.json` | `results/metaqa/phaseN/` |
+| Chunk text | as-is | prefixed with `[Movie: <title>]` before embedding/extraction |
+
+```bash
+make metaqa-check                # resolved config: docs, collection, DB, eval rows
+make metaqa-ingest-p1            # Phase 1 -> Qdrant
+make metaqa-ingest-p2            # Phase 2 -> isolated Neo4j database
+make metaqa-answers-p1 LIMIT=3   # smoke run (also: --no-resume, --top-k)
+make metaqa-bench-p1
+```
+
+- `TOP_K` (env) or `--top-k` override retrieval depth; the dataset and top_k are
+  recorded in `run_meta.json` and in the eval-results metadata.
+- Per-question metrics land in `results/metaqa/phaseN/per_question.jsonl`
+  (`id, phase, hop, evidence_n, gold_recall, all_found, evidence_recall, judge`)
+  so two runs can be compared paired.
+- `metaqa_eval.jsonl` uses the `hotpot_eval.jsonl` shape — `question`, `answer`,
+  `supporting_facts_titles` (= evidence movie titles) plus `answers`, `hop`,
+  `qtype`, `id`, `evidence_triples` — so the shared runner and benchmark engine can
+  consume it as-is. Two things to wire when the MetaQA ingest is written:
 
 1. ingest exactly the paths in `MetaQA/corpus_manifest.txt` (never glob `docs/`);
 2. point the runner at `MetaQA/metaqa_eval_v1.jsonl`
    (`shared/hotpot_runner.py` hardcodes `EVAL_FILE = hotpot_eval.jsonl`).
+
+### MetaQA graph isolation
+
+MetaQA ingest calls `SHOW DATABASES` first and **refuses to run if it would touch
+the HotpotQA database**. Default target: the same server, dedicated database
+(`NEO4J_METAQA_DATABASE=metaqa-graph`). If your server does not support multiple
+databases (Neo4j Community), use the isolated service instead:
+
+```bash
+docker compose up -d neo4j-metaqa      # ports 7475 (browser) / 7688 (bolt)
+# .env: NEO4J_METAQA_URI=neo4j://127.0.0.1:7688  NEO4J_METAQA_DATABASE=neo4j
+```
 
 ## Evaluation Metrics
 
@@ -335,6 +374,7 @@ rag-trilogy/
 - **HotpotQA for benchmarking**: 100 questions with golden answers and supporting facts — small enough for fast iteration, diverse enough for meaningful evaluation
 - **MetaQA is evidence-gated**: every question ships the exact movies and triples that justify its gold answers, and the audit drops any question whose evidence is not verifiable in the fetched docs. No phase ever has to guess what the corpus is
 - **Frozen artifacts over regeneration**: `corpus_manifest.txt` + `metaqa_eval_v1.jsonl` + `FROZEN.sha256` are the contract between phases; steps 2–4 are deterministic and reproducible, but a phase run must never rebuild them
+- **One harness, two datasets**: `shared/config.py::dataset_config(phase)` is the single switch. HotpotQA keeps its historical paths/collections/chunk sizes; MetaQA reads the frozen manifest, tags every chunk with `[Movie: <title>]`, and writes to isolated stores and `results/metaqa/`
 
 ## Dependency Management
 

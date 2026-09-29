@@ -2,7 +2,7 @@ import qdrant_client
 from llama_index.core import VectorStoreIndex
 from llama_index.vector_stores.qdrant import QdrantVectorStore
 import llama_index.core
-from shared.config import settings, get_llamaindex_settings
+from shared.config import dataset_config, settings, get_llamaindex_settings
 from llama_index.core.postprocessor import SimilarityPostprocessor
 from llama_index.core import QueryBundle
 
@@ -14,13 +14,15 @@ def retrieve_chunks(user_query: str, top_k: int = None, node_threshold: float = 
     """
     Queries Qdrant and returns the retrieved nodes (including text and scores).
 
-    Defaults come from shared/config.py so Phase 1 and Phase 2 stay comparable.
+    Store, collection and default top_k come from the active DATASET
+    (shared/config.py) so HotpotQA and MetaQA never share a collection.
     """
+    dataset = dataset_config(phase=1)
     if not user_query or not user_query.strip():
         print("Warning: empty query — returning no results.")
         return []
     if top_k is None:
-        top_k = settings.DEFAULT_TOP_K
+        top_k = dataset.top_k
     if node_threshold is None:
         node_threshold = settings.DEFAULT_SIMILARITY_THRESHOLD
 
@@ -35,7 +37,7 @@ def retrieve_chunks(user_query: str, top_k: int = None, node_threshold: float = 
 
     vector_store = QdrantVectorStore(
         client=client,
-        collection_name=settings.QDRANT_COLLECTION_NAME
+        collection_name=dataset.qdrant_collection
     )
 
     # Connect to the existing Qdrant DB
@@ -55,7 +57,7 @@ if __name__ == "__main__":
     # --- CHANGE YOUR QUERY HERE ---
     test_query = "The 41st International 500-Mile Sweepstakes was held at which location?" #The Coca-Cola system sold how many unit cases of products in 2019, 2018 and 2017, respectively." #"Onde o Sr. Dursley trabalha?" #"Quem é Mike Tyson?"
 
-    print(f"\nSearching for: '{test_query}' in {settings.QDRANT_COLLECTION_NAME}...\n")
+    print(f"\nSearching for: '{test_query}' in {dataset_config(phase=1).qdrant_collection}...\n")
 
     results = retrieve_chunks(test_query, top_k=8, node_threshold=0.4)
 

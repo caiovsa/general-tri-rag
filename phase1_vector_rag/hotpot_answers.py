@@ -1,25 +1,22 @@
 """
-Generate answers for all HotpotQA questions using Phase 1 (Vector RAG).
+Generate answers for the active dataset with Phase 1 (Vector RAG).
 
 Usage:
-  python -m phase1_vector_rag.hotpot_answers
+  python -m phase1_vector_rag.hotpot_answers                 # DATASET=hotpot (default)
+  DATASET=metaqa python -m phase1_vector_rag.hotpot_answers  # MetaQA track
+  python -m phase1_vector_rag.hotpot_answers --limit 3 --no-resume
 """
 
-from pathlib import Path
-
-from shared.hotpot_runner import run_hotpot_answers
+from shared.config import dataset_config
+from shared.hotpot_runner import run_phase
 from phase1_vector_rag.rag import run_rag_pipeline
 
-RESULTS_FILE = Path("phase1_vector_rag/hotpot_results.json")
-DETAILED_FILE = Path("phase1_vector_rag/hotpot_results_detailed.json")
+# Legacy constants (hotpot paths), kept so older callers keep working.
+RESULTS_FILE = dataset_config(1).results_file
+DETAILED_FILE = dataset_config(1).detailed_file
 
 
 if __name__ == "__main__":
-    run_hotpot_answers(
-        pipeline_func=run_rag_pipeline,
-        phase_name="Phase 1 (Vector RAG)",
-        results_file=RESULTS_FILE,
-        detailed_file=DETAILED_FILE,
-    )
+    run_phase(run_rag_pipeline, phase=1, phase_name="Phase 1 (Vector RAG)")
 
 # python -m phase1_vector_rag.hotpot_answers
