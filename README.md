@@ -259,6 +259,15 @@ make metaqa-answers-p1 LIMIT=3   # smoke run (also: --no-resume, --top-k)
 make metaqa-bench-p1
 ```
 
+`DATASET=metaqa_mini` is the same track on a **hop-balanced slice** — 12 questions
+(4 per hop) over 50 docs (35 evidence + 15 distractor), built by
+`uv run python -m scripts.metaqa_make_mini` (seed 42) into
+`MetaQA/{metaqa_eval_mini.jsonl,corpus_manifest_mini.txt}`. It uses its own
+collection, its own graph database (`metaqa-mini-graph`) and `results/metaqa_mini/`,
+so a mini baseline can never touch the full run's stores. A 50-doc slice cannot
+cover hop 3 unless the questions are chosen deliberately — picking the first 50
+docs covers only 6 of 212 questions, all hop 1.
+
 - `TOP_K` (env) or `--top-k` override retrieval depth; the dataset and top_k are
   recorded in `run_meta.json` and in the eval-results metadata.
 - Per-question metrics land in `results/metaqa/phaseN/per_question.jsonl`

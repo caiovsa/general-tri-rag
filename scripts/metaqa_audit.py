@@ -74,9 +74,8 @@ def mentions(haystack_norm: str, name: str) -> bool:
     return bool(needle) and re.search(rf"\b{re.escape(needle)}\b", haystack_norm) is not None
 
 
-def load_doc(path: Path) -> dict:
-    """Parse a generated doc: raw text, first 1500 chars, and the infobox fields."""
-    text = path.read_text(encoding="utf-8")
+def doc_from_text(text: str) -> dict:
+    """Parse a doc or chunk body: raw text, first 1500 chars, and the infobox fields."""
     lines = text.splitlines()
     start = next((i for i, line in enumerate(lines) if line.strip().lower() == "infobox:"), None)
     fields: dict[str, str] = {}
@@ -90,6 +89,11 @@ def load_doc(path: Path) -> dict:
     head = text[:YEAR_WINDOW]
     return {"text": text, "head": head, "norm": norm(text), "head_norm": norm(head),
             "language": norm(fields.get("language", ""))}
+
+
+def load_doc(path: Path) -> dict:
+    """Parse a generated doc file."""
+    return doc_from_text(path.read_text(encoding="utf-8"))
 
 
 def genre_match(head_norm: str, genre: str):

@@ -56,6 +56,11 @@ class Settings:
     METAQA_EVAL_FILE: Path = Path(os.getenv("METAQA_EVAL_FILE", str(METAQA_DIR / "metaqa_eval_v1.jsonl")))
     METAQA_DOC_LIST: Path = Path(os.getenv("METAQA_DOC_LIST", str(METAQA_DIR / "corpus_manifest.txt")))
     METAQA_DOCS_DIR: Path = Path(os.getenv("METAQA_DOCS_DIR", str(METAQA_DIR / "docs")))
+    # MetaQA mini track: a hop-balanced slice of the same corpus, built by
+    # scripts/metaqa_make_mini.py, for fast baselines on its own isolated stores.
+    METAQA_MINI_EVAL_FILE: Path = Path(os.getenv("METAQA_MINI_EVAL_FILE", str(METAQA_DIR / "metaqa_eval_mini.jsonl")))
+    METAQA_MINI_DOC_LIST: Path = Path(os.getenv("METAQA_MINI_DOC_LIST", str(METAQA_DIR / "corpus_manifest_mini.txt")))
+    NEO4J_METAQA_MINI_DATABASE: str = os.getenv("NEO4J_METAQA_MINI_DATABASE", "metaqa-mini-graph")
     # One chunk size for every MetaQA phase so the phases stay comparable
     METAQA_CHUNK_SIZE: int = int(os.getenv("METAQA_CHUNK_SIZE", "256"))
     METAQA_CHUNK_OVERLAP: int = int(os.getenv("METAQA_CHUNK_OVERLAP", "32"))
@@ -91,32 +96,39 @@ class Dataset:
     tag_movies: bool = False       # prepend "[Movie: <title>]" to every chunk
 
 
+def metaqa_database(name: str) -> str:
+    """Configured graph database for a MetaQA variant (never the HotpotQA database)."""
+    return settings.NEO4J_METAQA_MINI_DATABASE if name == "metaqa_mini" else settings.NEO4J_METAQA_DATABASE
+
+
 def dataset_config(phase: int = 1) -> Dataset:
     """Resolve paths and parameters for the active DATASET.
 
     DATASET=hotpot (default) returns exactly the historical paths, collections,
     chunk sizes and databases, so existing runs are unchanged. DATASET=metaqa
-    switches to the frozen MetaQA corpus, isolated stores and results/ dir.
+    switches to the frozen MetaQA corpus; DATASET=metaqa_mini is the same track on
+    the hop-balanced mini slice (scripts/metaqa_make_mini.py), isolated stores.
     """
     phase_dir = PHASE_DIRS[phase]
     phase_default_top_k = 8 if phase == 1 else 5  # 8 = Phase 1 today, 5 = Phase 2 today
     top_k = settings.TOP_K or phase_default_top_k
 
-    if settings.DATASET == "metaqa":
-        results_dir = REPO_ROOT / "results" / "metaqa" / f"phase{phase}"
+    if settings.DATASET in ("metaqa", "metaqa_mini"):
+        mini = settings.DATASET == "metaqa_mini"
+        results_dir = REPO_ROOT / "results" / settings.DATASET / f"phase{phase}"
         return Dataset(
-            name="metaqa",
-            eval_file=settings.METAQA_EVAL_FILE,
+            name=settings.DATASET,
+            eval_file=settings.METAQA_MINI_EVAL_FILE if mini else settings.METAQA_EVAL_FILE,
             docs_dir=settings.METAQA_DOCS_DIR,
-            doc_list=settings.METAQA_DOC_LIST,
+            doc_list=settings.METAQA_MINI_DOC_LIST if mini else settings.METAQA_DOC_LIST,
             results_file=results_dir / "results.json",
             detailed_file=results_dir / "results_detailed.json",
             eval_results_file=results_dir / "eval_results.json",
             eval_report_file=results_dir / "eval_report.txt",
             per_question_file=results_dir / "per_question.jsonl",
-            qdrant_collection=f"{settings.QDRANT_COLLECTION_NAME}_metaqa",
+            qdrant_collection=f"{settings.QDRANT_COLLECTION_NAME}_{settings.DATASET}",
             neo4j_uri=settings.NEO4J_METAQA_URI,
-            neo4j_database=settings.NEO4J_METAQA_DATABASE,
+            neo4j_database=metaqa_database(settings.DATASET),
             chunk_size=settings.METAQA_CHUNK_SIZE,
             chunk_overlap=settings.METAQA_CHUNK_OVERLAP,
             top_k=top_k,
@@ -124,7 +136,8 @@ def dataset_config(phase: int = 1) -> Dataset:
         )
 
     if settings.DATASET != "hotpot":
-        raise ValueError(f"Unknown DATASET={settings.DATASET!r} (expected 'hotpot' or 'metaqa')")
+        raise ValueError(f"Unknown DATASET={settings.DATASET!r} "
+                         "(expected 'hotpot', 'metaqa' or 'metaqa_mini')")
 
     chunk_size, chunk_overlap = (
         (settings.CHUNK_SIZE_HOTPOT, settings.CHUNK_OVERLAP_HOTPOT) if phase == 1
