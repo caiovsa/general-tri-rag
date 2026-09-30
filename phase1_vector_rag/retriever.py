@@ -10,12 +10,15 @@ from llama_index.core import QueryBundle
 _, embed_model = get_llamaindex_settings()
 llama_index.core.Settings.embed_model = embed_model
 
-def retrieve_chunks(user_query: str, top_k: int = None, node_threshold: float = None):
+def retrieve_chunks(user_query: str, top_k: int = None, node_threshold: float = None,
+                    apply_threshold: bool = True):
     """
     Queries Qdrant and returns the retrieved nodes (including text and scores).
 
     Store, collection and default top_k come from the active DATASET
     (shared/config.py) so HotpotQA and MetaQA never share a collection.
+    ``apply_threshold=False`` skips the similarity postprocessor entirely (MetaQA
+    protocol: no threshold), while HotpotQA keeps its default threshold.
     """
     dataset = dataset_config(phase=1)
     if not user_query or not user_query.strip():
@@ -48,6 +51,8 @@ def retrieve_chunks(user_query: str, top_k: int = None, node_threshold: float = 
 
     # This executes the similarity search and returns NodeWithScore objects
     nodes = retriever.retrieve(user_query)
+    if not apply_threshold:
+        return nodes
     postprocessor = SimilarityPostprocessor(similarity_cutoff=node_threshold)
     filtered_nodes = postprocessor.postprocess_nodes(nodes, query_bundle=QueryBundle(user_query))
         

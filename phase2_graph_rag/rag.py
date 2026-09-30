@@ -1,6 +1,7 @@
-from phase2_graph_rag.retriever import retrieve_graph_chunks
+from phase2_graph_rag.retriever import retrieve_graph_chunks, retrieve_graph_chunks_with_sources
 from shared.llm import generate_completion
-from shared.config import settings
+from shared.config import dataset_config, settings
+from shared.prompts import build_metaqa_prompt, format_context
 
 def build_graph_prompt(query: str, chunks: list[str]) -> str:
     """
@@ -30,8 +31,28 @@ Answer:"""
 
 def run_graph_rag_pipeline(user_query: str):
     """Main entry point: Graph Retrieve -> Prompt -> Generate"""
+    dataset = dataset_config(phase=2)
+    metaqa = dataset.tag_movies
     print(f"Executing Graph RAG for: '{user_query}'\n")
-    
+
+    if metaqa:
+        # One shared prompt for every MetaQA phase; the LLM is always called, even
+        # with an empty context (which the template renders as "(no context retrieved)").
+        print("1. Retrieving from Neo4j (seeds > anchors > neighbours, capped to top_k)...")
+        entries, counts = retrieve_graph_chunks_with_sources(user_query)
+        contexts = [entry["text"] for entry in entries]
+        prompt = build_metaqa_prompt(user_query, format_context(contexts))
+
+        print(f"2. Generating answer using model: {settings.GENERATION_MODEL}...\n")
+        answer = generate_completion(prompt, temperature=0)
+
+        print("=" * 50)
+        print("Final Graph RAG Answer:")
+        print("=" * 50)
+        print(answer)
+
+        return {"answer": answer, "contexts": contexts, "retrieval": counts}
+
     print("1. Retrieving from Neo4j (vector + graph traversal)...")
     chunks = retrieve_graph_chunks(user_query)
     print(f"-> Retrieved {len(chunks)} graph-enriched chunks.\n")

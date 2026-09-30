@@ -15,6 +15,7 @@ from numpy.linalg import norm
 
 from shared.config import settings
 from shared.ingest import MOVIE_TAG
+from shared.prompts import metaqa_prompt_template_hash
 
 FILLER_PATTERNS = [
     r"^(yes|no),?\s*",
@@ -314,7 +315,8 @@ def compute_semantic_similarity(data):
         return None, [None] * len(data), False
 
 
-def compute_llm_judge(data):
+def compute_llm_judge(data, dataset=None):
+    metaqa = bool(getattr(dataset, "tag_movies", False))
     if not settings.OPENAI_API_KEY:
         print("  OPENAI_API_KEY not set — skipping LLM-as-Judge.")
         return None, [None] * len(data), False
@@ -348,8 +350,9 @@ def compute_llm_judge(data):
                       JUDGE_PROMPT.format(question=item["question"], ground_truth=item["ground_truth"], answer=ans))
 
             resp = client.chat.completions.create(
-                model=settings.GENERATION_MODEL,
+                model=settings.JUDGE_MODEL if metaqa else settings.GENERATION_MODEL,
                 messages=[{"role": "user", "content": prompt}],
+                **({"temperature": 0} if metaqa else {}),
             )
             judgment = resp.choices[0].message.content.strip().upper()
             score = 1 if "CORRECT" in judgment else 0
@@ -359,7 +362,8 @@ def compute_llm_judge(data):
                 print(f"    Judged {i + 1}/{len(data)} ...")
 
         avg_score = sum(scores) / len(scores)
-        print(f"  LLM-as-Judge Accuracy : {avg_score:.4f}  ({sum(scores)}/{len(scores)} correct)")
+        label = "LLM-as-Judge (secondary)" if metaqa else "LLM-as-Judge"
+        print(f"  {label} Accuracy : {avg_score:.4f}  ({sum(scores)}/{len(scores)} correct)")
         return avg_score, scores, True
 
     except Exception as e:
@@ -413,7 +417,7 @@ def compute_ragas(data):
 
 
 def generate_report(phase_name, summary, per_question, ragas_ok, ragas_df, semantic_scores, judge_scores,
-                    grouped_lines=None):
+                    grouped_lines=None, deterministic_first=False):
     lines = []
     lines.append("=" * 80)
     lines.append(f"  {phase_name} — Evaluation Report")
@@ -422,19 +426,37 @@ def generate_report(phase_name, summary, per_question, ragas_ok, ragas_df, seman
     lines.append("SUMMARY")
     lines.append("-" * 40)
     lines.append(f"  Total questions     : {summary['num_examples']}")
-    lines.append(f"  Exact Match         : {summary['exact_match']}")
-    lines.append(f"  Relaxed EM          : {summary['relaxed_em']}")
-    lines.append(f"  Extracted EM        : {summary['extracted_em']}")
-    lines.append(f"  Token F1            : {summary['token_f1']}")
+
+    base_lines = [
+        f"  Exact Match         : {summary['exact_match']}",
+        f"  Relaxed EM          : {summary['relaxed_em']}",
+        f"  Extracted EM        : {summary['extracted_em']}",
+        f"  Token F1            : {summary['token_f1']}",
+    ]
+    deterministic_lines = []
     if summary.get("gold_recall") is not None:
-        lines.append(f"  Gold Recall (set)   : {summary['gold_recall']}")
-        lines.append(f"  All Found           : {summary['all_found']}")
+        deterministic_lines.append(f"  Gold Recall (set)   : {summary['gold_recall']}")
+        deterministic_lines.append(f"  All Found           : {summary['all_found']}")
     if summary.get("evidence_recall") is not None:
-        lines.append(f"  Evidence Recall     : {summary['evidence_recall']}")
+        deterministic_lines.append(f"  Evidence Recall     : {summary['evidence_recall']}")
+
+    if deterministic_first:
+        # MetaQA protocol: deterministic set metrics are the primary result.
+        lines.append("  Deterministic metrics")
+        lines.extend(deterministic_lines)
+        lines.append("  Other metrics")
+        lines.extend(base_lines)
+    else:
+        lines.extend(base_lines)
+        lines.extend(deterministic_lines)
+
     if summary.get("semantic_similarity") is not None:
         lines.append(f"  Semantic Similarity : {summary['semantic_similarity']}")
     if summary.get("llm_judge") is not None:
-        lines.append(f"  LLM-as-Judge        : {summary['llm_judge']}")
+        if deterministic_first:
+            lines.append(f"  LLM-as-Judge (secondary): {summary['llm_judge']}")
+        else:
+            lines.append(f"  LLM-as-Judge        : {summary['llm_judge']}")
     if ragas_ok:
         lines.append(f"  RAGAS Answer Corr   : {summary['ragas_answer_correctness']}")
         lines.append(f"  RAGAS Faithfulness  : {summary['ragas_faithfulness']}")
@@ -495,21 +517,29 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
 
     print(f"Loaded {len(data)} examples from {data_file}")
 
+    tagged = bool(getattr(dataset, "tag_movies", False))
+
     print("\n--- EM + Token F1 (official HotpotQA metrics) ---")
     avg_em, avg_rem, avg_eem, avg_f1, per_question = compute_em_f1(data)
+
+    if tagged:
+        # MetaQA protocol: deterministic set metrics first, LLM judge secondary.
+        print("\n--- Deterministic metrics (gold recall / all found) ---")
+        gold_recall_scores, all_found_scores, evidence_scores = compute_set_metrics(data, tagged=tagged)
 
     print("\n--- Semantic Similarity (OpenAI embeddings) ---")
     avg_semantic, semantic_scores, semantic_ok = compute_semantic_similarity(data)
 
     print("\n--- LLM-as-Judge ---")
-    avg_judge, judge_scores, judge_ok = compute_llm_judge(data)
+    avg_judge, judge_scores, judge_ok = compute_llm_judge(data, dataset=dataset)
 
     print("\n--- RAGAS (LLM-based metrics) ---")
     ragas_results, ragas_ok = compute_ragas(data)
 
-    print("\n--- Set answers (gold recall / evidence recall) ---")
-    gold_recall_scores, all_found_scores, evidence_scores = compute_set_metrics(
-        data, tagged=bool(getattr(dataset, "tag_movies", False)))
+    if not tagged:
+        print("\n--- Set answers (gold recall / evidence recall) ---")
+        gold_recall_scores, all_found_scores, evidence_scores = compute_set_metrics(data, tagged=tagged)
+
     grouped_lines = grouped_table(data, gold_recall_scores, all_found_scores, evidence_scores, judge_scores)
     if grouped_lines:
         print("\n--- By group (hop / evidence size) ---")
@@ -575,6 +605,12 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
         summary["ragas_faithfulness"] = round(float(ragas_results["faithfulness"]), 4)
         summary["ragas_context_recall"] = round(float(ragas_results["context_recall"]), 4)
 
+    if tagged:
+        # Deterministic metrics are the first block of the MetaQA report/metadata.
+        first = ["num_examples", "gold_recall", "all_found", "evidence_recall"]
+        summary = ({k: summary[k] for k in first} |
+                   {k: v for k, v in summary.items() if k not in first})
+
     print(json.dumps(summary, indent=2))
 
     metadata = {
@@ -585,6 +621,25 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
         "data_file": str(data_file),
         "runner": runner_command,
     }
+    if tagged:
+        # MetaQA protocol: pinned models at temperature 0 + frozen prompt template.
+        metadata.update({
+            "generation_model": settings.GENERATION_MODEL,
+            "judge_model": settings.JUDGE_MODEL,
+            "temperature": 0,
+            "prompt_template_hash": metaqa_prompt_template_hash(),
+        })
+        retrieval_rows = [d["retrieval"] for d in data if isinstance(d.get("retrieval"), dict)]
+        if retrieval_rows:
+            chunks = [r.get("chunks_in_prompt") or 0 for r in retrieval_rows]
+            metadata["retrieval"] = {
+                "questions": len(retrieval_rows),
+                "chunks_in_prompt_mean": round(sum(chunks) / len(chunks), 4),
+                "chunks_in_prompt_max": max(chunks),
+                "seeds_total": sum((r.get("seeds") or 0) for r in retrieval_rows),
+                "anchors_total": sum((r.get("anchors") or 0) for r in retrieval_rows),
+                "neighbours_total": sum((r.get("neighbours") or 0) for r in retrieval_rows),
+            }
 
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump({
@@ -615,7 +670,7 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
         }, f, indent=2, ensure_ascii=False)
 
     report = generate_report(phase_name, summary, per_question, ragas_ok, ragas_df, semantic_scores, judge_scores,
-                             grouped_lines=grouped_lines)
+                             grouped_lines=grouped_lines, deterministic_first=tagged)
     with open(report_file, "w", encoding="utf-8") as f:
         f.write(report)
 
@@ -624,6 +679,7 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
         Path(per_question_file).parent.mkdir(parents=True, exist_ok=True)
         with open(per_question_file, "w", encoding="utf-8") as f:
             for i, item in enumerate(data):
+                retrieval = item.get("retrieval") if isinstance(item.get("retrieval"), dict) else {}
                 f.write(json.dumps({
                     "id": item.get("id"),
                     "phase": phase,
@@ -637,6 +693,12 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
                     "judge": None if judge_scores[i] is None else int(judge_scores[i]),
                     "EM": per_question[i]["EM"],
                     "F1": round(per_question[i]["F1"], 4),
+                    **({
+                        "chunks_in_prompt": retrieval.get("chunks_in_prompt"),
+                        "seeds": retrieval.get("seeds"),
+                        "anchors": retrieval.get("anchors"),
+                        "neighbours": retrieval.get("neighbours"),
+                    } if tagged else {}),
                 }, ensure_ascii=False) + "\n")
         print(f"Per-question metrics saved to: {per_question_file}")
 

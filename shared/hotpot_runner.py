@@ -18,7 +18,8 @@ from pathlib import Path
 
 from tqdm import tqdm
 
-from shared.config import dataset_config, set_top_k
+from shared.config import dataset_config, closed_book_dataset, settings, set_top_k
+from shared.prompts import metaqa_prompt_template_hash
 
 EVAL_FILE = Path("hotpot_eval.jsonl")  # legacy default, kept for backwards compatibility
 
@@ -66,9 +67,11 @@ def save_results(results, detailed_results, results_file, detailed_file):
     print(f"Saved {len(detailed_results)} detailed results to {detailed_file}")
 
 
-def detailed_row(question: dict, answer: str, contexts: list, extra_keys=("id", "hop", "qtype", "answers")) -> dict:
+def detailed_row(question: dict, answer: str, contexts: list, extra_keys=("id", "hop", "qtype", "answers"),
+                 retrieval: dict | None = None) -> dict:
     """Detailed result row. HotpotQA rows keep their exact shape; MetaQA adds the
-    fields that let the benchmark group by hop and compare runs paired."""
+    fields that let the benchmark group by hop and compare runs paired, plus the
+    per-question retrieval budget/provenance when the phase provides it."""
     row = {
         "question": question["question"],
         "ground_truth": question.get("answer", ""),
@@ -79,7 +82,25 @@ def detailed_row(question: dict, answer: str, contexts: list, extra_keys=("id", 
     for key in extra_keys:
         if key in question:
             row[key] = question[key]
+    if retrieval is not None:
+        row["retrieval"] = retrieval
     return row
+
+
+def retrieval_summary(rows: list[dict]) -> dict | None:
+    """Aggregate per-question retrieval counts (chunks_in_prompt + provenance)."""
+    retrieval_rows = [row.get("retrieval") for row in rows if isinstance(row.get("retrieval"), dict)]
+    if not retrieval_rows:
+        return None
+    chunks = [r.get("chunks_in_prompt") or 0 for r in retrieval_rows]
+    return {
+        "questions": len(retrieval_rows),
+        "chunks_in_prompt_mean": round(sum(chunks) / len(chunks), 4),
+        "chunks_in_prompt_max": max(chunks),
+        "seeds_total": sum((r.get("seeds") or 0) for r in retrieval_rows),
+        "anchors_total": sum((r.get("anchors") or 0) for r in retrieval_rows),
+        "neighbours_total": sum((r.get("neighbours") or 0) for r in retrieval_rows),
+    }
 
 
 def run_hotpot_answers(pipeline_func, phase_name, results_file, detailed_file, limit: int = None,
@@ -126,12 +147,13 @@ def run_hotpot_answers(pipeline_func, phase_name, results_file, detailed_file, l
             pipeline_result = pipeline_func(question)
             answer = pipeline_result.get("answer", "")
             contexts = pipeline_result.get("contexts", [])
+            retrieval = pipeline_result.get("retrieval")
         except Exception as e:
-            answer, contexts = f"Error: {str(e)}", []
+            answer, contexts, retrieval = f"Error: {str(e)}", [], None
             print(f"\n  [Question {i+1}] {answer}")
 
         results.append({"question": question, "answer": answer})
-        detailed_results.append(detailed_row(q, answer, contexts))
+        detailed_results.append(detailed_row(q, answer, contexts, retrieval=retrieval))
 
     # Merge with previous answers and write in eval order, so a resumed run never
     # drops rows answered by an earlier one.
@@ -145,6 +167,9 @@ def run_hotpot_answers(pipeline_func, phase_name, results_file, detailed_file, l
         meta_path = Path(detailed_file).parent / "run_meta.json"
         meta = {**run_meta, "questions": len(questions), "answered": len(ordered),
                 "generated": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+        retrieval = retrieval_summary(ordered)
+        if retrieval is not None:
+            meta["retrieval"] = retrieval
         meta_path.write_text(json.dumps(meta, indent=2), encoding="utf-8")
         print(f"Run metadata saved to {meta_path}")
     print(f"\nDone! Processed {len(pending)}/{len(questions)} questions.")
@@ -158,12 +183,16 @@ def parse_args(phase: int) -> argparse.Namespace:
     return parser.parse_args()
 
 
-def run_phase(pipeline_func, phase: int, phase_name: str):
-    """Resolve the active dataset, parse CLI flags and run the phase."""
+def run_phase(pipeline_func, phase: int, phase_name: str, closed_book: bool = False):
+    """Resolve the active dataset, parse CLI flags and run the phase.
+
+    ``closed_book=True`` routes the run to results/<dataset>/closed_book/ (MetaQA
+    tracks only) and uses the same runner/format as a normal phase.
+    """
     args = parse_args(phase)
     if args.top_k:
         set_top_k(args.top_k)
-    dataset = dataset_config(phase)
+    dataset = closed_book_dataset(phase) if closed_book else dataset_config(phase)
 
     print(f"Dataset: {dataset.name} | phase: {phase}")
     print(f"  eval file  : {dataset.eval_file}")
@@ -173,6 +202,17 @@ def run_phase(pipeline_func, phase: int, phase_name: str):
         print(f"  corpus     : {dataset.doc_list}")
     print()
 
+    run_meta = {"dataset": dataset.name, "phase": phase, "top_k": dataset.top_k,
+                "eval_file": str(dataset.eval_file), "limit": args.limit}
+    if dataset.tag_movies:
+        # MetaQA protocol: pinned models at temperature 0 + frozen prompt template.
+        run_meta.update({
+            "generation_model": settings.GENERATION_MODEL,
+            "judge_model": settings.JUDGE_MODEL,
+            "temperature": 0,
+            "prompt_template_hash": metaqa_prompt_template_hash(),
+        })
+
     run_hotpot_answers(
         pipeline_func=pipeline_func,
         phase_name=phase_name,
@@ -181,6 +221,5 @@ def run_phase(pipeline_func, phase: int, phase_name: str):
         limit=args.limit,
         resume=not args.no_resume,
         eval_file=dataset.eval_file,
-        run_meta={"dataset": dataset.name, "phase": phase, "top_k": dataset.top_k,
-                  "eval_file": str(dataset.eval_file), "limit": args.limit},
+        run_meta=run_meta,
     )

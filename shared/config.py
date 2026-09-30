@@ -1,5 +1,5 @@
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from dotenv import load_dotenv
 from qdrant_client import QdrantClient
@@ -27,6 +27,8 @@ class Settings:
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
     EMBEDDING_DIMENSION: int = int(os.getenv("EMBEDDING_DIMENSION", "1536"))
     GENERATION_MODEL: str = os.getenv("GENERATION_MODEL", "gpt-4o-mini")
+    # Judge model for the benchmark; defaults to the generation model for now.
+    JUDGE_MODEL: str = os.getenv("JUDGE_MODEL", GENERATION_MODEL)
     EXTRACTION_MODEL: str = os.getenv("EXTRACTION_MODEL", "gpt-5-mini")
 
     # RAG parameters
@@ -111,9 +113,10 @@ def dataset_config(phase: int = 1) -> Dataset:
     """
     phase_dir = PHASE_DIRS[phase]
     phase_default_top_k = 8 if phase == 1 else 5  # 8 = Phase 1 today, 5 = Phase 2 today
-    top_k = settings.TOP_K or phase_default_top_k
 
     if settings.DATASET in ("metaqa", "metaqa_mini"):
+        # Experiment protocol: top_k=20 for BOTH phases on the MetaQA tracks.
+        top_k = settings.TOP_K or 20
         mini = settings.DATASET == "metaqa_mini"
         results_dir = REPO_ROOT / "results" / settings.DATASET / f"phase{phase}"
         return Dataset(
@@ -139,6 +142,7 @@ def dataset_config(phase: int = 1) -> Dataset:
         raise ValueError(f"Unknown DATASET={settings.DATASET!r} "
                          "(expected 'hotpot', 'metaqa' or 'metaqa_mini')")
 
+    top_k = settings.TOP_K or phase_default_top_k
     chunk_size, chunk_overlap = (
         (settings.CHUNK_SIZE_HOTPOT, settings.CHUNK_OVERLAP_HOTPOT) if phase == 1
         else (settings.CHUNK_SIZE_GRAPH, settings.CHUNK_OVERLAP_GRAPH)
@@ -161,6 +165,29 @@ def dataset_config(phase: int = 1) -> Dataset:
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
         top_k=top_k,
+    )
+
+
+def closed_book_dataset(phase: int = 1) -> Dataset:
+    """Dataset paths for the closed-book control: results/<dataset>/closed_book/.
+
+    Only the MetaQA tracks support it (the shared prompt + no retrieval); HotpotQA
+    keeps its historical behavior and raises here.
+    """
+    dataset = dataset_config(phase)
+    if not dataset.tag_movies:
+        raise SystemExit(
+            "Closed-book mode is only implemented for the MetaQA tracks "
+            "(DATASET=metaqa or DATASET=metaqa_mini)."
+        )
+    directory = REPO_ROOT / "results" / dataset.name / "closed_book"
+    return replace(
+        dataset,
+        results_file=directory / "results.json",
+        detailed_file=directory / "results_detailed.json",
+        eval_results_file=directory / "eval_results.json",
+        eval_report_file=directory / "eval_report.txt",
+        per_question_file=directory / "per_question.jsonl",
     )
 
 
