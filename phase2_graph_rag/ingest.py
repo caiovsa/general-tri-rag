@@ -161,9 +161,18 @@ def instrument_retries(llm, stats: RunStats) -> None:
 
 
 def guard_reset(dataset) -> None:
-    """--reset may only ever touch this dataset's own MetaQA database."""
+    """--reset may only ever touch this dataset's own MetaQA (or local) database."""
+    if dataset.name == "local":
+        if dataset.neo4j_database != settings.LOCAL_NEO4J_DATABASE:
+            raise SystemExit(f"Refusing --reset: {dataset.neo4j_database!r} is not the configured "
+                             f"local database ({settings.LOCAL_NEO4J_DATABASE!r}).")
+        if dataset.neo4j_database in {settings.NEO4J_DATABASE, settings.NEO4J_METAQA_DATABASE,
+                                      settings.NEO4J_METAQA_MINI_DATABASE,
+                                      settings.NEO4J_METAQA_MINI30_DATABASE}:
+            raise SystemExit(f"Refusing --reset: {dataset.neo4j_database!r} belongs to another track.")
+        return
     if dataset.name not in ("metaqa", "metaqa_mini", "metaqa_mini30"):
-        raise SystemExit("--reset is MetaQA-only: refusing to wipe a HotpotQA/local graph.")
+        raise SystemExit("--reset is MetaQA/local-only: refusing to wipe an unknown graph.")
     expected = metaqa_database(dataset.name)
     if dataset.neo4j_database != expected:
         raise SystemExit(f"Refusing --reset: target database {dataset.neo4j_database!r} is not the "

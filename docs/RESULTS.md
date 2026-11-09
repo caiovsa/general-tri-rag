@@ -62,6 +62,14 @@ The neighbour ablation is recorded in `run_meta.json` (`include_neighbours: fals
 | Phase 2 — graph | **pending full ingest** (mini30 certified; full gpt-5-mini extraction is ~4 h / ≈$15–20, deliberately not started without a budget checkpoint) | | | | |
 | Phase 3a — oracle ontology graph | **212/212 answered, 0 errors** | 0.881 | 0.966 | 0.972 | 0.695 / 0.752 / 0.860 |
 
+## Generic local track smoke
+
+A 1-document text fixture with 2 questions was ingested through `DATASET=local` for both phases:
+Phase 1 and Phase 2 each answered 2/2 with 0 errors (EM 1.0, judge 1.0), using the shared prompt
+and the isolated `rag_local` collection / `local-graph` database. PDF text extraction was verified
+separately (`data/HP-1.pdf` -> 274 pages of text via `pypdf`), so `DATASET=local` + `LOCAL_PATTERN`
+covers TXT/PDF corpora without touching the benchmark collections.
+
 ## Operational facts
 
 - Phase 1 ingest is deterministic: `hotpot-qa_metaqa` rebuilt to exactly **4,522 chunks**.
