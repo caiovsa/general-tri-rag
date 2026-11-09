@@ -1,34 +1,41 @@
 """
-Phase 3 — Ontology RAG Pipeline
-================================
+Phase 3 — Ontology RAG pipeline (typed KB graph, Phase 3a).
 
-TODO: Implement ontology-aware RAG pipeline.
+Retrieval: `phase3_ontology_rag.retriever` (entity match -> typed BFS -> chunk
+ranking). Generation: the same frozen shared prompt and model as the MetaQA
+tracks, so Phase 1 / Phase 2 / Phase 3 are comparable at the same top_k.
 
-Design:
-  1. Call retrieve_graph_chunks() from phase3_ontology_rag.retriever.
-  2. Build a prompt that includes:
-     a. Retrieved chunk text.
-     b. Typed graph relationships (e.g., "Harry Potter is a Person who
-        works_for Grifinória which is an Organization").
-     c. Ontology class context (e.g., "Person: an individual human.
-        Organization: a structured group of people.").
-  3. The prompt should instruct the LLM to use the ontology types for
-     reasoning: "Use the entity types and their relationships to answer
-     questions that require understanding what kind of thing an entity is."
-
-Key differences from Phase 2:
-  - Prompt includes entity type information (Person, Organization, etc.).
-  - LLM can reason about entity categories, not just named relationships.
-  - Better for questions like "What organizations is X part of?" where
-    the ontology defines what counts as an organization.
-
-Example prompt structure:
-  "The context below includes typed entities and relationships.
-   Entity types are defined by the ontology:
-   - Person: an individual human
-   - Organization: a structured group
-   - Location: a geographic place
-   Use the types to answer questions that require category reasoning."
-
-Run: python -m phase3_ontology_rag.rag
+Run: DATASET=metaqa_mini30 python -m phase3_ontology_rag.rag
 """
+
+from phase3_ontology_rag.retriever import retrieve_ontology_chunks
+from shared.config import dataset_config, settings
+from shared.llm import generate_completion
+from shared.prompts import build_metaqa_prompt, format_context
+
+
+def run_ontology_rag_pipeline(user_query: str):
+    dataset = dataset_config(phase=3)
+    print(f"Executing Ontology RAG for: '{user_query}'\n")
+
+    print("1. Matching the topic entity and walking the typed KB graph...")
+    entries, counts = retrieve_ontology_chunks(user_query)
+    contexts = [entry["text"] for entry in entries]
+    print(f"-> Retrieved {len(contexts)} chunks "
+          f"({counts.get('entity')!r}, candidates={counts.get('candidates')}).\n")
+
+    prompt = build_metaqa_prompt(user_query, format_context(contexts))
+    print(f"2. Generating answer using model: {settings.GENERATION_MODEL}...\n")
+    answer = generate_completion(prompt)
+
+    print("=" * 50)
+    print("Final Ontology RAG Answer:")
+    print("=" * 50)
+    print(answer)
+    return {"answer": answer, "contexts": contexts, "retrieval": counts}
+
+
+if __name__ == "__main__":
+    run_ontology_rag_pipeline("what movies did Cher act in")
+
+# python -m phase3_ontology_rag.rag

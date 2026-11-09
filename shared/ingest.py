@@ -103,6 +103,7 @@ def ingest_documents(
     dataset=None,
     batch_size: int = 50,
     verbose: bool = True,
+    reset: bool = False,
 ):
     """Qdrant ingest for a resolved dataset (manifest-driven, movie-tagged).
 
@@ -114,6 +115,10 @@ def ingest_documents(
         raise ValueError("embed_model is required")
 
     client = qdrant_client.QdrantClient(url=qdrant_url)
+    if reset:
+        client.delete_collection(collection_name=collection_name)
+        if verbose:
+            print(f"Reset: deleted Qdrant collection {collection_name!r} (if it existed)")
     vector_store = QdrantVectorStore(client=client, collection_name=collection_name)
     storage_context = StorageContext.from_defaults(vector_store=vector_store)
     transformations = [TokenTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)]
@@ -138,9 +143,28 @@ def ingest_documents(
 
 
 def load_documents(file_path: Path):
-    """Load a single file via LlamaIndex SimpleDirectoryReader."""
+    """Load a single file via LlamaIndex SimpleDirectoryReader (text validated).
+
+    Without a reader for the file type, SimpleDirectoryReader can silently
+    decode raw bytes; ingesting that would poison the collection.
+    """
     reader = SimpleDirectoryReader(input_files=[str(file_path)])
-    return reader.load_data()
+    documents = reader.load_data()
+    if not documents:
+        raise ValueError(f"no text extracted from {file_path} — unsupported or corrupt file "
+                         "(the reader skipped it silently). Convert it to .txt/.md first.")
+    for document in documents:
+        sample = (document.text or "")[:4000]
+        if not sample:
+            continue
+        if sample.lstrip().startswith("%PDF"):
+            raise ValueError(f"{file_path} decoded as raw bytes — install a PDF reader "
+                             "(`llama-index-readers-file` + `pypdf`) before ingesting PDFs.")
+        printable = sum(ch.isprintable() or ch.isspace() for ch in sample)
+        if printable / len(sample) < 0.85:
+            raise ValueError(f"{file_path} does not look like text "
+                             f"({printable / len(sample):.0%} printable) — convert it to .txt/.md first.")
+    return documents
 
 
 def ingest_directory(
@@ -152,6 +176,7 @@ def ingest_directory(
     qdrant_url: str = "http://localhost:6333",
     embed_model=None,
     verbose: bool = True,
+    reset: bool = False,
 ):
     """
     Generic Qdrant ingest: first file bootstraps the collection, remaining
@@ -164,6 +189,7 @@ def ingest_directory(
         collection_name / qdrant_url: Qdrant target
         embed_model: LlamaIndex embedding model (required for pipeline)
         verbose: print progress
+        reset: delete the target collection first (explicit, never implicit)
     """
     if embed_model is None:
         raise ValueError("embed_model is required — pass get_llamaindex_settings()[1]")
@@ -177,6 +203,10 @@ def ingest_directory(
         print(f"Chunk size={chunk_size}, overlap={chunk_overlap}, collection={collection_name}\n")
 
     client = qdrant_client.QdrantClient(url=qdrant_url)
+    if reset:
+        client.delete_collection(collection_name=collection_name)
+        if verbose:
+            print(f"Reset: deleted Qdrant collection {collection_name!r} (if it existed)")
     vector_store = QdrantVectorStore(client=client, collection_name=collection_name)
     storage_context = StorageContext.from_defaults(vector_store=vector_store)
     node_parser = TokenTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
@@ -197,7 +227,8 @@ def ingest_directory(
         )
         if verbose:
             print("  -> Collection created and first doc indexed.\n")
-        total_chunks += len(documents)
+        # Count the chunks the splitter actually produced (not the document itself).
+        total_chunks += len(node_parser.get_nodes_from_documents(documents))
     except Exception as e:
         print(f"  -> ERROR on first doc {first_doc.name}: {e}")
         raise

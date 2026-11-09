@@ -49,24 +49,25 @@ Answer:"""
 
 def run_rag_pipeline(user_query: str):
     dataset = dataset_config(phase=1)
-    metaqa = dataset.tag_movies
+    shared_prompt = dataset.prompt_style == "shared"
     print(f"Executing Vector RAG for: '{user_query}'\n")
 
     # 1. Retrieve
     print("1. Retrieving chunks from Qdrant...")
-    # MetaQA protocol: no similarity threshold. HotpotQA keeps its default.
-    nodes = retrieve_chunks(user_query, apply_threshold=False) if metaqa else retrieve_chunks(user_query)
+    # Shared-prompt tracks (MetaQA + local) run without the similarity threshold;
+    # HotpotQA keeps its historical thresholded path.
+    nodes = retrieve_chunks(user_query, apply_threshold=False) if shared_prompt else retrieve_chunks(user_query)
     chunks = [extract_chunk_text(node) for node in nodes]
     scores = [node.score for node in nodes]
     print(f"-> Retrieved {len(chunks)} chunks.\n")
 
-    if metaqa:
+    if shared_prompt:
         # One shared prompt for every MetaQA phase; the LLM is always called, even
         # with an empty context (which the template renders as "(no context retrieved)").
         prompt = build_metaqa_prompt(user_query, format_context(chunks))
 
         print(f"3. Generating answer using model: {settings.GENERATION_MODEL}...\n")
-        answer = generate_completion(prompt, temperature=0)
+        answer = generate_completion(prompt)
 
         print("=" * 50)
         print("Final Answer:")

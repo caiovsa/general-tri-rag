@@ -32,6 +32,10 @@ attrs==26.1.0
     #   referencing
 banks==2.4.5
     # via llama-index-core
+beautifulsoup4==4.15.0
+    # via
+    #   rag-trilogy (pyproject.toml)
+    #   llama-index-readers-file
 certifi==2026.6.17
     # via
     #   httpcore
@@ -61,7 +65,9 @@ datasets==4.8.5
     #   rag-trilogy (pyproject.toml)
     #   ragas
 defusedxml==0.7.1
-    # via nltk
+    # via
+    #   llama-index-readers-file
+    #   nltk
 deprecated==1.3.1
     # via
     #   banks
@@ -207,6 +213,7 @@ llama-index-core==0.14.13
     #   llama-index-embeddings-openai
     #   llama-index-graph-stores-neo4j
     #   llama-index-llms-openai
+    #   llama-index-readers-file
     #   llama-index-vector-stores-qdrant
 llama-index-embeddings-openai==0.5.2
     # via rag-trilogy (pyproject.toml)
@@ -216,10 +223,14 @@ llama-index-instrumentation==0.5.0
     # via llama-index-workflows
 llama-index-llms-openai==0.6.26
     # via rag-trilogy (pyproject.toml)
+llama-index-readers-file==0.6.0
+    # via rag-trilogy (pyproject.toml)
 llama-index-vector-stores-qdrant==0.10.1
     # via rag-trilogy (pyproject.toml)
 llama-index-workflows==2.22.2
     # via llama-index-core
+lxml==6.1.3
+    # via rag-trilogy (pyproject.toml)
 markupsafe==3.0.3
     # via jinja2
 marshmallow==3.26.2
@@ -284,6 +295,7 @@ pandas==2.3.3
     #   rag-trilogy (pyproject.toml)
     #   datasets
     #   lightrag-hku
+    #   llama-index-readers-file
 pillow==12.3.0
     # via llama-index-core
 pipmaster==1.1.13
@@ -330,6 +342,10 @@ pydantic==2.13.4
     #   qdrant-client
 pydantic-core==2.46.4
     # via pydantic
+pypdf==6.21.4
+    # via
+    #   rag-trilogy (pyproject.toml)
+    #   llama-index-readers-file
 pypinyin==0.55.0
     # via lightrag-hku
 pysbd==0.3.4
@@ -395,11 +411,15 @@ sniffio==1.3.1
     # via
     #   google-genai
     #   openai
+soupsieve==2.10
+    # via beautifulsoup4
 sqlalchemy==2.0.51
     # via
     #   langchain
     #   langchain-community
     #   llama-index-core
+striprtf==0.0.26
+    # via llama-index-readers-file
 tenacity==8.5.0
     # via
     #   google-genai
@@ -430,6 +450,7 @@ typing-extensions==4.16.0
     #   aiohttp
     #   aiosignal
     #   anyio
+    #   beautifulsoup4
     #   google-genai
     #   grpcio
     #   huggingface-hub

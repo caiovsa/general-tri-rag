@@ -1,0 +1,41 @@
+@prefix : <http://rag-trilogy.org/ontology/metaqa#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://rag-trilogy.org/ontology/metaqa> a owl:Ontology ;
+    rdfs:label "MetaQA film ontology" ;
+    rdfs:comment "Typed schema produced from MetaQA/kb.txt: movies, people, genres, languages, years, tags, ratings and votes." .
+
+# ── Classes ────────────────────────────────────────────────────────────────
+:Movie a owl:Class ; rdfs:label "Movie" .
+:Person a owl:Class ; rdfs:label "Person" .
+:Actor a owl:Class ; rdfs:subClassOf :Person ; rdfs:label "Actor" .
+:Director a owl:Class ; rdfs:subClassOf :Person ; rdfs:label "Director" .
+:Writer a owl:Class ; rdfs:subClassOf :Person ; rdfs:label "Writer" .
+:Genre a owl:Class ; rdfs:label "Genre" .
+:Language a owl:Class ; rdfs:label "Language" .
+:Year a owl:Class ; rdfs:label "Year" .
+:Tag a owl:Class ; rdfs:label "Tag" .
+:Rating a owl:Class ; rdfs:label "Rating" .
+:Votes a owl:Class ; rdfs:label "Votes" .
+
+# ── Object properties (domain -> range) ────────────────────────────────────
+:starredActors a owl:ObjectProperty ;
+    rdfs:domain :Movie ; rdfs:range :Person ; rdfs:label "starred_actors" .
+:directedBy a owl:ObjectProperty ;
+    rdfs:domain :Movie ; rdfs:range :Director ; rdfs:label "directed_by" .
+:writtenBy a owl:ObjectProperty ;
+    rdfs:domain :Movie ; rdfs:range :Writer ; rdfs:label "written_by" .
+:hasGenre a owl:ObjectProperty ;
+    rdfs:domain :Movie ; rdfs:range :Genre ; rdfs:label "has_genre" .
+:inLanguage a owl:ObjectProperty ;
+    rdfs:domain :Movie ; rdfs:range :Language ; rdfs:label "in_language" .
+:releasedIn a owl:ObjectProperty ;
+    rdfs:domain :Movie ; rdfs:range :Year ; rdfs:label "release_year" .
+:hasTag a owl:ObjectProperty ;
+    rdfs:domain :Movie ; rdfs:range :Tag ; rdfs:label "has_tags" .
+:hasImdbRating a owl:ObjectProperty ;
+    rdfs:domain :Movie ; rdfs:range :Rating ; rdfs:label "has_imdb_rating" .
+:hasImdbVotes a owl:ObjectProperty ;
+    rdfs:domain :Movie ; rdfs:range :Votes ; rdfs:label "has_imdb_votes" .

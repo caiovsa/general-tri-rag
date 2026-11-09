@@ -96,11 +96,14 @@ switches the eval file, corpus, stores and results directory:
 | Chunk text | as-is | prefixed with `[Movie: <title>]` before embedding/extraction |
 
 ```bash
-make check-config DATASET=metaqa    # resolved config: docs, collection, DB, eval rows
+make check-config DATASET=metaqa    # resolved config: docs, collection, DB (P2 + P3), eval rows
 make ingest-p1 DATASET=metaqa       # Phase 1 -> Qdrant
-make ingest-p2 DATASET=metaqa       # Phase 2 -> isolated Neo4j database
-make answers-p1 DATASET=metaqa LIMIT=3   # smoke run (also: --no-resume, --top-k)
+make ingest-p2 DATASET=metaqa RESET=1   # Phase 2 -> isolated Neo4j database
+make answers-p1 DATASET=metaqa LIMIT=3  # smoke run (also: --no-resume, --top-k)
 make bench-p1 DATASET=metaqa
+make ingest-p3 DATASET=metaqa RESET=1   # Phase 3a typed KB graph -> *-ontology-graph
+make answers-p3 DATASET=metaqa
+make bench-p3 DATASET=metaqa
 ```
 
 The old `make metaqa-check` / `metaqa-ingest-p1` / … aliases still work but print a
@@ -116,11 +119,27 @@ This slice is a pilot; the roadmap scales it to 30 questions / 100 docs. A 50-do
 slice cannot cover hop 3 unless the questions are chosen deliberately — picking
 the first 50 docs covers only 6 of 212 questions, all hop 1.
 
+`DATASET=metaqa_mini30` is the **plumbing corpus** — 30 questions (10 per hop; hop 1 split
+5 movie-anchored / 5 person-anchored, hop 2/3 split 5 exactly-2-evidence / 5 with 3–5 evidence)
+over 100 docs (60 must-have + 24 hard + 16 random). It is built by
+`uv run python -m scripts.metaqa_make_mini30` (seed 42), is a subsequence of v1, and uses its
+own collection (`<base>_metaqa_mini30`), graph database (`metaqa-mini30-graph`) and
+`results/metaqa_mini30/`, so it can never mix with the 12/50 mini or the full run. Its frozen
+files are checksummed in `MetaQA/FROZEN_mini30.sha256`; the eval/manifest/checksum are tracked
+in git, while `MetaQA/docs/` and `kb.txt` stay local. Mini tracks are plumbing checks only:
+the corpora are tiny and evidence is deliberately shared, so never quote their scores or compare
+Phase 1 vs Phase 2 on them.
+
+Phase 3 (ontology) uses a **separate** graph database per track
+(`NEO4J_METAQA_PHASE3_DATABASE=metaqa-ontology-graph`,
+`NEO4J_METAQA_MINI30_PHASE3_DATABASE=metaqa-mini30-ontology-graph`), never the Phase 2 database.
+
 - `TOP_K` (env) or `--top-k` override retrieval depth; the dataset and top_k are
   recorded in `run_meta.json` and in the eval-results metadata.
-- Per-question metrics land in `results/metaqa/phaseN/per_question.jsonl`
-  (`id, phase, hop, evidence_n, gold_recall, all_found, evidence_recall, judge`)
-  so two runs can be compared paired.
+- Per-question metrics land in `results/<dataset>/phaseN/per_question.jsonl`
+  (`id, phase, hop, evidence_n, gold_recall, all_found, evidence_recall, judge`) so two runs
+  can be compared paired. `run_meta.json` carries the full run fingerprint; deleting or
+  changing it (or the eval/corpus) makes the next run refuse to resume.
 - `metaqa_eval.jsonl` uses the `hotpot_eval.jsonl` shape — `question`, `answer`,
   `supporting_facts_titles` (= evidence movie titles) plus `answers`, `hop`,
   `qtype`, `id`, `evidence_triples` — so the shared runner and benchmark engine can

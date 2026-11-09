@@ -8,12 +8,14 @@ from shared.config import settings
 def generate_completion(
     prompt: str,
     system_message: str = "You are a helpful assistant.",
-    temperature: float = 1,  # Low temp for RAG — you want factual, not creative
+    temperature: float | None = None,  # None -> settings.GENERATION_TEMPERATURE
     max_retries: int = 3,
     #max_tokens: int = 1024,
 ) -> str:
     if not prompt or not prompt.strip():
         raise ValueError("Prompt must not be empty.")
+    if temperature is None:
+        temperature = settings.GENERATION_TEMPERATURE
 
     messages = [
         {"role": "system", "content": system_message},

@@ -3,12 +3,12 @@ nest_asyncio.apply()
 
 import argparse
 import asyncio
-import os
 import time
 from pathlib import Path
 
 import llama_index.core
 from llama_index.core import SimpleDirectoryReader
+from llama_index.core.base.llms.types import ChatMessage, ChatResponse, MessageRole
 from llama_index.core.node_parser import TokenTextSplitter
 from llama_index.core.indices.property_graph import (
     ImplicitPathExtractor,
@@ -18,7 +18,7 @@ from llama_index.graph_stores.neo4j import Neo4jPropertyGraphStore
 from llama_index.llms.openai import OpenAI
 from llama_index.core.schema import TransformComponent
 
-from shared.config import check_neo4j_target, dataset_config, metaqa_database, settings, get_llamaindex_settings
+from shared.config import check_neo4j_target, dataset_config, metaqa_database, settings, get_llamaindex_settings, write_ingest_meta
 from shared.ingest import MovieTagger, prepare_documents
 
 llm, embed_model = get_llamaindex_settings()
@@ -42,10 +42,16 @@ class CountingExtractionLLM(OpenAI):
     (`apredict` -> `achat` -> `_achat`, `complete` -> `_chat`), so each logical
     extraction call is counted exactly once, and failures are visible even when
     the extractor swallows them.
+
+    A content-policy rejection (`invalid_prompt`) is counted as a per-chunk skip
+    and answered with an empty completion: the chunk keeps its text/embedding
+    (only its triples are missing), and one flagged movie plot cannot abort a
+    multi-hour ingest.
     """
 
     calls: int = 0
     errors: int = 0
+    policy_skips: int = 0
     prompt_tokens: int = 0
     completion_tokens: int = 0
 
@@ -53,11 +59,25 @@ class CountingExtractionLLM(OpenAI):
         self.prompt_tokens += _usage_value(response, "prompt_tokens")
         self.completion_tokens += _usage_value(response, "completion_tokens")
 
+    @staticmethod
+    def _is_policy_error(error: Exception) -> bool:
+        text = str(error).lower()
+        return (getattr(error, "code", None) == "invalid_prompt"
+                or "usage policy" in text
+                or "invalid prompt" in text)
+
+    @staticmethod
+    def _empty_response() -> ChatResponse:
+        return ChatResponse(message=ChatMessage(role=MessageRole.ASSISTANT, content=""))
+
     def _chat(self, messages, **kwargs):
         self.calls += 1
         try:
             response = super()._chat(messages, **kwargs)
-        except Exception:
+        except Exception as error:
+            if self._is_policy_error(error):
+                self.policy_skips += 1
+                return self._empty_response()
             self.errors += 1
             raise
         self._record_tokens(response)
@@ -67,7 +87,10 @@ class CountingExtractionLLM(OpenAI):
         self.calls += 1
         try:
             response = await super()._achat(messages, **kwargs)
-        except Exception:
+        except Exception as error:
+            if self._is_policy_error(error):
+                self.policy_skips += 1
+                return self._empty_response()
             self.errors += 1
             raise
         self._record_tokens(response)
@@ -110,7 +133,8 @@ class MetadataScrubber(TransformComponent):
         return nodes
 
 
-EXTRACTION_LLM = CountingExtractionLLM(model=settings.EXTRACTION_MODEL, temperature=0.0)
+EXTRACTION_LLM = CountingExtractionLLM(model=settings.EXTRACTION_MODEL,
+                                     temperature=settings.EXTRACTION_TEMPERATURE)
 
 
 def instrument_retries(llm, stats: RunStats) -> None:
@@ -138,17 +162,18 @@ def instrument_retries(llm, stats: RunStats) -> None:
 
 def guard_reset(dataset) -> None:
     """--reset may only ever touch this dataset's own MetaQA database."""
-    if dataset.name not in ("metaqa", "metaqa_mini"):
-        raise SystemExit("--reset is MetaQA-only: refusing to wipe a HotpotQA graph.")
+    if dataset.name not in ("metaqa", "metaqa_mini", "metaqa_mini30"):
+        raise SystemExit("--reset is MetaQA-only: refusing to wipe a HotpotQA/local graph.")
     expected = metaqa_database(dataset.name)
     if dataset.neo4j_database != expected:
         raise SystemExit(f"Refusing --reset: target database {dataset.neo4j_database!r} is not the "
                          f"configured {dataset.name} database ({expected!r}).")
     if dataset.neo4j_database == settings.NEO4J_DATABASE:
         raise SystemExit(f"Refusing --reset: {dataset.neo4j_database!r} is the HotpotQA database.")
-    other = metaqa_database("metaqa" if dataset.name == "metaqa_mini" else "metaqa_mini")
-    if dataset.neo4j_database == other:
-        raise SystemExit(f"Refusing --reset: {dataset.neo4j_database!r} is the other MetaQA "
+    others = {metaqa_database(name) for name in ("metaqa", "metaqa_mini", "metaqa_mini30")
+              if name != dataset.name}
+    if dataset.neo4j_database in others:
+        raise SystemExit(f"Refusing --reset: {dataset.neo4j_database!r} is another MetaQA "
                          "track's database.")
 
 
@@ -233,15 +258,17 @@ def create_vector_index(graph_store):
             `vector.similarity_function`: 'cosine'
         }}}}
     """)
-    time.sleep(2)
-    result = graph_store.structured_query(
-        "SHOW VECTOR INDEXES YIELD name, state WHERE name = 'chunk_embeddings' RETURN state"
-    )
-    if result:
-        state = result[0].get('state', 'unknown')
-        print(f"  Vector index state: {state}")
-    else:
-        print("  Warning: Could not verify vector index state")
+    # Wait for the index to become READY (fresh databases can take a moment).
+    state = None
+    for _ in range(15):
+        time.sleep(1)
+        result = graph_store.structured_query(
+            "SHOW VECTOR INDEXES YIELD name, state WHERE name = 'chunk_embeddings' RETURN state"
+        )
+        state = result[0].get("state") if result else None
+        if state == "READY":
+            break
+    print(f"  Vector index state: {state or 'unknown'}")
 
     # Full-text index for fast keyword anchor search (replaces CONTAINS scan)
     print("Creating full-text index on Chunk.text (if not exists)...")
@@ -272,8 +299,9 @@ def build_extractors():
     ]
 
 
-def iter_document_batches(data_dir: str = None, batch_size: int = 50, dataset=None, limit_docs: int = None):
-    """Yield document batches: glob a directory (hotpot) or read the manifest (metaqa)."""
+def iter_document_batches(data_dir: str = None, batch_size: int = 50, dataset=None,
+                          limit_docs: int = None, pattern: str = None):
+    """Yield document batches: glob a directory (hotpot/local) or read the manifest (metaqa)."""
     dataset = dataset or dataset_config(phase=2)
 
     if dataset.doc_list:
@@ -284,11 +312,7 @@ def iter_document_batches(data_dir: str = None, batch_size: int = 50, dataset=No
             raise FileNotFoundError(f"{len(missing)} manifest file(s) missing, e.g. {missing[:3]}")
     else:
         data_dir = data_dir or str(dataset.docs_dir)
-        all_files = sorted(
-            os.path.join(data_dir, f)
-            for f in os.listdir(data_dir)
-            if f.lower().endswith(".txt")
-        )
+        all_files = sorted(str(path) for path in Path(data_dir).glob(pattern or dataset.file_pattern))
     available = len(all_files)
     if limit_docs:
         all_files = all_files[:limit_docs]
@@ -306,7 +330,7 @@ def iter_document_batches(data_dir: str = None, batch_size: int = 50, dataset=No
 
 
 async def ingest_phase_2_graph(data_dir: str = None, batch_size: int = 50, limit_docs: int = None,
-                               reset: bool = False, cleanup: bool = True):
+                               reset: bool = False, cleanup: bool = True, max_concurrent_docs: int = 4):
     """
     Pure Graph RAG ingestion: Neo4j only (no Qdrant).
 
@@ -316,7 +340,8 @@ async def ingest_phase_2_graph(data_dir: str = None, batch_size: int = 50, limit
     started = time.monotonic()
     stats = RunStats()
     dataset = dataset_config(phase=2)
-    if dataset.name == "metaqa":
+    if dataset.tag_movies:
+        # Every MetaQA track must prove its own database before writing anything.
         check_neo4j_target(dataset.neo4j_uri, dataset.neo4j_database)
     if reset:
         guard_reset(dataset)
@@ -355,17 +380,19 @@ async def ingest_phase_2_graph(data_dir: str = None, batch_size: int = 50, limit
             )
         else:
             print("Inserting batch into existing index...")
-            insert_tasks = [
-                asyncio.create_task(index.ainsert(doc))
-                for doc in batch_docs
-            ]
-            await asyncio.gather(*insert_tasks)
+            semaphore = asyncio.Semaphore(max(1, max_concurrent_docs))
+
+            async def guarded_insert(doc):
+                async with semaphore:
+                    return await index.ainsert(doc)
+
+            await asyncio.gather(*(guarded_insert(doc) for doc in batch_docs))
 
         docs_ingested += len(batch_docs)
         print(f"Batch complete. {len(batch_docs)} document(s) ingested.")
 
     # Verify ingestion (cleanup first, so the numbers below are post-cleanup)
-    cleanup_tag_artifact(graph_store, enabled=cleanup)
+    cleanup_tag_artifact(graph_store, enabled=cleanup and dataset.tag_movies)
     print("\nVerifying ingestion...")
     result = graph_store.structured_query(
         "MATCH (c:Chunk) WHERE c.embedding IS NOT NULL RETURN count(c) AS chunk_count"
@@ -398,11 +425,27 @@ async def ingest_phase_2_graph(data_dir: str = None, batch_size: int = 50, limit
     print(f"  completion tokens : {EXTRACTION_LLM.completion_tokens:,}")
     print(f"  total tokens      : {EXTRACTION_LLM.prompt_tokens + EXTRACTION_LLM.completion_tokens:,}")
     print(f"  errors            : {EXTRACTION_LLM.errors:,}")
+    print(f"  policy skips      : {EXTRACTION_LLM.policy_skips:,}  (chunk kept; no triples)")
     print(f"  retries           : {stats.retries:,}")
     print(f"  relationships     : {rel_count:,}  (db total)")
+    print(f"  doc concurrency   : {max_concurrent_docs:,}  (extraction workers: 8)")
     print(f"  wall clock        : {elapsed:.1f}s ({elapsed / 60:.1f} min)")
     if EXTRACTION_LLM.errors:
         print(f"  WARNING: {EXTRACTION_LLM.errors:,} extraction call(s) failed — those chunks have no triples")
+    write_ingest_meta(
+        dataset, 2,
+        graph_database=dataset.neo4j_database,
+        extraction_model=settings.EXTRACTION_MODEL,
+        extraction_temperature=settings.EXTRACTION_TEMPERATURE,
+        docs=docs_ingested,
+        chunks=chunks_total,
+        relationships=rel_count,
+        errors=EXTRACTION_LLM.errors,
+        policy_skips=EXTRACTION_LLM.policy_skips,
+        retries=stats.retries,
+        reset=reset,
+        include_neighbours=settings.INCLUDE_NEIGHBOURS,
+    )
     print("\nPhase 2 ingestion complete! Data is in Neo4j.")
     return index
 
@@ -415,13 +458,18 @@ def parse_args() -> argparse.Namespace:
                         help="wipe the MetaQA database before ingesting (refuses any other database)")
     parser.add_argument("--cleanup", action=argparse.BooleanOptionalAction, default=True,
                         help="delete the tag-artifact entity 'Movie' after ingest (default: on)")
+    parser.add_argument("--batch-size", type=int, default=2000,
+                        help="documents loaded per PropertyGraphIndex batch (default: 2000)")
+    parser.add_argument("--max-concurrent-docs", type=int, default=4,
+                        help="documents inserted concurrently (each uses 8 extraction workers; default: 4)")
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     args = parse_args()
-    asyncio.run(ingest_phase_2_graph(batch_size=2000, limit_docs=args.limit_docs, reset=args.reset,
-                                     cleanup=args.cleanup))
+    asyncio.run(ingest_phase_2_graph(batch_size=args.batch_size, limit_docs=args.limit_docs,
+                                     reset=args.reset, cleanup=args.cleanup,
+                                     max_concurrent_docs=args.max_concurrent_docs))
     # python -m phase2_graph_rag.ingest                      (DATASET=hotpot)
     # DATASET=metaqa python -m phase2_graph_rag.ingest --reset --limit-docs 50
-    # DATASET=metaqa_mini python -m phase2_graph_rag.ingest --reset
+    # DATASET=metaqa_mini30 python -m phase2_graph_rag.ingest --reset

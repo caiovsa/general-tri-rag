@@ -315,8 +315,11 @@ def compute_semantic_similarity(data):
         return None, [None] * len(data), False
 
 
-def compute_llm_judge(data, dataset=None):
+def compute_llm_judge(data, dataset=None, judge_model: str | None = None,
+                      temperature: float | None = None):
     metaqa = bool(getattr(dataset, "tag_movies", False))
+    judge_model = judge_model or settings.JUDGE_MODEL
+    temperature = settings.GENERATION_TEMPERATURE if temperature is None else temperature
     if not settings.OPENAI_API_KEY:
         print("  OPENAI_API_KEY not set — skipping LLM-as-Judge.")
         return None, [None] * len(data), False
@@ -350,9 +353,9 @@ def compute_llm_judge(data, dataset=None):
                       JUDGE_PROMPT.format(question=item["question"], ground_truth=item["ground_truth"], answer=ans))
 
             resp = client.chat.completions.create(
-                model=settings.JUDGE_MODEL if metaqa else settings.GENERATION_MODEL,
+                model=judge_model,
                 messages=[{"role": "user", "content": prompt}],
-                **({"temperature": 0} if metaqa else {}),
+                temperature=temperature,
             )
             judgment = resp.choices[0].message.content.strip().upper()
             score = 1 if "CORRECT" in judgment else 0
@@ -371,7 +374,14 @@ def compute_llm_judge(data, dataset=None):
         return None, [None] * len(data), False
 
 
-def compute_ragas(data):
+def compute_ragas(data, judge_model: str | None = None, temperature: float | None = None,
+                  ragas_model: str | None = None):
+    judge_model = judge_model or settings.JUDGE_MODEL
+    temperature = settings.GENERATION_TEMPERATURE if temperature is None else temperature
+    ragas_model = ragas_model or settings.RAGAS_MODEL
+    if not any(item.get("contexts") for item in data):
+        print("  RAGAS skipped: no retrieved contexts (closed-book control).")
+        return None, False
     if not settings.OPENAI_API_KEY:
         print("  OPENAI_API_KEY not set — skipping RAGAS.")
         return None, False
@@ -384,8 +394,9 @@ def compute_ragas(data):
         from langchain_openai import ChatOpenAI
 
         llm = ChatOpenAI(
-            model=settings.GENERATION_MODEL,
+            model=ragas_model,
             api_key=settings.OPENAI_API_KEY,
+            temperature=temperature,
         )
         llm_wrapper = LangchainLLMWrapper(llm)
 
@@ -494,6 +505,29 @@ def generate_report(phase_name, summary, per_question, ragas_ok, ragas_df, seman
     return "\n".join(lines)
 
 
+def _read_ingest_meta(directory: Path) -> dict | None:
+    path = Path(directory) / "ingest_meta.json"
+    if not path.exists():
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def _read_run_meta(data_file: Path) -> dict | None:
+    """run_meta.json next to the detailed results, when present."""
+    path = Path(data_file).parent / "run_meta.json"
+    if not path.exists():
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+    return data if isinstance(data, dict) else None
+
+
 def run_benchmark(phase_name, data_file, output_file, report_file, runner_command,
                   dataset=None, phase=None, per_question_file=None):
     """Run the full benchmark pipeline for a phase."""
@@ -518,6 +552,16 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
     print(f"Loaded {len(data)} examples from {data_file}")
 
     tagged = bool(getattr(dataset, "tag_movies", False))
+    run_meta = _read_run_meta(Path(data_file))
+    fingerprint = (run_meta or {}).get("fingerprint") or {}
+    generation_model = fingerprint.get("generation_model", settings.GENERATION_MODEL)
+    judge_model = fingerprint.get("judge_model", settings.JUDGE_MODEL)
+    temperature = fingerprint.get("temperature", settings.GENERATION_TEMPERATURE)
+    if run_meta is None:
+        print("WARNING: no run_meta.json next to the detailed results — "
+              "model/temperature metadata falls back to the current environment.")
+    print(f"  models: generation={generation_model} judge={judge_model} "
+          f"ragas={settings.RAGAS_MODEL} temperature={temperature}")
 
     print("\n--- EM + Token F1 (official HotpotQA metrics) ---")
     avg_em, avg_rem, avg_eem, avg_f1, per_question = compute_em_f1(data)
@@ -531,10 +575,13 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
     avg_semantic, semantic_scores, semantic_ok = compute_semantic_similarity(data)
 
     print("\n--- LLM-as-Judge ---")
-    avg_judge, judge_scores, judge_ok = compute_llm_judge(data, dataset=dataset)
+    avg_judge, judge_scores, judge_ok = compute_llm_judge(
+        data, dataset=dataset, judge_model=judge_model, temperature=temperature)
 
     print("\n--- RAGAS (LLM-based metrics) ---")
-    ragas_results, ragas_ok = compute_ragas(data)
+    ragas_results, ragas_ok = compute_ragas(
+        data, judge_model=judge_model, temperature=temperature)
+
 
     if not tagged:
         print("\n--- Set answers (gold recall / evidence recall) ---")
@@ -620,15 +667,25 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
         "eval_file": str(getattr(dataset, "eval_file", "")),
         "data_file": str(data_file),
         "runner": runner_command,
+        "generation_model": generation_model,
+        "judge_model": judge_model,
+        "ragas_model": settings.RAGAS_MODEL,
+        "extraction_model": fingerprint.get("extraction_model", settings.EXTRACTION_MODEL),
+        "temperature": temperature,
+        "prompt_style": getattr(dataset, "prompt_style", "phase"),
     }
+    if run_meta is not None:
+        metadata["run_meta"] = run_meta
+    ingest_meta = _read_ingest_meta(Path(data_file).parent)
+    if ingest_meta is not None:
+        metadata["ingest"] = ingest_meta
+        recorded_top_k = (run_meta.get("fingerprint") or {}).get("top_k")
+        if recorded_top_k is not None and recorded_top_k != getattr(dataset, "top_k", None):
+            print(f"WARNING: results were generated with top_k={recorded_top_k}, "
+                  f"but the current config says top_k={getattr(dataset, 'top_k', None)}.")
     if tagged:
         # MetaQA protocol: pinned models at temperature 0 + frozen prompt template.
-        metadata.update({
-            "generation_model": settings.GENERATION_MODEL,
-            "judge_model": settings.JUDGE_MODEL,
-            "temperature": 0,
-            "prompt_template_hash": metaqa_prompt_template_hash(),
-        })
+        metadata["prompt_template_hash"] = metaqa_prompt_template_hash()
         retrieval_rows = [d["retrieval"] for d in data if isinstance(d.get("retrieval"), dict)]
         if retrieval_rows:
             chunks = [r.get("chunks_in_prompt") or 0 for r in retrieval_rows]
@@ -698,6 +755,7 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
                         "seeds": retrieval.get("seeds"),
                         "anchors": retrieval.get("anchors"),
                         "neighbours": retrieval.get("neighbours"),
+                        "entities": retrieval.get("entities"),
                     } if tagged else {}),
                 }, ensure_ascii=False) + "\n")
         print(f"Per-question metrics saved to: {per_question_file}")

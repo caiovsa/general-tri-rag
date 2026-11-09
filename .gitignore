@@ -1,6 +1,9 @@
 neo4j_data
 neo4j_logs
 neo4j_plugins
+neo4j_metaqa_data
+neo4j_metaqa_logs
+neo4j_metaqa_plugins
 qdrant_data
 .env
 .vscode
@@ -17,9 +20,20 @@ __pycache__/
 lightrag_storage/
 checkpoint_lightrag.json
 checkpoint_lightrag.json.bak
+ingest_meta.json
 digest.txt
 .DS_Store
-MetaQA
+
+# MetaQA dataset + generated docs are local; the frozen eval/manifest and the
+# checksum files ARE tracked (small, and required to reproduce a run).
+/MetaQA/*
+!/MetaQA/FROZEN*.sha256
+!/MetaQA/metaqa_eval_v1.jsonl
+!/MetaQA/metaqa_eval_mini.jsonl
+!/MetaQA/metaqa_eval_mini30.jsonl
+!/MetaQA/corpus_manifest.txt
+!/MetaQA/corpus_manifest_mini.txt
+!/MetaQA/corpus_manifest_mini30.txt
 
 # HotpotQA generated outputs (currently tracked for reference — uncomment to ignore future runs)
 # hotpot_eval.jsonl

@@ -1,16 +1,47 @@
 import json
+from pathlib import Path
 
 import llama_index.core
 from llama_index.graph_stores.neo4j import Neo4jPropertyGraphStore
 
 from shared.config import dataset_config, settings, get_llamaindex_settings
+from shared.llm import generate_completion
 
 llm, embed_model = get_llamaindex_settings()
 llama_index.core.Settings.llm = llm
 llama_index.core.Settings.embed_model = embed_model
 
-# Simple in-memory cache for entity extraction (avoids LLM call per identical query)
+# Simple in-memory cache for entity extraction (avoids LLM call per identical query).
+# On MetaQA it is backed by results/<dataset>/phase2/entity_cache.json.
 _ENTITY_CACHE: dict[str, list[str]] = {}
+_ENTITY_CACHE_FILES: set[Path] = set()
+
+
+def _entity_cache_path() -> Path:
+    """MetaQA only: results/<dataset>/phase2/entity_cache.json."""
+    return dataset_config(phase=2).results_file.parent / "entity_cache.json"
+
+
+def _load_entity_cache(path: Path) -> None:
+    """Merge a persisted question -> entities map into the in-memory cache (once)."""
+    if path in _ENTITY_CACHE_FILES:
+        return
+    if path.exists():
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError) as error:
+            print(f"Warning: could not read entity cache {path}: {error}")
+            data = None
+        if isinstance(data, dict):
+            for question, entities in data.items():
+                if isinstance(entities, list):
+                    _ENTITY_CACHE.setdefault(question, [str(entity) for entity in entities])
+    _ENTITY_CACHE_FILES.add(path)
+
+
+def _write_entity_cache(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(_ENTITY_CACHE, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
 # ─────────────────────────────────────────────
@@ -22,26 +53,40 @@ def extract_entities_from_query(user_query: str) -> list[str]:
     from the user query. These are used as keyword anchors to guarantee
     the right seed chunks are retrieved even when vector search misses them.
     Results are cached per query string to avoid duplicate LLM calls.
+
+    MetaQA protocol: the configured generation model at the pinned temperature,
+    and the cache is persisted to results/<dataset>/phase2/entity_cache.json
+    (keyed by question text). HotpotQA keeps the in-memory cache only.
     """
     if not user_query or not user_query.strip():
         return []
+    cache_path = _entity_cache_path() if dataset_config(phase=2).tag_movies else None
+    if cache_path is not None:
+        _load_entity_cache(cache_path)
     # Cache hit?
     if user_query in _ENTITY_CACHE:
         print(f"-> Extracted entities (cached): {_ENTITY_CACHE[user_query]}")
         return _ENTITY_CACHE[user_query]
 
-    response = llm.complete(
-        f"""Extract the key named entities (people, places, episode titles, movie titles, show titles) 
+    prompt = f"""Extract the key named entities (people, places, episode titles, movie titles, show titles)
 from this question. Return ONLY a comma-separated list of entity names, nothing else.
 Do not include generic words like 'episode', 'brother', 'guest', 'star'.
 
 Question: {user_query}
 Entities:"""
-    )
-    raw = response.text.strip()
+    # litellm (shared.llm) rather than LlamaIndex's OpenAI wrapper: the configured
+    # models may be gateway aliases that LlamaIndex's static model list rejects.
+    raw = generate_completion(
+        prompt,
+        system_message="You extract named entities from questions.",
+        temperature=settings.GENERATION_TEMPERATURE,
+    ).strip()
     entities = [e.strip() for e in raw.split(",") if e.strip()]
     print(f"-> Extracted entities: {entities}")
     _ENTITY_CACHE[user_query] = entities
+    if cache_path is not None:
+        _write_entity_cache(cache_path)
+        print(f"-> Entity cache written to {cache_path}")
     return entities
 
 
@@ -78,19 +123,21 @@ def _row_chunk_text(row: dict) -> str:
     return chunk_text
 
 
-def cap_metaqa_chunks(vector_seeds, keyword_anchors, neighbours, top_k):
+def cap_metaqa_chunks(vector_seeds, keyword_anchors, neighbours, top_k, include_neighbours: bool = True):
     """Order MetaQA context chunks: vector seeds, then keyword anchors, then graph
     neighbours; deduplicate by text and truncate to `top_k` in total.
 
     Selection is unchanged (vector index / full-text anchors / 1-hop neighbours);
     this only enforces the shared context budget and records provenance.
+    `include_neighbours=False` is the recorded no-neighbours ablation.
     """
     entries: list[dict] = []
     seen: set[str] = set()
     counts = {"chunks_in_prompt": 0, "seeds": 0, "anchors": 0, "neighbours": 0}
-    for key, source, texts in (("seeds", "seed", vector_seeds),
-                               ("anchors", "anchor", keyword_anchors),
-                               ("neighbours", "neighbour", neighbours)):
+    stages = [("seeds", "seed", vector_seeds), ("anchors", "anchor", keyword_anchors)]
+    if include_neighbours:
+        stages.append(("neighbours", "neighbour", neighbours))
+    for key, source, texts in stages:
         for text in texts:
             if len(entries) >= top_k:
                 break
@@ -103,7 +150,7 @@ def cap_metaqa_chunks(vector_seeds, keyword_anchors, neighbours, top_k):
     return entries, counts
 
 
-def retrieve_graph_chunks_with_sources(user_query: str, top_k: int = None):
+def retrieve_graph_chunks_with_sources(user_query: str, top_k: int = None, include_neighbours: bool | None = None):
     """MetaQA retrieval with provenance and the shared context budget.
 
     Priority: vector seeds (top_k // 2 of the budget) -> keyword anchors -> graph
@@ -113,7 +160,10 @@ def retrieve_graph_chunks_with_sources(user_query: str, top_k: int = None):
     dataset = dataset_config(phase=2)
     if top_k is None:
         top_k = dataset.top_k
-    empty_counts = {"chunks_in_prompt": 0, "seeds": 0, "anchors": 0, "neighbours": 0}
+    if include_neighbours is None:
+        include_neighbours = settings.INCLUDE_NEIGHBOURS
+    empty_counts = {"chunks_in_prompt": 0, "seeds": 0, "anchors": 0, "neighbours": 0,
+                    "include_neighbours": include_neighbours}
     if not user_query or not user_query.strip():
         print("Warning: empty query — returning no results.")
         return [], empty_counts
@@ -192,20 +242,23 @@ def retrieve_graph_chunks_with_sources(user_query: str, top_k: int = None):
     neighbours = []
     for row in list(vector_results) + list(keyword_results):
         neighbours.extend(row.get("neighbor_texts") or [])
-    entries, counts = cap_metaqa_chunks(seeds, anchors, neighbours, top_k)
+    entries, counts = cap_metaqa_chunks(seeds, anchors, neighbours, top_k,
+                                       include_neighbours=include_neighbours)
+    counts["entities"] = entities
+    counts["include_neighbours"] = include_neighbours
     print(f"-> Context budget: {counts['chunks_in_prompt']}/{top_k} chunks "
           f"(seeds {counts['seeds']}, anchors {counts['anchors']}, neighbours {counts['neighbours']})")
     return entries, counts
 
 
-def retrieve_graph_chunks(user_query: str, top_k: int = None) -> list[str]:
+def retrieve_graph_chunks(user_query: str, top_k: int = None, include_neighbours: bool | None = None) -> list[str]:
     """Context chunks for a question.
 
     MetaQA uses the budgeted path above; DATASET=hotpot keeps the historical output
     (same selection and formatting) via the legacy path.
     """
     if dataset_config(phase=2).tag_movies:
-        entries, _ = retrieve_graph_chunks_with_sources(user_query, top_k)
+        entries, _ = retrieve_graph_chunks_with_sources(user_query, top_k, include_neighbours)
         return [entry["text"] for entry in entries]
     return _retrieve_graph_chunks_legacy(user_query, top_k)
 

@@ -28,6 +28,17 @@
 | Built by | `uv run python -m scripts.metaqa_make_mini` (seed 42, defaults `--per-hop 4 --docs 50`); it only reads the frozen v1 artifacts |
 | Verify | `make freeze-verify` (`sha256sum -c MetaQA/FROZEN_mini.sha256`) |
 
+### 2026-11-09 — MetaQA mini30 (plumbing corpus)
+
+| | |
+|---|---|
+| Questions | `MetaQA/metaqa_eval_mini30.jsonl` — 30 questions (10 per hop), a subsequence of v1 |
+| Corpus | `MetaQA/corpus_manifest_mini30.txt` — 100 docs (60 must-have, 24 hard, 16 random) |
+| Built by | `uv run python -m scripts.metaqa_make_mini30` (seed 42); additive — the 12/50 mini is untouched |
+| Freeze | `MetaQA/FROZEN_mini30.sha256`; eval/manifest/checksum are **tracked in git** (the dataset docs/kb remain local) |
+| Verify | `make freeze-verify` |
+| Note | Plumbing only: shared evidence and a 100-doc corpus make retrieval artificially easy. Never quote mini30 as a result or compare P1 vs P2 on it. |
+
 ## Protocol rules
 
 Every cross-phase comparison must satisfy all of these. A run that violates one is not
@@ -44,11 +55,13 @@ mixing results.
    plus the MetaQA chunk size/overlap (256/32) apply identically to Phase 1, Phase 2 and
    Phase 3; no phase may retag, rechunk, or re-glob the corpus. The corpus is always
    `MetaQA/corpus_manifest.txt` (or the mini manifest), never a fresh glob of `docs/`.
-4. **Pinned answer and judge models at temperature 0.** One pinned `GENERATION_MODEL` answers
-   and judges every run; no model or sampling change mid-experiment.
-   *Current deviation:* `shared/llm.py::generate_completion` still defaults to
-   `temperature=1`, and the judge call passes no temperature — fix before recording clean
-   baselines.
+4. **Pinned answer/judge/extraction models at the model's supported temperature.** One pinned
+   `GENERATION_MODEL` answers and judges every run; no model or sampling change mid-experiment.
+   `GENERATION_TEMPERATURE` is recorded in `run_meta.json` (gpt-5/gpt-6 families only accept 1;
+   `gpt-4o-mini` supports 0). RAGAS uses its own `RAGAS_MODEL` because it injects a tiny
+   temperature that gpt-5-family models reject. Every phase writes a run fingerprint
+   (eval/corpus hashes, chunking, top_k, models, temperatures, prompt hash, ablation switches,
+   Phase 3 ontology hash) and refuses to resume into a change.
 5. **No per-question tuning.** Prompts, retrieval parameters, thresholds and models are fixed
    before the run and applied to every question; a question that fails is a result, not an
    edit.
@@ -56,3 +69,6 @@ mixing results.
 Frozen artifacts are inputs: a phase run never rebuilds `metaqa_eval_v1.jsonl`,
 `corpus_manifest.txt`, or the mini equivalents (steps 2–4 rebuild only, and a rebuilt eval
 must be re-frozen and re-checksummed before use).
+
+The `--no-neighbours` Phase 2 ablation is allowed only as an explicitly recorded extra run
+(`run_meta.json` carries `include_neighbours: false`); it is never the baseline.

@@ -20,20 +20,32 @@
   triple recall at k = 8/20/50 with no generation.
 - **Phase 2 50-doc pilot**: mini-corpus ingest/retrieval smoke run with metadata scrubbing
   and isolated stores.
+- **Phase 2 mini30 certificate**: 100 docs / 443 chunks / 0 extraction errors, 30/30 answers,
+  full metric stack; the recorded `--no-neighbours` ablation shows the 1-hop neighbours add
+  +5.8 gold recall and +10 evidence recall points on mini30.
+- **Full MetaQA baselines**: Phase 1 (212/212) and Phase 3a oracle graph (212/212, evidence
+  recall .966, gold recall .881) are complete; Phase 2 full is pending an explicit budget call
+  (~4 h / ≈$15–20 at gpt-5-mini).
+- **Mini30 track (30 q / 100 docs)**: additive plumbing corpus
+  (`MetaQA/metaqa_eval_mini30.jsonl` + `corpus_manifest_mini30.txt`, checksummed) with its own
+  collection, graph DB and results dir; the 12/50 mini stays frozen and runnable.
+- **Operational gates**: run fingerprints (resume refuses a changed config), strict error
+  accounting, explicit `--reset`, bounded Phase 2 concurrency, isolated PDF collection, offline
+  `make test` suite, and a trackable `DATASET=local` for arbitrary TXT/PDF corpora.
+- **Closed-book control**: `shared/closed_book.py` + `make answers-cb/bench-cb` (plumbing in
+  place; a full 212-question control run is still pending).
 
 ## Next
 
-- [ ] **Mini dataset (30 questions, 100 docs)** — scale `scripts/metaqa_make_mini.py` from the
-      12-question/50-doc pilot (`--per-hop 10 --docs 100`) and re-freeze it
-      (`MetaQA/FROZEN_mini.sha256`).
 - [ ] **Phase 1 and Phase 2 clean baselines** — same top_k and chunk budget in both phases,
-      similarity threshold off on MetaQA, temperature 0, no per-question tuning
-      (protocol: `docs/EXPERIMENT_LOG.md`).
-- [ ] **Closed-book control** — the same questions and models without retrieval; the floor the
-      phases must beat.
-- [ ] **Phase 3a — oracle graph from `kb.txt`** — build the MetaQA graph directly from the KB
-      triples (no extraction noise); upper bound for graph retrieval quality.
-- [ ] **Phase 3b — schema-constrained LLM extraction** — restrict LLM extraction to the KB
-      relation schema and compare against 3a and Phase 2.
-- [ ] **Phase 1b — hybrid (dense + BM25) baseline** — sparse + dense fusion as a second
-      Phase 1 retrieval baseline before the graph comparison.
+      similarity threshold off on MetaQA, pinned temperature, no per-question tuning, complete
+      `run_meta.json` (protocol: `docs/EXPERIMENT_LOG.md`).
+- [ ] **Full MetaQA Phase 2** — 994-doc ingest at the pinned extraction model (pending budget
+      call); answers/bench scripts are ready (`make answers-p2 DATASET=metaqa`).
+- [x] **Phase 3a — oracle graph from `kb.txt`** — typed schema, no extraction noise; upper bound
+      for graph retrieval quality and the sanity check for the eval set (212/212, evidence .966).
+- [ ] **Phase 3b — schema-constrained LLM extraction** — restrict extraction to the KB relation
+      schema and typed entities; compare against 3a and Phase 2 (`phase3_ontology_rag/schema.py`
+      is the ready schema contract).
+- [ ] **Phase 1b — hybrid (dense + BM25) baseline** — second Phase 1 retrieval baseline.
+- [ ] **HotpotQA 10-question regression** after the shared-runner changes (full rerun optional).

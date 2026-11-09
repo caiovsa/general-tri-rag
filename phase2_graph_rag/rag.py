@@ -32,19 +32,19 @@ Answer:"""
 def run_graph_rag_pipeline(user_query: str):
     """Main entry point: Graph Retrieve -> Prompt -> Generate"""
     dataset = dataset_config(phase=2)
-    metaqa = dataset.tag_movies
+    shared_prompt = dataset.prompt_style == "shared"
     print(f"Executing Graph RAG for: '{user_query}'\n")
 
-    if metaqa:
-        # One shared prompt for every MetaQA phase; the LLM is always called, even
-        # with an empty context (which the template renders as "(no context retrieved)").
+    if shared_prompt:
+        # One shared prompt for every shared-prompt track (MetaQA + local); the LLM
+        # is always called, even with an empty context ("(no context retrieved)").
         print("1. Retrieving from Neo4j (seeds > anchors > neighbours, capped to top_k)...")
         entries, counts = retrieve_graph_chunks_with_sources(user_query)
         contexts = [entry["text"] for entry in entries]
         prompt = build_metaqa_prompt(user_query, format_context(contexts))
 
         print(f"2. Generating answer using model: {settings.GENERATION_MODEL}...\n")
-        answer = generate_completion(prompt, temperature=0)
+        answer = generate_completion(prompt)
 
         print("=" * 50)
         print("Final Graph RAG Answer:")

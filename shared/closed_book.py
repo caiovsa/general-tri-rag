@@ -21,7 +21,7 @@ from shared.prompts import CLOSED_BOOK_CONTEXT, build_metaqa_prompt
 def run_closed_book_pipeline(user_query: str) -> dict:
     """Shared MetaQA prompt, no retrieval, same model at temperature 0."""
     prompt = build_metaqa_prompt(user_query, CLOSED_BOOK_CONTEXT)
-    answer = generate_completion(prompt, temperature=0)
+    answer = generate_completion(prompt)
     return {
         "answer": answer,
         "contexts": [],

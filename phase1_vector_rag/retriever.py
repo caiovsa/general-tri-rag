@@ -29,13 +29,17 @@ def retrieve_chunks(user_query: str, top_k: int = None, node_threshold: float = 
     if node_threshold is None:
         node_threshold = settings.DEFAULT_SIMILARITY_THRESHOLD
 
-    # Preflight: is Qdrant reachable?
+    # Preflight: is Qdrant reachable, and does the dataset's collection exist?
     try:
         client = qdrant_client.QdrantClient(url=settings.QDRANT_URL)
         client.get_collections()  # cheap health check
     except Exception as e:
         print(f"Error: Qdrant not reachable at {settings.QDRANT_URL}: {e}")
         print("Hint: run `docker compose up -d qdrant` and ensure the collection was ingested.")
+        return []
+    if not client.collection_exists(dataset.qdrant_collection):
+        print(f"Error: Qdrant collection {dataset.qdrant_collection!r} does not exist.")
+        print(f"Hint: run `make ingest-p1 DATASET={dataset.name}` first.")
         return []
 
     vector_store = QdrantVectorStore(

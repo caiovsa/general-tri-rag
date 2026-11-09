@@ -30,6 +30,13 @@ class Settings:
     # Judge model for the benchmark; defaults to the generation model for now.
     JUDGE_MODEL: str = os.getenv("JUDGE_MODEL", GENERATION_MODEL)
     EXTRACTION_MODEL: str = os.getenv("EXTRACTION_MODEL", "gpt-5-mini")
+    # gpt-5 / gpt-6 families only accept temperature=1 (litellm raises otherwise);
+    # set these to 1 when pinning those models. Everything is recorded in run_meta.
+    GENERATION_TEMPERATURE: float = float(os.getenv("GENERATION_TEMPERATURE", "0"))
+    EXTRACTION_TEMPERATURE: float = float(os.getenv("EXTRACTION_TEMPERATURE", "0"))
+    # RAGAS injects temperature=1e-8, which gpt-5/gpt-6 models reject. Keep this
+    # on a model that supports it (recorded in run_meta / eval metadata).
+    RAGAS_MODEL: str = os.getenv("RAGAS_MODEL", "gpt-4o-mini")
 
     # RAG parameters
     QDRANT_COLLECTION_NAME: str = os.getenv("QDRANT_COLLECTION_NAME", "rag_phase_1_baseline")
@@ -63,6 +70,32 @@ class Settings:
     METAQA_MINI_EVAL_FILE: Path = Path(os.getenv("METAQA_MINI_EVAL_FILE", str(METAQA_DIR / "metaqa_eval_mini.jsonl")))
     METAQA_MINI_DOC_LIST: Path = Path(os.getenv("METAQA_MINI_DOC_LIST", str(METAQA_DIR / "corpus_manifest_mini.txt")))
     NEO4J_METAQA_MINI_DATABASE: str = os.getenv("NEO4J_METAQA_MINI_DATABASE", "metaqa-mini-graph")
+    # MetaQA mini30: the 30-question / 100-doc plumbing corpus built by
+    # scripts/metaqa_make_mini30.py (additive track; the 12/50 mini stays frozen).
+    METAQA_MINI30_EVAL_FILE: Path = Path(os.getenv("METAQA_MINI30_EVAL_FILE", str(METAQA_DIR / "metaqa_eval_mini30.jsonl")))
+    METAQA_MINI30_DOC_LIST: Path = Path(os.getenv("METAQA_MINI30_DOC_LIST", str(METAQA_DIR / "corpus_manifest_mini30.txt")))
+    NEO4J_METAQA_MINI30_DATABASE: str = os.getenv("NEO4J_METAQA_MINI30_DATABASE", "metaqa-mini30-graph")
+    # Phase 3 (ontology) must never share a database with its Phase 2 track.
+    NEO4J_PHASE3_DATABASE: str = os.getenv("NEO4J_PHASE3_DATABASE", "hotpot-ontology-graph")
+    NEO4J_METAQA_PHASE3_DATABASE: str = os.getenv("NEO4J_METAQA_PHASE3_DATABASE", "metaqa-ontology-graph")
+    NEO4J_METAQA_MINI_PHASE3_DATABASE: str = os.getenv("NEO4J_METAQA_MINI_PHASE3_DATABASE", "metaqa-mini-ontology-graph")
+    NEO4J_METAQA_MINI30_PHASE3_DATABASE: str = os.getenv("NEO4J_METAQA_MINI30_PHASE3_DATABASE", "metaqa-mini30-ontology-graph")
+
+    # Generic local track (DATASET=local): any TXT/PDF/MD corpus + an eval JSONL.
+    LOCAL_EVAL_FILE: str = os.getenv("LOCAL_EVAL_FILE", "")
+    LOCAL_DOCS_DIR: str = os.getenv("LOCAL_DOCS_DIR", "")
+    LOCAL_COLLECTION: str = os.getenv("LOCAL_COLLECTION", "rag_local")
+    LOCAL_NEO4J_DATABASE: str = os.getenv("LOCAL_NEO4J_DATABASE", "local-graph")
+    LOCAL_NEO4J_PHASE3_DATABASE: str = os.getenv("LOCAL_NEO4J_PHASE3_DATABASE", "local-ontology-graph")
+    LOCAL_PATTERN: str = os.getenv("LOCAL_PATTERN", "**/*.txt")
+    LOCAL_CHUNK_SIZE: int = int(os.getenv("LOCAL_CHUNK_SIZE", "256"))
+    LOCAL_CHUNK_OVERLAP: int = int(os.getenv("LOCAL_CHUNK_OVERLAP", "32"))
+
+    # Phase 2 MetaQA ablation: include 1-hop neighbour chunks (default on).
+    INCLUDE_NEIGHBOURS: bool = os.getenv("INCLUDE_NEIGHBOURS", "1").strip().lower() not in ("0", "false", "no")
+    # Optional suffix for results/<dataset>/phaseN<tag> (e.g. _no_neighbours),
+    # so an ablation never overwrites the baseline results directory.
+    RESULTS_TAG: str = os.getenv("RESULTS_TAG", "").strip().strip("_")
     # One chunk size for every MetaQA phase so the phases stay comparable
     METAQA_CHUNK_SIZE: int = int(os.getenv("METAQA_CHUNK_SIZE", "256"))
     METAQA_CHUNK_OVERLAP: int = int(os.getenv("METAQA_CHUNK_OVERLAP", "32"))
@@ -96,11 +129,29 @@ class Dataset:
     chunk_overlap: int
     top_k: int
     tag_movies: bool = False       # prepend "[Movie: <title>]" to every chunk
+    # "phase" = historical HotpotQA prompts; "shared" = one frozen template
+    # (MetaQA tracks and the generic local track).
+    prompt_style: str = "phase"
+    # Directory ingest pattern (Phase 1/2/3); ignored when doc_list is set.
+    file_pattern: str = "**/*.txt"
+    # Phase 3 graph database; never the Phase 2 database.
+    neo4j_ontology_database: str | None = None
 
 
 def metaqa_database(name: str) -> str:
-    """Configured graph database for a MetaQA variant (never the HotpotQA database)."""
-    return settings.NEO4J_METAQA_MINI_DATABASE if name == "metaqa_mini" else settings.NEO4J_METAQA_DATABASE
+    """Configured Phase 2 graph database for a MetaQA variant (never HotpotQA)."""
+    if name == "metaqa_mini":
+        return settings.NEO4J_METAQA_MINI_DATABASE
+    if name == "metaqa_mini30":
+        return settings.NEO4J_METAQA_MINI30_DATABASE
+    if name == "metaqa":
+        return settings.NEO4J_METAQA_DATABASE
+    raise ValueError(f"Unknown MetaQA track {name!r}")
+
+
+def phase3_database(dataset: "Dataset") -> str:
+    """Graph database a Phase 3 run must use (always distinct from Phase 2)."""
+    return dataset.neo4j_ontology_database or dataset.neo4j_database
 
 
 def dataset_config(phase: int = 1) -> Dataset:
@@ -114,33 +165,76 @@ def dataset_config(phase: int = 1) -> Dataset:
     phase_dir = PHASE_DIRS[phase]
     phase_default_top_k = 8 if phase == 1 else 5  # 8 = Phase 1 today, 5 = Phase 2 today
 
-    if settings.DATASET in ("metaqa", "metaqa_mini"):
+    if settings.DATASET in ("metaqa", "metaqa_mini", "metaqa_mini30"):
         # Experiment protocol: top_k=20 for BOTH phases on the MetaQA tracks.
         top_k = settings.TOP_K or 20
-        mini = settings.DATASET == "metaqa_mini"
-        results_dir = REPO_ROOT / "results" / settings.DATASET / f"phase{phase}"
+        name = settings.DATASET
+        eval_file, doc_list = {
+            "metaqa": (settings.METAQA_EVAL_FILE, settings.METAQA_DOC_LIST),
+            "metaqa_mini": (settings.METAQA_MINI_EVAL_FILE, settings.METAQA_MINI_DOC_LIST),
+            "metaqa_mini30": (settings.METAQA_MINI30_EVAL_FILE, settings.METAQA_MINI30_DOC_LIST),
+        }[name]
+        tag = f"_{settings.RESULTS_TAG}" if settings.RESULTS_TAG else ""
+        results_dir = REPO_ROOT / "results" / name / f"phase{phase}{tag}"
         return Dataset(
-            name=settings.DATASET,
-            eval_file=settings.METAQA_MINI_EVAL_FILE if mini else settings.METAQA_EVAL_FILE,
+            name=name,
+            eval_file=eval_file,
             docs_dir=settings.METAQA_DOCS_DIR,
-            doc_list=settings.METAQA_MINI_DOC_LIST if mini else settings.METAQA_DOC_LIST,
+            doc_list=doc_list,
             results_file=results_dir / "results.json",
             detailed_file=results_dir / "results_detailed.json",
             eval_results_file=results_dir / "eval_results.json",
             eval_report_file=results_dir / "eval_report.txt",
             per_question_file=results_dir / "per_question.jsonl",
-            qdrant_collection=f"{settings.QDRANT_COLLECTION_NAME}_{settings.DATASET}",
+            qdrant_collection=f"{settings.QDRANT_COLLECTION_NAME}_{name}",
             neo4j_uri=settings.NEO4J_METAQA_URI,
-            neo4j_database=metaqa_database(settings.DATASET),
+            neo4j_database=metaqa_database(name),
             chunk_size=settings.METAQA_CHUNK_SIZE,
             chunk_overlap=settings.METAQA_CHUNK_OVERLAP,
             top_k=top_k,
             tag_movies=True,
+            prompt_style="shared",
+            neo4j_ontology_database={
+                "metaqa": settings.NEO4J_METAQA_PHASE3_DATABASE,
+                "metaqa_mini": settings.NEO4J_METAQA_MINI_PHASE3_DATABASE,
+                "metaqa_mini30": settings.NEO4J_METAQA_MINI30_PHASE3_DATABASE,
+            }[name],
+        )
+
+    if settings.DATASET == "local":
+        if not settings.LOCAL_EVAL_FILE or not settings.LOCAL_DOCS_DIR:
+            raise SystemExit(
+                "DATASET=local needs LOCAL_DOCS_DIR and LOCAL_EVAL_FILE "
+                "(eval JSONL in the hotpot/metaqa shape: question, answer, optional answers/"
+                "supporting_facts_titles)."
+            )
+        tag = f"_{settings.RESULTS_TAG}" if settings.RESULTS_TAG else ""
+        results_dir = REPO_ROOT / "results" / "local" / f"phase{phase}{tag}"
+        return Dataset(
+            name="local",
+            eval_file=Path(settings.LOCAL_EVAL_FILE),
+            docs_dir=Path(settings.LOCAL_DOCS_DIR),
+            doc_list=None,
+            results_file=results_dir / "results.json",
+            detailed_file=results_dir / "results_detailed.json",
+            eval_results_file=results_dir / "eval_results.json",
+            eval_report_file=results_dir / "eval_report.txt",
+            per_question_file=results_dir / "per_question.jsonl",
+            qdrant_collection=settings.LOCAL_COLLECTION,
+            neo4j_uri=settings.NEO4J_URI,
+            neo4j_database=settings.LOCAL_NEO4J_DATABASE,
+            chunk_size=settings.LOCAL_CHUNK_SIZE,
+            chunk_overlap=settings.LOCAL_CHUNK_OVERLAP,
+            top_k=settings.TOP_K or 8,
+            tag_movies=False,
+            prompt_style="shared",
+            file_pattern=settings.LOCAL_PATTERN,
+            neo4j_ontology_database=settings.LOCAL_NEO4J_PHASE3_DATABASE,
         )
 
     if settings.DATASET != "hotpot":
         raise ValueError(f"Unknown DATASET={settings.DATASET!r} "
-                         "(expected 'hotpot', 'metaqa' or 'metaqa_mini')")
+                         "(expected 'hotpot', 'metaqa', 'metaqa_mini', 'metaqa_mini30' or 'local')")
 
     top_k = settings.TOP_K or phase_default_top_k
     chunk_size, chunk_overlap = (
@@ -165,6 +259,9 @@ def dataset_config(phase: int = 1) -> Dataset:
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
         top_k=top_k,
+        prompt_style="phase",
+        file_pattern="**/*.txt",
+        neo4j_ontology_database=settings.NEO4J_PHASE3_DATABASE,
     )
 
 
@@ -194,6 +291,32 @@ def closed_book_dataset(phase: int = 1) -> Dataset:
 def set_top_k(value: int) -> None:
     """Override retrieval depth for this process (used by the runner's --top-k)."""
     settings.TOP_K = int(value)
+
+
+def set_include_neighbours(value: bool) -> None:
+    """Phase 2 ablation switch (used by the runner's --no-neighbours)."""
+    settings.INCLUDE_NEIGHBOURS = bool(value)
+
+
+def write_ingest_meta(dataset, phase: int, **payload) -> Path:
+    """Persist what an ingest actually built (read back by the answer runner)."""
+    import json
+    from datetime import datetime, timezone
+
+    path = Path(dataset.results_file).parent / "ingest_meta.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    data = {
+        "dataset": dataset.name,
+        "phase": phase,
+        "top_k": dataset.top_k,
+        "chunk_size": dataset.chunk_size,
+        "chunk_overlap": dataset.chunk_overlap,
+        "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        **payload,
+    }
+    path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+    print(f"Ingest metadata saved to {path}")
+    return path
 
 
 def check_neo4j_target(uri: str, database: str, user: str | None = None, password: str | None = None) -> None:
@@ -265,7 +388,9 @@ def describe_datasets() -> None:
         print(f"  docs       : {docs}")
         print(f"  qdrant     : {dataset.qdrant_collection}")
         print(f"  neo4j      : {dataset.neo4j_uri} / {dataset.neo4j_database}")
-        print(f"  chunk      : {dataset.chunk_size}/{dataset.chunk_overlap} | top_k={dataset.top_k} | tag_movies={dataset.tag_movies}")
+        print(f"  neo4j (p3) : {dataset.neo4j_uri} / {phase3_database(dataset)}")
+        print(f"  chunk      : {dataset.chunk_size}/{dataset.chunk_overlap} | top_k={dataset.top_k} | "
+              f"tag_movies={dataset.tag_movies} | prompt={dataset.prompt_style}")
         print(f"  results    : {dataset.results_file.parent}")
 
 
