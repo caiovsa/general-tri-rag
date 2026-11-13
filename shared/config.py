@@ -14,6 +14,12 @@ load_dotenv(dotenv_path=env_path)
 REPO_ROOT = Path(__file__).parent.parent
 PHASE_DIRS = {1: "phase1_vector_rag", 2: "phase2_graph_rag", 3: "phase3_ontology_rag"}
 
+
+def _optional_float(name: str) -> float | None:
+    """Env float, or None when unset (models that only accept the default)."""
+    raw = os.getenv(name)
+    return None if raw is None or not raw.strip() else float(raw)
+
 class Settings:
     # Database Configs
     QDRANT_URL: str = os.getenv("QDRANT_URL", "http://localhost:6333")
@@ -26,14 +32,14 @@ class Settings:
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
     EMBEDDING_DIMENSION: int = int(os.getenv("EMBEDDING_DIMENSION", "1536"))
-    GENERATION_MODEL: str = os.getenv("GENERATION_MODEL", "gpt-4o-mini")
-    # Judge model for the benchmark; defaults to the generation model for now.
-    JUDGE_MODEL: str = os.getenv("JUDGE_MODEL", GENERATION_MODEL)
-    EXTRACTION_MODEL: str = os.getenv("EXTRACTION_MODEL", "gpt-5-mini")
-    # gpt-5 / gpt-6 families only accept temperature=1 (litellm raises otherwise);
-    # set these to 1 when pinning those models. Everything is recorded in run_meta.
-    GENERATION_TEMPERATURE: float = float(os.getenv("GENERATION_TEMPERATURE", "0"))
-    EXTRACTION_TEMPERATURE: float = float(os.getenv("EXTRACTION_TEMPERATURE", "0"))
+    GENERATION_MODEL: str = os.getenv("GENERATION_MODEL", "gpt-6-luna")
+    # Judge must differ from the generator; pinned in .env and every run_meta.
+    JUDGE_MODEL: str = os.getenv("JUDGE_MODEL", "gpt-5.6-luna")
+    EXTRACTION_MODEL: str = os.getenv("EXTRACTION_MODEL", "gpt-6-luna")
+    # gpt-5 / gpt-6 families accept only the provider default (1); when unset we
+    # send no temperature parameter at all and record "default".
+    GENERATION_TEMPERATURE: float | None = _optional_float("GENERATION_TEMPERATURE")
+    EXTRACTION_TEMPERATURE: float | None = _optional_float("EXTRACTION_TEMPERATURE")
     # RAGAS injects temperature=1e-8, which gpt-5/gpt-6 models reject. Keep this
     # on a model that supports it (recorded in run_meta / eval metadata).
     RAGAS_MODEL: str = os.getenv("RAGAS_MODEL", "gpt-4o-mini")

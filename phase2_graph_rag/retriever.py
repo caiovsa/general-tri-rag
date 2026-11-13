@@ -79,7 +79,6 @@ Entities:"""
     raw = generate_completion(
         prompt,
         system_message="You extract named entities from questions.",
-        temperature=settings.GENERATION_TEMPERATURE,
     ).strip()
     entities = [e.strip() for e in raw.split(",") if e.strip()]
     print(f"-> Extracted entities: {entities}")
@@ -97,12 +96,14 @@ NEIGHBOR_QUERY = """
     WITH DISTINCT seed_chunk, score
     OPTIONAL MATCH (seed_chunk)-[:MENTIONS]->(entity)<-[:MENTIONS]-(neighbor_chunk)
     WHERE neighbor_chunk <> seed_chunk
-    WITH seed_chunk, score, COLLECT(DISTINCT neighbor_chunk) AS neighbors
+    WITH seed_chunk, score, neighbor_chunk, count(DISTINCT entity) AS shared_entities
+    ORDER BY shared_entities DESC, neighbor_chunk.id
+    WITH seed_chunk, score, collect(neighbor_chunk.text)[0..3] AS neighbor_texts
     RETURN seed_chunk.id             AS chunk_id,
            seed_chunk.text          AS chunk_text,
            seed_chunk._node_content AS node_content,
            score,
-           [n IN neighbors | n.text][0..3] AS neighbor_texts
+           neighbor_texts
     ORDER BY score DESC
 """
 
@@ -163,7 +164,7 @@ def retrieve_graph_chunks_with_sources(user_query: str, top_k: int = None, inclu
     if include_neighbours is None:
         include_neighbours = settings.INCLUDE_NEIGHBOURS
     empty_counts = {"chunks_in_prompt": 0, "seeds": 0, "anchors": 0, "neighbours": 0,
-                    "include_neighbours": include_neighbours}
+                    "include_neighbours": include_neighbours, "anchor_search": None}
     if not user_query or not user_query.strip():
         print("Warning: empty query — returning no results.")
         return [], empty_counts
@@ -205,6 +206,8 @@ def retrieve_graph_chunks_with_sources(user_query: str, top_k: int = None, inclu
     entities = extract_entities_from_query(user_query)
 
     keyword_results = []
+    search_paths: set[str] = set()
+    warned_fallback = False
     for entity in entities:
         print(f"Running keyword anchor search for: '{entity}'...")
         # Prefer full-text index (fast) if available; fallback to CONTAINS scan
@@ -220,8 +223,14 @@ def retrieve_graph_chunks_with_sources(user_query: str, top_k: int = None, inclu
             )
             if results is None:
                 raise RuntimeError("fulltext returned None")
-        except Exception:
-            # Fallback: CONTAINS scan (correct but slower)
+            search_paths.add("fulltext")
+        except Exception as error:
+            # Fallback: CONTAINS scan (correct but slower). Never silent.
+            if not warned_fallback:
+                print(f"WARNING: full-text index unavailable ({type(error).__name__}: {error}); "
+                      "falling back to CONTAINS scans.")
+                warned_fallback = True
+            search_paths.add("contains")
             results = graph_store.structured_query(
                 f"""
                 MATCH (seed_chunk)
@@ -246,6 +255,10 @@ def retrieve_graph_chunks_with_sources(user_query: str, top_k: int = None, inclu
                                        include_neighbours=include_neighbours)
     counts["entities"] = entities
     counts["include_neighbours"] = include_neighbours
+    counts["anchor_search"] = ("none" if not entities
+                               else "fulltext" if search_paths == {"fulltext"}
+                               else "contains" if search_paths == {"contains"}
+                               else "mixed")
     print(f"-> Context budget: {counts['chunks_in_prompt']}/{top_k} chunks "
           f"(seeds {counts['seeds']}, anchors {counts['anchors']}, neighbours {counts['neighbours']})")
     return entries, counts
@@ -319,6 +332,8 @@ def _retrieve_graph_chunks_legacy(user_query: str, top_k: int = None) -> list[st
     entities = extract_entities_from_query(user_query)
 
     keyword_results = []
+    search_paths: set[str] = set()
+    warned_fallback = False
     for entity in entities:
         print(f"Running keyword anchor search for: '{entity}'...")
         # Prefer full-text index (fast) if available; fallback to CONTAINS scan

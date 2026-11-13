@@ -9,6 +9,7 @@ Usage:
   # Legacy alias (still works, deprecated): python -m preapre_hotpot
 """
 
+import hashlib
 import json
 from pathlib import Path
 from datasets import load_dataset
@@ -22,6 +23,7 @@ def main():
     DATA_DIR.mkdir(exist_ok=True)
 
     saved_docs = {}
+    used_paths: dict[Path, str] = {}
 
     eval_path = Path("hotpot_eval.jsonl")
     if eval_path.exists():
@@ -37,6 +39,12 @@ def main():
                 doc_text = " ".join(sentences)
                 safe_filename = "".join([c for c in title if c.isalpha() or c.isdigit() or c == ' ']).rstrip()
                 filepath = DATA_DIR / f"{safe_filename}.txt"
+                # Titles such as "Romeo + Juliet" and "Romeo x Juliet" sanitize to
+                # the same name. Never let one document overwrite another.
+                if used_paths.get(filepath, title) != title:
+                    suffix = hashlib.sha1(title.encode("utf-8")).hexdigest()[:8]
+                    filepath = DATA_DIR / f"{safe_filename}__{suffix}.txt"
+                used_paths[filepath] = title
 
                 with open(filepath, "w", encoding="utf-8") as f:
                     f.write(doc_text)

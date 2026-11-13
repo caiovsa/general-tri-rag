@@ -4,8 +4,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from phase2_graph_rag.ingest import CountingExtractionLLM
-from shared.config import Dataset
+from shared.config import Dataset, settings
+from shared.extraction_llm import LitellmExtractionLLM
 from shared.hotpot_runner import run_fingerprint
 
 
@@ -14,18 +14,20 @@ class PolicySkipTest(unittest.TestCase):
         class PolicyError(Exception):
             code = "invalid_prompt"
 
-        self.assertTrue(CountingExtractionLLM._is_policy_error(
+        self.assertTrue(LitellmExtractionLLM._is_policy_error(
             PolicyError("flagged as potentially violating our usage policy")))
 
     def test_other_errors_are_not_skipped(self):
         class LengthError(Exception):
             code = "context_length_exceeded"
 
-        self.assertFalse(CountingExtractionLLM._is_policy_error(
+        self.assertFalse(LitellmExtractionLLM._is_policy_error(
             LengthError("maximum context length exceeded")))
 
-    def test_empty_response(self):
-        self.assertEqual(CountingExtractionLLM._empty_response().message.content, "")
+    def test_wrapper_metadata(self):
+        wrapper = LitellmExtractionLLM()
+        self.assertFalse(wrapper.metadata.is_chat_model)
+        self.assertEqual(wrapper.metadata.model_name, settings.EXTRACTION_MODEL)
 
 
 class Phase3FingerprintTest(unittest.TestCase):

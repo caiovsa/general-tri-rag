@@ -12,15 +12,15 @@ def build_graph_prompt(query: str, chunks: list[str]) -> str:
     
     prompt = f"""You are an expert research assistant.
 Use the following pieces of retrieved context to answer the user's question.
-The context contains document chunks enriched with graph relationships (triplets) that connect entities.
-Use the graph relationships silently to accurately connect entities and resolve complex queries.
+Some context blocks include a "Connected Context" section found by graph traversal.
+Use those connections silently to resolve complex queries.
 
 Rules:
 - Base your answer strictly on the provided context.
 - If the answer is not in the context, say "I don't know based on the provided context."
 - Do not invent relationships or facts not present in the context.
-- Give a natural, conversational answer. Do NOT expose raw triplets, node IDs, or graph syntax in your response.
-- Use the graph relationships as internal evidence only — never mention them explicitly.
+- Give a natural, conversational answer. Do NOT expose node IDs, graph syntax, or internal markers.
+- Use the connected context as internal evidence only — never mention it explicitly.
 
 Context:
 {context_str}

@@ -18,8 +18,6 @@ from shared.ingest import MOVIE_TAG
 from shared.prompts import metaqa_prompt_template_hash
 
 FILLER_PATTERNS = [
-    r"^(yes|no),?\s*",
-    r"^(yes\.|no\.)\s*",
     r"^according to the (provided )?(context|passage|text)[,\.]?\s*",
     r"^based on the (provided )?(context|passage|text)[,\.]?\s*",
     r"^the (provided )?(context|passage|text) (states|says|indicates|shows|mentions)[,\.]?\s*",
@@ -93,11 +91,31 @@ def relaxed_em(prediction: str, ground_truth: str) -> int:
 
 def extract_answer(prediction: str) -> str:
     text = prediction.strip()
+    # Yes/no answers ARE the answer: never strip the leading token.
+    yes_no = re.match(r"^(yes|no)\b", text, flags=re.IGNORECASE)
+    if yes_no:
+        return yes_no.group(1)
     for pattern in FILLER_PATTERNS:
         text = re.sub(pattern, "", text, flags=re.IGNORECASE).strip()
     if not text:
         return prediction
     return text
+
+
+def parse_judge_verdict(raw: str) -> tuple[int | None, str]:
+    """Parse a judge verdict as whole words.
+
+    `INCORRECT` contains the substring `CORRECT`, which the old parser counted as
+    correct. Any negative marker wins; otherwise CORRECT is 1; otherwise None.
+    """
+    text = (raw or "").strip().upper()
+    if not text:
+        return None, raw
+    if re.search(r"\bINCORRECT\b", text) or re.search(r"\bNOT\b", text):
+        return 0, raw
+    if re.search(r"\bCORRECT\b", text):
+        return 1, raw
+    return None, raw
 
 
 def token_f1(prediction: str, ground_truth: str) -> float:
@@ -315,21 +333,20 @@ def compute_semantic_similarity(data):
         return None, [None] * len(data), False
 
 
-def compute_llm_judge(data, dataset=None, judge_model: str | None = None,
-                      temperature: float | None = None):
+def compute_llm_judge(data, dataset=None, judge_model: str | None = None):
+    """LLM-as-Judge with a whole-word verdict parser (raw verdict is kept)."""
     metaqa = bool(getattr(dataset, "tag_movies", False))
     judge_model = judge_model or settings.JUDGE_MODEL
-    temperature = settings.GENERATION_TEMPERATURE if temperature is None else temperature
     if not settings.OPENAI_API_KEY:
         print("  OPENAI_API_KEY not set — skipping LLM-as-Judge.")
-        return None, [None] * len(data), False
+        return None, [None] * len(data), False, [None] * len(data)
 
     try:
         from openai import OpenAI
         client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
-        print("  Running LLM-as-Judge evaluation ...")
-        scores = []
+        print(f"  Running LLM-as-Judge evaluation (judge={judge_model}, no temperature) ...")
+        scores, raws = [], []
 
         for i, item in enumerate(data):
             ans = item["answer"].strip()
@@ -343,6 +360,7 @@ def compute_llm_judge(data, dataset=None, judge_model: str | None = None,
             ans_lower = ans.lower()
             if any(p in ans_lower for p in dont_know_patterns):
                 scores.append(0)
+                raws.append("REFUSED")
                 if (i + 1) % 10 == 0:
                     print(f"    Judged {i + 1}/{len(data)} ...")
                 continue
@@ -355,11 +373,13 @@ def compute_llm_judge(data, dataset=None, judge_model: str | None = None,
             resp = client.chat.completions.create(
                 model=judge_model,
                 messages=[{"role": "user", "content": prompt}],
-                temperature=temperature,
             )
-            judgment = resp.choices[0].message.content.strip().upper()
-            score = 1 if "CORRECT" in judgment else 0
-            scores.append(score)
+            raw = resp.choices[0].message.content or ""
+            parsed, raw = parse_judge_verdict(raw)
+            if parsed is None:
+                print(f"    WARNING: unparsed judge verdict for Q{i + 1}: {raw[:80]!r} (scored 0)")
+            scores.append(parsed if parsed is not None else 0)
+            raws.append(raw)
 
             if (i + 1) % 10 == 0:
                 print(f"    Judged {i + 1}/{len(data)} ...")
@@ -367,17 +387,19 @@ def compute_llm_judge(data, dataset=None, judge_model: str | None = None,
         avg_score = sum(scores) / len(scores)
         label = "LLM-as-Judge (secondary)" if metaqa else "LLM-as-Judge"
         print(f"  {label} Accuracy : {avg_score:.4f}  ({sum(scores)}/{len(scores)} correct)")
-        return avg_score, scores, True
+        return avg_score, scores, True, raws
 
     except Exception as e:
         print(f"  LLM-as-Judge failed: {e}")
-        return None, [None] * len(data), False
+        return None, [None] * len(data), False, [None] * len(data)
 
 
-def compute_ragas(data, judge_model: str | None = None, temperature: float | None = None,
-                  ragas_model: str | None = None):
-    judge_model = judge_model or settings.JUDGE_MODEL
-    temperature = settings.GENERATION_TEMPERATURE if temperature is None else temperature
+def compute_ragas(data, ragas_model: str | None = None):
+    """RAGAS diagnostics: faithfulness and context recall only.
+
+    Answer Correctness was removed from the headline: it assigns ~0.24 to
+    answers identical to the ground truth (e.g. "World War II.").
+    """
     ragas_model = ragas_model or settings.RAGAS_MODEL
     if not any(item.get("contexts") for item in data):
         print("  RAGAS skipped: no retrieved contexts (closed-book control).")
@@ -389,18 +411,18 @@ def compute_ragas(data, judge_model: str | None = None, temperature: float | Non
     try:
         from datasets import Dataset
         from ragas import evaluate
-        from ragas.metrics import answer_correctness, faithfulness, context_recall
+        from ragas.metrics import faithfulness, context_recall
         from ragas.llms import LangchainLLMWrapper
         from langchain_openai import ChatOpenAI
 
         llm = ChatOpenAI(
             model=ragas_model,
             api_key=settings.OPENAI_API_KEY,
-            temperature=temperature,
+            temperature=0,
         )
         llm_wrapper = LangchainLLMWrapper(llm)
 
-        for metric in [answer_correctness, faithfulness, context_recall]:
+        for metric in [faithfulness, context_recall]:
             metric.llm = llm_wrapper
 
         ragas_data = {
@@ -411,13 +433,9 @@ def compute_ragas(data, judge_model: str | None = None, temperature: float | Non
         }
         dataset = Dataset.from_dict(ragas_data)
 
-        print("  Running RAGAS evaluation ...")
-        ragas_results = evaluate(
-            dataset,
-            metrics=[answer_correctness, faithfulness, context_recall],
-        )
+        print("  Running RAGAS evaluation (faithfulness, context recall) ...")
+        ragas_results = evaluate(dataset, metrics=[faithfulness, context_recall])
 
-        print(f"  Answer Correctness : {ragas_results['answer_correctness']:.4f}")
         print(f"  Faithfulness       : {ragas_results['faithfulness']:.4f}")
         print(f"  Context Recall     : {ragas_results['context_recall']:.4f}")
         return ragas_results, True
@@ -469,7 +487,6 @@ def generate_report(phase_name, summary, per_question, ragas_ok, ragas_df, seman
         else:
             lines.append(f"  LLM-as-Judge        : {summary['llm_judge']}")
     if ragas_ok:
-        lines.append(f"  RAGAS Answer Corr   : {summary['ragas_answer_correctness']}")
         lines.append(f"  RAGAS Faithfulness  : {summary['ragas_faithfulness']}")
         lines.append(f"  RAGAS Context Recall: {summary['ragas_context_recall']}")
     if grouped_lines:
@@ -496,7 +513,6 @@ def generate_report(phase_name, summary, per_question, ragas_ok, ragas_df, seman
             extra.append(f"Judge={'CORRECT' if judge_scores[i] else 'INCORRECT'}")
         if ragas_ok and ragas_df is not None:
             row = ragas_df.iloc[i]
-            extra.append(f"AnswerCorr={row.get('answer_correctness', 0):.4f}")
             extra.append(f"Faith={row.get('faithfulness', 0):.4f}")
             extra.append(f"CtxRecall={row.get('context_recall', 0):.4f}")
         if extra:
@@ -557,6 +573,8 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
     generation_model = fingerprint.get("generation_model", settings.GENERATION_MODEL)
     judge_model = fingerprint.get("judge_model", settings.JUDGE_MODEL)
     temperature = fingerprint.get("temperature", settings.GENERATION_TEMPERATURE)
+    if temperature is None:
+        temperature = "default"
     if run_meta is None:
         print("WARNING: no run_meta.json next to the detailed results — "
               "model/temperature metadata falls back to the current environment.")
@@ -575,12 +593,11 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
     avg_semantic, semantic_scores, semantic_ok = compute_semantic_similarity(data)
 
     print("\n--- LLM-as-Judge ---")
-    avg_judge, judge_scores, judge_ok = compute_llm_judge(
-        data, dataset=dataset, judge_model=judge_model, temperature=temperature)
+    avg_judge, judge_scores, judge_ok, judge_raw = compute_llm_judge(
+        data, dataset=dataset, judge_model=judge_model)
 
-    print("\n--- RAGAS (LLM-based metrics) ---")
-    ragas_results, ragas_ok = compute_ragas(
-        data, judge_model=judge_model, temperature=temperature)
+    print("\n--- RAGAS (secondary diagnostics) ---")
+    ragas_results, ragas_ok = compute_ragas(data, ragas_model=settings.RAGAS_MODEL)
 
 
     if not tagged:
@@ -619,10 +636,9 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
 
         if ragas_df is not None:
             row = ragas_df.iloc[i]
-            ac = row.get("answer_correctness", float("nan"))
             fa = row.get("faithfulness", float("nan"))
             cr = row.get("context_recall", float("nan"))
-            print(f"  AnswerCorr={ac:.4f}  Faith={fa:.4f}  CtxRecall={cr:.4f}", end="")
+            print(f"  Faith={fa:.4f}  CtxRecall={cr:.4f}", end="")
         print()
 
     print("\n" + "=" * 60)
@@ -648,7 +664,6 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
     summary["evidence_recall"] = _mean(evidence_scores)
 
     if ragas_ok:
-        summary["ragas_answer_correctness"] = round(float(ragas_results["answer_correctness"]), 4)
         summary["ragas_faithfulness"] = round(float(ragas_results["faithfulness"]), 4)
         summary["ragas_context_recall"] = round(float(ragas_results["context_recall"]), 4)
 
@@ -679,12 +694,12 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
     ingest_meta = _read_ingest_meta(Path(data_file).parent)
     if ingest_meta is not None:
         metadata["ingest"] = ingest_meta
-        recorded_top_k = (run_meta.get("fingerprint") or {}).get("top_k")
-        if recorded_top_k is not None and recorded_top_k != getattr(dataset, "top_k", None):
-            print(f"WARNING: results were generated with top_k={recorded_top_k}, "
-                  f"but the current config says top_k={getattr(dataset, 'top_k', None)}.")
+    recorded_top_k = ((run_meta or {}).get("fingerprint") or {}).get("top_k")
+    if recorded_top_k is not None and recorded_top_k != getattr(dataset, "top_k", None):
+        print(f"WARNING: results were generated with top_k={recorded_top_k}, "
+              f"but the current config says top_k={getattr(dataset, 'top_k', None)}.")
     if tagged:
-        # MetaQA protocol: pinned models at temperature 0 + frozen prompt template.
+        # MetaQA protocol: pinned models (provider-default temperature) + frozen prompt template.
         metadata["prompt_template_hash"] = metaqa_prompt_template_hash()
         retrieval_rows = [d["retrieval"] for d in data if isinstance(d.get("retrieval"), dict)]
         if retrieval_rows:
@@ -714,9 +729,9 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
                     "F1": round(per_question[i]["F1"], 4),
                     "Semantic": round(semantic_scores[i], 4) if semantic_scores[i] is not None else None,
                     "LLM_Judge": "CORRECT" if judge_scores[i] == 1 else ("INCORRECT" if judge_scores[i] == 0 else None),
+                    "judge_raw": judge_raw[i],
                     **(
                         {
-                            "ragas_answer_correctness": round(float(ragas_df.iloc[i]["answer_correctness"]), 4),
                             "ragas_faithfulness": round(float(ragas_df.iloc[i]["faithfulness"]), 4),
                             "ragas_context_recall": round(float(ragas_df.iloc[i]["context_recall"]), 4),
                         } if ragas_ok else {}
@@ -756,6 +771,7 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
                         "anchors": retrieval.get("anchors"),
                         "neighbours": retrieval.get("neighbours"),
                         "entities": retrieval.get("entities"),
+                        "anchor_search": retrieval.get("anchor_search"),
                     } if tagged else {}),
                 }, ensure_ascii=False) + "\n")
         print(f"Per-question metrics saved to: {per_question_file}")

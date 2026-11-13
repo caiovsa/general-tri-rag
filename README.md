@@ -26,6 +26,7 @@ shared between questions, so never compare Phase 1 vs Phase 2 (or mini vs full) 
 - Docker (Qdrant and the `neo4j-metaqa` service)
 - Neo4j Desktop or Neo4j Docker for the Phase 2 HotpotQA graph
 - `OPENAI_API_KEY` in `.env` (see `.env.example`)
+- Pinned models: generation/extraction `gpt-6-luna`, judge `gpt-5.6-luna` (no temperature parameter — Luna only accepts the default)
 - MetaQA track only: `WIKI_CONTACT` for the Wikimedia User-Agent
 
 ## Quickstart
@@ -106,8 +107,8 @@ Deprecated aliases (`hotpot-p1`, `hotpot-p2`, `metaqa-check`, `metaqa-ingest-p1`
 |--------|--------------|
 | Exact Match, Relaxed EM, Extracted EM, Token F1 | No |
 | Semantic Similarity (embedding cosine) | Yes |
-| LLM-as-Judge | Yes |
-| RAGAS Answer Correctness / Faithfulness / Context Recall | Yes |
+| LLM-as-Judge (fixed whole-word parser; judge != generator) | Yes |
+| RAGAS Faithfulness / Context Recall (Answer Correctness removed — unreliable) | Yes |
 
 ## Project structure
 

@@ -115,8 +115,8 @@ def run_fingerprint(dataset, phase: int, closed_book: bool = False) -> dict:
         "judge_model": settings.JUDGE_MODEL,
         "extraction_model": settings.EXTRACTION_MODEL,
         "embedding_model": settings.EMBEDDING_MODEL,
-        "temperature": settings.GENERATION_TEMPERATURE,
-        "extraction_temperature": settings.EXTRACTION_TEMPERATURE,
+        "temperature": settings.GENERATION_TEMPERATURE if settings.GENERATION_TEMPERATURE is not None else "default",
+        "extraction_temperature": settings.EXTRACTION_TEMPERATURE if settings.EXTRACTION_TEMPERATURE is not None else "default",
         "include_neighbours": settings.INCLUDE_NEIGHBOURS if phase == 2 else None,
         "graph_database": phase3_database(dataset) if phase == 3 else dataset.neo4j_database,
         **({"ontology_sha256": _ontology_hash()} if phase == 3 else {}),
@@ -368,8 +368,9 @@ def run_phase(pipeline_func, phase: int, phase_name: str, closed_book: bool = Fa
     print(f"  eval file  : {dataset.eval_file}")
     print(f"  results dir: {dataset.results_file.parent}")
     print(f"  top_k      : {dataset.top_k}")
+    temp = settings.GENERATION_TEMPERATURE if settings.GENERATION_TEMPERATURE is not None else "default (1)"
     print(f"  models     : gen={settings.GENERATION_MODEL} judge={settings.JUDGE_MODEL} "
-          f"extract={settings.EXTRACTION_MODEL} | temperature={settings.GENERATION_TEMPERATURE}")
+          f"extract={settings.EXTRACTION_MODEL} | temperature={temp}")
     if dataset.doc_list:
         print(f"  corpus     : {dataset.doc_list}")
     print()
@@ -386,7 +387,7 @@ def run_phase(pipeline_func, phase: int, phase_name: str, closed_book: bool = Fa
             "generation_model": settings.GENERATION_MODEL,
             "judge_model": settings.JUDGE_MODEL,
             "extraction_model": settings.EXTRACTION_MODEL,
-            "temperature": settings.GENERATION_TEMPERATURE,
+            "temperature": settings.GENERATION_TEMPERATURE if settings.GENERATION_TEMPERATURE is not None else "default",
             "prompt_template_hash": metaqa_prompt_template_hash(),
         })
 

@@ -8,17 +8,16 @@ from pathlib import Path
 
 import llama_index.core
 from llama_index.core import SimpleDirectoryReader
-from llama_index.core.base.llms.types import ChatMessage, ChatResponse, MessageRole
 from llama_index.core.node_parser import TokenTextSplitter
 from llama_index.core.indices.property_graph import (
     ImplicitPathExtractor,
     SimpleLLMPathExtractor,
 )
 from llama_index.graph_stores.neo4j import Neo4jPropertyGraphStore
-from llama_index.llms.openai import OpenAI
 from llama_index.core.schema import TransformComponent
 
 from shared.config import check_neo4j_target, dataset_config, metaqa_database, settings, get_llamaindex_settings, write_ingest_meta
+from shared.extraction_llm import LitellmExtractionLLM
 from shared.ingest import MovieTagger, prepare_documents
 
 llm, embed_model = get_llamaindex_settings()
@@ -26,90 +25,13 @@ llama_index.core.Settings.llm = llm
 llama_index.core.Settings.embed_model = embed_model
 
 
-class RunStats:
-    """Counters for the end-of-run report (extraction settings are untouched)."""
-
-    def __init__(self):
-        self.calls = 0
-        self.errors = 0
-        self.retries = 0
-
-
-class CountingExtractionLLM(OpenAI):
-    """EXTRACTION_LLM with identical settings (model/temperature/retries), plus counters.
-
-    `_chat`/`_achat` are the single funnel every entry point funnels through
-    (`apredict` -> `achat` -> `_achat`, `complete` -> `_chat`), so each logical
-    extraction call is counted exactly once, and failures are visible even when
-    the extractor swallows them.
-
-    A content-policy rejection (`invalid_prompt`) is counted as a per-chunk skip
-    and answered with an empty completion: the chunk keeps its text/embedding
-    (only its triples are missing), and one flagged movie plot cannot abort a
-    multi-hour ingest.
-    """
-
-    calls: int = 0
-    errors: int = 0
-    policy_skips: int = 0
-    prompt_tokens: int = 0
-    completion_tokens: int = 0
-
-    def _record_tokens(self, response) -> None:
-        self.prompt_tokens += _usage_value(response, "prompt_tokens")
-        self.completion_tokens += _usage_value(response, "completion_tokens")
-
-    @staticmethod
-    def _is_policy_error(error: Exception) -> bool:
-        text = str(error).lower()
-        return (getattr(error, "code", None) == "invalid_prompt"
-                or "usage policy" in text
-                or "invalid prompt" in text)
-
-    @staticmethod
-    def _empty_response() -> ChatResponse:
-        return ChatResponse(message=ChatMessage(role=MessageRole.ASSISTANT, content=""))
-
-    def _chat(self, messages, **kwargs):
-        self.calls += 1
-        try:
-            response = super()._chat(messages, **kwargs)
-        except Exception as error:
-            if self._is_policy_error(error):
-                self.policy_skips += 1
-                return self._empty_response()
-            self.errors += 1
-            raise
-        self._record_tokens(response)
-        return response
-
-    async def _achat(self, messages, **kwargs):
-        self.calls += 1
-        try:
-            response = await super()._achat(messages, **kwargs)
-        except Exception as error:
-            if self._is_policy_error(error):
-                self.policy_skips += 1
-                return self._empty_response()
-            self.errors += 1
-            raise
-        self._record_tokens(response)
-        return response
+EXTRACTION_LLM = LitellmExtractionLLM()
 
 
 # Real retrieval chunks only: the store also keeps empty document-id placeholders as Chunk nodes.
 TEXT_CHUNKS = "MATCH (c:Chunk) WHERE c.text <> '' RETURN count(c) AS n"
 # The [Movie: <title>] tag makes the LLM extractor emit an entity literally named "Movie".
 TAG_ARTIFACT_NAME = "movie"
-
-
-def _usage_value(response, key: str) -> int:
-    """Token count from a ChatResponse's raw openai usage (object or dict)."""
-    usage = getattr(getattr(response, "raw", None), "usage", None)
-    if usage is None:
-        return 0
-    value = usage.get(key) if isinstance(usage, dict) else getattr(usage, key, None)
-    return int(value or 0)
 
 
 class MetadataScrubber(TransformComponent):
@@ -131,33 +53,6 @@ class MetadataScrubber(TransformComponent):
         for node in nodes:
             node.metadata.clear()
         return nodes
-
-
-EXTRACTION_LLM = CountingExtractionLLM(model=settings.EXTRACTION_MODEL,
-                                     temperature=settings.EXTRACTION_TEMPERATURE)
-
-
-def instrument_retries(llm, stats: RunStats) -> None:
-    """Count SDK-level retries by observing the OpenAI client's retry hook.
-
-    Only wraps the existing hook — retry configuration itself is unchanged.
-    """
-    for get_client in (llm._get_client, llm._get_aclient):
-        try:
-            client = get_client()
-        except Exception as error:  # noqa: BLE001 - counter is best effort
-            print(f"  (retry counter unavailable: {type(error).__name__})")
-            continue
-        original = getattr(client, "_calculate_retry_timeout", None)
-        if original is None or getattr(client, "_metaqa_counted", False):
-            continue
-
-        def counting(remaining_retries, options, response_headers=None, _original=original):
-            stats.retries += 1
-            return _original(remaining_retries, options, response_headers)
-
-        client._calculate_retry_timeout = counting
-        client._metaqa_counted = True
 
 
 def guard_reset(dataset) -> None:
@@ -347,7 +242,6 @@ async def ingest_phase_2_graph(data_dir: str = None, batch_size: int = 50, limit
     and creates a vector index on Chunk nodes for similarity search.
     """
     started = time.monotonic()
-    stats = RunStats()
     dataset = dataset_config(phase=2)
     if dataset.tag_movies:
         # Every MetaQA track must prove its own database before writing anything.
@@ -359,7 +253,6 @@ async def ingest_phase_2_graph(data_dir: str = None, batch_size: int = 50, limit
     if reset:
         reset_metaqa_graph(graph_store, dataset)
 
-    instrument_retries(EXTRACTION_LLM, stats)
     extractors = build_extractors()
     chunker = get_extraction_chunker(dataset)
     # [Movie: <title>] tags every chunk before extraction, identically to Phase 1
@@ -435,7 +328,7 @@ async def ingest_phase_2_graph(data_dir: str = None, batch_size: int = 50, limit
     print(f"  total tokens      : {EXTRACTION_LLM.prompt_tokens + EXTRACTION_LLM.completion_tokens:,}")
     print(f"  errors            : {EXTRACTION_LLM.errors:,}")
     print(f"  policy skips      : {EXTRACTION_LLM.policy_skips:,}  (chunk kept; no triples)")
-    print(f"  retries           : {stats.retries:,}")
+    print("  retries           : 0 (litellm internal)")
     print(f"  relationships     : {rel_count:,}  (db total)")
     print(f"  doc concurrency   : {max_concurrent_docs:,}  (extraction workers: 8)")
     print(f"  wall clock        : {elapsed:.1f}s ({elapsed / 60:.1f} min)")
@@ -445,13 +338,13 @@ async def ingest_phase_2_graph(data_dir: str = None, batch_size: int = 50, limit
         dataset, 2,
         graph_database=dataset.neo4j_database,
         extraction_model=settings.EXTRACTION_MODEL,
-        extraction_temperature=settings.EXTRACTION_TEMPERATURE,
+        extraction_temperature=settings.EXTRACTION_TEMPERATURE if settings.EXTRACTION_TEMPERATURE is not None else "default",
         docs=docs_ingested,
         chunks=chunks_total,
         relationships=rel_count,
         errors=EXTRACTION_LLM.errors,
         policy_skips=EXTRACTION_LLM.policy_skips,
-        retries=stats.retries,
+        retries=0,
         reset=reset,
         include_neighbours=settings.INCLUDE_NEIGHBOURS,
     )

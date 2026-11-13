@@ -21,6 +21,9 @@ def generate_completion(
         {"role": "system", "content": system_message},
         {"role": "user", "content": prompt}
     ]
+    # Luna models accept only the provider default; omit the parameter entirely
+    # instead of sending a value that would 400.
+    temperature_kwargs = {} if temperature is None else {"temperature": temperature}
 
     last_exc: Exception | None = None
     for attempt in range(max_retries + 1):
@@ -28,7 +31,7 @@ def generate_completion(
             response = completion(
                 model=settings.GENERATION_MODEL,
                 messages=messages,
-                temperature=temperature,
+                **temperature_kwargs,
                 #max_tokens=max_tokens,
                 api_key=settings.MARITACA_API_KEY or None,
                 api_base=settings.MARITACA_API_BASE or None,

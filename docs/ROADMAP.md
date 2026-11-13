@@ -22,10 +22,13 @@
   and isolated stores.
 - **Phase 2 mini30 certificate**: 100 docs / 443 chunks / 0 extraction errors, 30/30 answers,
   full metric stack; the recorded `--no-neighbours` ablation shows the 1-hop neighbours add
-  +5.8 gold recall and +10 evidence recall points on mini30.
+  +18 gold recall and +11 evidence recall points on mini30 after ranking them by shared entities.
 - **Full MetaQA baselines**: Phase 1 (212/212) and Phase 3a oracle graph (212/212, evidence
-  recall .966, gold recall .881) are complete; Phase 2 full is pending an explicit budget call
-  (~4 h / ≈$15–20 at gpt-5-mini).
+  recall .966, gold recall .876) are complete; Phase 2 full is pending a time/budget call.
+- **Metric corrections (2026-11-12)**: judge parser fixed (previous judge columns were refusal
+  rates), Extracted EM fixed for yes/no, RAGAS Answer Correctness removed, judge separated from
+  the generator, Luna models used with no temperature parameter, neighbours ranked by shared
+  entities, full-text/CONTAINS provenance recorded.
 - **Mini30 track (30 q / 100 docs)**: additive plumbing corpus
   (`MetaQA/metaqa_eval_mini30.jsonl` + `corpus_manifest_mini30.txt`, checksummed) with its own
   collection, graph DB and results dir; the 12/50 mini stays frozen and runnable.
@@ -38,14 +41,15 @@
 ## Next
 
 - [ ] **Phase 1 and Phase 2 clean baselines** — same top_k and chunk budget in both phases,
-      similarity threshold off on MetaQA, pinned temperature, no per-question tuning, complete
-      `run_meta.json` (protocol: `docs/EXPERIMENT_LOG.md`).
-- [ ] **Full MetaQA Phase 2** — 994-doc ingest at the pinned extraction model (pending budget
-      call); answers/bench scripts are ready (`make answers-p2 DATASET=metaqa`).
+      no temperature parameter, no per-question tuning, complete `run_meta.json`
+      (protocol: `docs/EXPERIMENT_LOG.md`).
+- [ ] **Full MetaQA Phase 2** — 994-doc ingest with gpt-6-luna extraction (measured: 13.1 min / 443 chunks;
+      ~2.5 h and ~$3 for 4,950 chunks). Answers/bench scripts are ready (`make answers-p2 DATASET=metaqa`).
 - [x] **Phase 3a — oracle graph from `kb.txt`** — typed schema, no extraction noise; upper bound
       for graph retrieval quality and the sanity check for the eval set (212/212, evidence .966).
 - [ ] **Phase 3b — schema-constrained LLM extraction** — restrict extraction to the KB relation
       schema and typed entities; compare against 3a and Phase 2 (`phase3_ontology_rag/schema.py`
       is the ready schema contract).
 - [ ] **Phase 1b — hybrid (dense + BM25) baseline** — second Phase 1 retrieval baseline.
-- [ ] **HotpotQA 10-question regression** after the shared-runner changes (full rerun optional).
+- [ ] **HotpotQA controlled v2 (optional)** — retired from headline comparisons; if it returns,
+      use 256/20 chunks, one prompt, same top_k/context budget, fixed judge, 500+ sampled questions.

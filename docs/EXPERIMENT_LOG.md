@@ -55,16 +55,19 @@ mixing results.
    plus the MetaQA chunk size/overlap (256/32) apply identically to Phase 1, Phase 2 and
    Phase 3; no phase may retag, rechunk, or re-glob the corpus. The corpus is always
    `MetaQA/corpus_manifest.txt` (or the mini manifest), never a fresh glob of `docs/`.
-4. **Pinned answer/judge/extraction models at the model's supported temperature.** One pinned
-   `GENERATION_MODEL` answers and judges every run; no model or sampling change mid-experiment.
-   `GENERATION_TEMPERATURE` is recorded in `run_meta.json` (gpt-5/gpt-6 families only accept 1;
-   `gpt-4o-mini` supports 0). RAGAS uses its own `RAGAS_MODEL` because it injects a tiny
-   temperature that gpt-5-family models reject. Every phase writes a run fingerprint
-   (eval/corpus hashes, chunking, top_k, models, temperatures, prompt hash, ablation switches,
-   Phase 3 ontology hash) and refuses to resume into a change.
+4. **Pinned models; no temperature parameter.** `GENERATION_MODEL` answers, a different
+   `JUDGE_MODEL` judges, and `EXTRACTION_MODEL` builds graphs. Luna models accept only the
+   provider-default temperature (1): the code omits the parameter entirely and records
+   `"temperature": "default"`. RAGAS keeps its own `RAGAS_MODEL` (it injects a tiny temperature).
+   Every phase writes a run fingerprint (eval/corpus hashes, chunking, top_k, models, temperature,
+   prompt hash, ablation switches, Phase 3 ontology hash) and refuses to resume into a change.
 5. **No per-question tuning.** Prompts, retrieval parameters, thresholds and models are fixed
-   before the run and applied to every question; a question that fails is a result, not an
-   edit.
+   before the run and applied to every question; a question that fails is a result, not an edit.
+6. **One prompt across phases.** The prompt text (and its recorded sha256) must be identical for
+   any phase comparison; HotpotQA's historical phase-specific prompts are not comparable.
+7. **One embedding model.** Embedding model and dimension are recorded in `run_meta.json`; a
+   comparison with different embeddings is invalid.
+8. **The judge must not be the generator.** Separate model, fixed parser, raw verdict saved.
 
 Frozen artifacts are inputs: a phase run never rebuilds `metaqa_eval_v1.jsonl`,
 `corpus_manifest.txt`, or the mini equivalents (steps 2–4 rebuild only, and a rebuilt eval
@@ -72,3 +75,13 @@ must be re-frozen and re-checksummed before use).
 
 The `--no-neighbours` Phase 2 ablation is allowed only as an explicitly recorded extra run
 (`run_meta.json` carries `include_neighbours: false`); it is never the baseline.
+
+### 2026-11-12 — metric correction
+
+- The judge parser (`"CORRECT" in judgment`) counted `INCORRECT` as correct. Every judge column
+  before this date was a refusal rate; it was fixed to whole-word parsing, the raw verdict is
+  saved, and the judge is now `gpt-5.6-luna` (never the generator).
+- Extracted EM no longer strips `Yes`/`No`.
+- RAGAS Answer Correctness was removed from the headline (exact answers scored ~0.24).
+- Phase 2 neighbours are ranked by shared entities; `anchor_search` records fulltext vs CONTAINS.
+- HotpotQA is retired as a headline comparison (uncontrolled protocol; historical numbers invalid).
