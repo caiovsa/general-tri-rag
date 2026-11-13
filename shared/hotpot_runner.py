@@ -351,7 +351,8 @@ def parse_args(phase: int) -> argparse.Namespace:
     return parser.parse_args()
 
 
-def run_phase(pipeline_func, phase: int, phase_name: str, closed_book: bool = False):
+def run_phase(pipeline_func, phase: int, phase_name: str, closed_book: bool = False,
+              dataset_override=None):
     """Resolve the active dataset, parse CLI flags and run the phase.
 
     ``closed_book=True`` routes the run to results/<dataset>/closed_book/ (MetaQA
@@ -362,7 +363,7 @@ def run_phase(pipeline_func, phase: int, phase_name: str, closed_book: bool = Fa
         set_top_k(args.top_k)
     if args.no_neighbours:
         set_include_neighbours(False)
-    dataset = closed_book_dataset(phase) if closed_book else dataset_config(phase)
+    dataset = dataset_override or (closed_book_dataset(phase) if closed_book else dataset_config(phase))
 
     print(f"Dataset: {dataset.name} | phase: {phase}")
     print(f"  eval file  : {dataset.eval_file}")
@@ -379,6 +380,8 @@ def run_phase(pipeline_func, phase: int, phase_name: str, closed_book: bool = Fa
     run_meta = {"dataset": dataset.name, "phase": phase, "top_k": dataset.top_k,
                 "eval_file": str(dataset.eval_file), "limit": args.limit,
                 "closed_book": closed_book}
+    if dataset.results_file.parent.name == "phase3b":
+        run_meta["variant"] = "3b"
     ingest_meta = read_ingest_meta(dataset)
     if ingest_meta is not None:
         run_meta["ingest"] = ingest_meta

@@ -60,13 +60,18 @@ make bench-p2 DATASET=metaqa
 Phase 3 (ontology) is MetaQA-only and uses a typed graph built directly from `kb.txt`:
 
 ```bash
-make ingest-p3 DATASET=metaqa_mini30 RESET=1   # typed KB graph + the same 256/32 chunks
+make ingest-p3 DATASET=metaqa_mini30 RESET=1   # 3a: typed KB graph + the same 256/32 chunks
 make answers-p3 DATASET=metaqa_mini30          # entity match -> typed BFS -> chunk ranking
 make bench-p3 DATASET=metaqa_mini30            # same metrics as Phase 1/2
+
+make ingest-p3b DATASET=metaqa_mini30 RESET=1  # 3b: schema-constrained gpt-6-luna extraction
+make answers-p3b DATASET=metaqa_mini30
+make bench-p3b DATASET=metaqa_mini30
 ```
 
-Phase 3a is the oracle graph (no extraction); Phase 3b (schema-constrained LLM extraction)
-is the next experiment. Phase 3 always writes to `*-ontology-graph`, never the Phase 2 DB.
+Phase 3a is the oracle graph (no extraction); Phase 3b is schema-constrained LLM extraction.
+They use separate `*-ontology-graph` / `*-ontology-b-graph` databases and never touch the Phase 2 DB.
+Paired comparisons: `python -m scripts.compare_runs <run_a> <run_b> --metric all_found`.
 
 ## Makefile commands
 
@@ -116,7 +121,8 @@ Deprecated aliases (`hotpot-p1`, `hotpot-p2`, `metaqa-check`, `metaqa-ingest-p1`
 shared/                       # config (the DATASET switch), LLM wrapper, benchmark engine, runner
 phase1_vector_rag/            # Pure vector RAG: ingest, retriever, rag, answers, benchmark
 phase2_graph_rag/             # Pure Graph RAG: ingest, retriever, rag, answers, benchmark
-phase3_ontology_rag/          # Ontology RAG (typed KB graph; schema + design notes)
+phase3_ontology_rag/          # Phase 3a: typed KB graph (oracle) + retrieval
+phase3b_ontology_rag/         # Phase 3b: schema-constrained LLM extraction
 scripts/                      # MetaQA track
 ├── metaqa_inspect.py         # dataset facts -> MetaQA/INSPECT.md
 ├── metaqa_sample.py          # candidate sampling + KB self-check

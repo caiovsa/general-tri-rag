@@ -86,6 +86,11 @@ class Settings:
     NEO4J_METAQA_PHASE3_DATABASE: str = os.getenv("NEO4J_METAQA_PHASE3_DATABASE", "metaqa-ontology-graph")
     NEO4J_METAQA_MINI_PHASE3_DATABASE: str = os.getenv("NEO4J_METAQA_MINI_PHASE3_DATABASE", "metaqa-mini-ontology-graph")
     NEO4J_METAQA_MINI30_PHASE3_DATABASE: str = os.getenv("NEO4J_METAQA_MINI30_PHASE3_DATABASE", "metaqa-mini30-ontology-graph")
+    # Phase 3b (schema-constrained extraction) must not overwrite the 3a oracle graph.
+    NEO4J_PHASE3B_DATABASE: str = os.getenv("NEO4J_PHASE3B_DATABASE", "hotpot-ontology-b-graph")
+    NEO4J_METAQA_PHASE3B_DATABASE: str = os.getenv("NEO4J_METAQA_PHASE3B_DATABASE", "metaqa-ontology-b-graph")
+    NEO4J_METAQA_MINI_PHASE3B_DATABASE: str = os.getenv("NEO4J_METAQA_MINI_PHASE3B_DATABASE", "metaqa-mini-ontology-b-graph")
+    NEO4J_METAQA_MINI30_PHASE3B_DATABASE: str = os.getenv("NEO4J_METAQA_MINI30_PHASE3B_DATABASE", "metaqa-mini30-ontology-b-graph")
 
     # Generic local track (DATASET=local): any TXT/PDF/MD corpus + an eval JSONL.
     LOCAL_EVAL_FILE: str = os.getenv("LOCAL_EVAL_FILE", "")
@@ -93,6 +98,7 @@ class Settings:
     LOCAL_COLLECTION: str = os.getenv("LOCAL_COLLECTION", "rag_local")
     LOCAL_NEO4J_DATABASE: str = os.getenv("LOCAL_NEO4J_DATABASE", "local-graph")
     LOCAL_NEO4J_PHASE3_DATABASE: str = os.getenv("LOCAL_NEO4J_PHASE3_DATABASE", "local-ontology-graph")
+    LOCAL_NEO4J_PHASE3B_DATABASE: str = os.getenv("LOCAL_NEO4J_PHASE3B_DATABASE", "local-ontology-b-graph")
     LOCAL_PATTERN: str = os.getenv("LOCAL_PATTERN", "**/*.txt")
     LOCAL_CHUNK_SIZE: int = int(os.getenv("LOCAL_CHUNK_SIZE", "256"))
     LOCAL_CHUNK_OVERLAP: int = int(os.getenv("LOCAL_CHUNK_OVERLAP", "32"))
@@ -158,6 +164,37 @@ def metaqa_database(name: str) -> str:
 def phase3_database(dataset: "Dataset") -> str:
     """Graph database a Phase 3 run must use (always distinct from Phase 2)."""
     return dataset.neo4j_ontology_database or dataset.neo4j_database
+
+
+def phase3b_database(name: str) -> str:
+    """Phase 3b graph database for a track (never the 3a or Phase 2 database)."""
+    mapping = {
+        "hotpot": settings.NEO4J_PHASE3B_DATABASE,
+        "metaqa": settings.NEO4J_METAQA_PHASE3B_DATABASE,
+        "metaqa_mini": settings.NEO4J_METAQA_MINI_PHASE3B_DATABASE,
+        "metaqa_mini30": settings.NEO4J_METAQA_MINI30_PHASE3B_DATABASE,
+        "local": settings.LOCAL_NEO4J_PHASE3B_DATABASE,
+    }
+    if name not in mapping:
+        raise ValueError(f"Unknown Phase 3b track {name!r}")
+    return mapping[name]
+
+
+def phase3b_dataset(phase: int = 3) -> "Dataset":
+    """Phase 3b paths: same corpus/eval/chunks as 3a, separate DB and results dir."""
+    base = dataset_config(phase)
+    if not base.tag_movies:
+        raise SystemExit("Phase 3b is MetaQA-only for now (DATASET=metaqa|metaqa_mini|metaqa_mini30).")
+    directory = REPO_ROOT / "results" / base.name / "phase3b"
+    return replace(
+        base,
+        results_file=directory / "results.json",
+        detailed_file=directory / "results_detailed.json",
+        eval_results_file=directory / "eval_results.json",
+        eval_report_file=directory / "eval_report.txt",
+        per_question_file=directory / "per_question.jsonl",
+        neo4j_ontology_database=phase3b_database(base.name),
+    )
 
 
 def dataset_config(phase: int = 1) -> Dataset:
@@ -395,6 +432,8 @@ def describe_datasets() -> None:
         print(f"  qdrant     : {dataset.qdrant_collection}")
         print(f"  neo4j      : {dataset.neo4j_uri} / {dataset.neo4j_database}")
         print(f"  neo4j (p3) : {dataset.neo4j_uri} / {phase3_database(dataset)}")
+        if phase == 3 and dataset.tag_movies:
+            print(f"  neo4j (p3b): {dataset.neo4j_uri} / {phase3b_database(dataset.name)}")
         print(f"  chunk      : {dataset.chunk_size}/{dataset.chunk_overlap} | top_k={dataset.top_k} | "
               f"tag_movies={dataset.tag_movies} | prompt={dataset.prompt_style}")
         print(f"  results    : {dataset.results_file.parent}")

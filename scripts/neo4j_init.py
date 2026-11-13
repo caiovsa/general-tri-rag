@@ -24,6 +24,11 @@ def databases() -> list[str]:
         settings.NEO4J_METAQA_PHASE3_DATABASE,
         settings.NEO4J_METAQA_MINI_PHASE3_DATABASE,
         settings.NEO4J_METAQA_MINI30_PHASE3_DATABASE,
+        settings.NEO4J_PHASE3B_DATABASE,
+        settings.NEO4J_METAQA_PHASE3B_DATABASE,
+        settings.NEO4J_METAQA_MINI_PHASE3B_DATABASE,
+        settings.NEO4J_METAQA_MINI30_PHASE3B_DATABASE,
+        settings.LOCAL_NEO4J_PHASE3B_DATABASE,
         settings.LOCAL_NEO4J_DATABASE,
         settings.LOCAL_NEO4J_PHASE3_DATABASE,
     ]

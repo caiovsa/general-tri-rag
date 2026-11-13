@@ -16,7 +16,7 @@ RESET_FLAG := $(if $(RESET),--reset,)
 DS := DATASET=$(DATASET)
 
 .PHONY: help install sync prepare ingest-hot ingest-pdf ingest-graph retrieve-p1 retrieve-p2 rag-p1 rag-p2 \
-        ingest-p1 ingest-p2 ingest-p3 answers-p1 answers-p2 answers-p3 bench-p1 bench-p2 bench-p3 bench-all check-config freeze-verify \
+        ingest-p1 ingest-p2 ingest-p3 ingest-p3b answers-p1 answers-p2 answers-p3 answers-p3b bench-p1 bench-p2 bench-p3 bench-p3b bench-all check-config freeze-verify \
         answers-cb bench-cb clean-results clean-hotpot-DANGEROUS hotpot-p1 hotpot-p2 metaqa-check metaqa-ingest-p1 \
         metaqa-ingest-p2 metaqa-answers-p1 metaqa-answers-p2 metaqa-bench-p1 metaqa-bench-p2 metaqa-up docker-up docker-down \
         mini30 test neo4j-init
@@ -44,14 +44,20 @@ ingest-p2:  ## Ingest the active DATASET into Neo4j (RESET=1 for MetaQA tracks)
 ingest-p3:  ## Phase 3a: build the typed KB graph + chunks (MetaQA only)
 	$(DS) $(PYTHON) -m phase3_ontology_rag.ingest $(RESET_FLAG) $(LIMIT_DOCS_FLAG)
 
+ingest-p3b:  ## Phase 3b: schema-constrained gpt-6-luna extraction (MetaQA only)
+	$(DS) $(PYTHON) -m phase3b_ontology_rag.ingest $(RESET_FLAG) $(LIMIT_DOCS_FLAG)
+
 answers-p1:  ## Phase 1: answers for the active DATASET (LIMIT=N for a smoke run)
 	$(DS) $(PYTHON) -m phase1_vector_rag.hotpot_answers $(LIMIT_FLAG)
 
 answers-p2:  ## Phase 2: answers for the active DATASET (LIMIT=N for a smoke run)
 	$(DS) $(PYTHON) -m phase2_graph_rag.hotpot_answers $(LIMIT_FLAG)
 
-answers-p3:  ## Phase 3: ontology answers for the active MetaQA DATASET
+answers-p3:  ## Phase 3a: ontology answers for the active MetaQA DATASET
 	$(DS) $(PYTHON) -m phase3_ontology_rag.hotpot_answers $(LIMIT_FLAG)
+
+answers-p3b:  ## Phase 3b: schema-constrained answers
+	$(DS) $(PYTHON) -m phase3b_ontology_rag.hotpot_answers $(LIMIT_FLAG)
 
 bench-p1:  ## Phase 1: evaluate the active DATASET (EM, F1, Semantic, Judge, RAGAS)
 	$(DS) $(PYTHON) -m phase1_vector_rag.benchmark
@@ -59,8 +65,11 @@ bench-p1:  ## Phase 1: evaluate the active DATASET (EM, F1, Semantic, Judge, RAG
 bench-p2:  ## Phase 2: evaluate the active DATASET
 	$(DS) $(PYTHON) -m phase2_graph_rag.benchmark
 
-bench-p3:  ## Phase 3: evaluate the active MetaQA DATASET
+bench-p3:  ## Phase 3a: evaluate the active MetaQA DATASET
 	$(DS) $(PYTHON) -m phase3_ontology_rag.benchmark
+
+bench-p3b:  ## Phase 3b: evaluate the schema-constrained run
+	$(DS) $(PYTHON) -m phase3b_ontology_rag.benchmark
 
 bench-all: bench-p1 bench-p2  ## Evaluate both phases on the active DATASET
 

@@ -47,9 +47,11 @@
       ~2.5 h and ~$3 for 4,950 chunks). Answers/bench scripts are ready (`make answers-p2 DATASET=metaqa`).
 - [x] **Phase 3a — oracle graph from `kb.txt`** — typed schema, no extraction noise; upper bound
       for graph retrieval quality and the sanity check for the eval set (212/212, evidence .966).
-- [ ] **Phase 3b — schema-constrained LLM extraction** — restrict extraction to the KB relation
-      schema and typed entities; compare against 3a and Phase 2 (`phase3_ontology_rag/schema.py`
-      is the ready schema contract).
+- [x] **Phase 3b (mini30) — schema-constrained LLM extraction** — implemented and certified on
+      mini30 (443 chunks, 0 parse/extraction errors; .839 gold / .983 evidence). Paired n=30:
+      no detectable difference vs Phase 2, and 3a remains the ceiling. Full 3b deferred.
+- [ ] **Paired statistics on every comparison** — `scripts/compare_runs.py` (exact McNemar +
+      bootstrap CI); use full 212 for claims, mini30 for wiring only.
 - [ ] **Phase 1b — hybrid (dense + BM25) baseline** — second Phase 1 retrieval baseline.
 - [ ] **HotpotQA controlled v2 (optional)** — retired from headline comparisons; if it returns,
       use 256/20 chunks, one prompt, same top_k/context budget, fixed judge, 500+ sampled questions.

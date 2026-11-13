@@ -13,7 +13,8 @@
 | Retrieval depth | `top_k = 20` |
 | Generation | `gpt-6-luna` — **no temperature parameter** (Luna accepts only the provider default, 1) |
 | Judge | `gpt-5.6-luna` — no temperature parameter; whole-word verdict parser; raw verdict saved |
-| Extraction (Phase 2/3b) | `gpt-6-luna` — no temperature; `max_completion_tokens` only |
+| Extraction (Phase 2) | `gpt-6-luna` — no temperature; `max_completion_tokens` only |
+| Extraction (Phase 3b) | `gpt-6-luna` — schema-constrained JSON (actors/directors/writers/genres/languages/year) |
 | RAGAS | `gpt-4o-mini` — **Faithfulness + Context Recall only**; Answer Correctness removed |
 | Embeddings | `text-embedding-3-small` |
 | Run identity | every run writes `run_meta.json` (eval/corpus hashes, chunking, top_k, models, `"temperature": "default"`, prompt/ontology hashes); resume with a different fingerprint is refused |
@@ -30,12 +31,19 @@ judge model. Extracted EM was also fixed for yes/no answers.
 |---|---|---|---|---|---|---|---|
 | Phase 1 — vector | 0.681 | 0.600 | 0.813 | 0.367 | 0.633 | 0.879 | 0.737 |
 | Phase 2 — graph (LLM triples) | 0.822 | 0.733 | 0.959 | 0.333 | 0.733 | 0.719 | 0.919 |
+| Phase 3b — schema-constrained extraction | 0.839 | 0.767 | 0.983 | 0.267 | 0.767 | 0.681 | 0.888 |
 | Phase 3a — ontology ceiling | **0.889** | **0.833** | **1.000** | 0.367 | **0.867** | 0.772 | **0.914** |
 | Closed book | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | — | — |
 
-Phase 2 ingest with gpt-6-luna extraction: 443 chunks, 12,485 graph relationships, 0 extraction errors, 13.1 min. Phase 3a: full typed
+Phase 2 ingest with gpt-6-luna extraction: 443 chunks, 12,485 graph relationships, 0 extraction errors, 13.1 min. Phase 3b ingest: 443 chunks, 1,617 actors / 126 directors / 226 writers / 155 genres / 119 languages / 100 years, **0 parse errors**, **0 extraction errors**, ~2 min. Phase 3a: full typed
 KB (16,427 movies, 21,731 people, 134k facts) with the 443-chunk index, entity match 30/30,
 evidence recall 1.0.
+
+**Phase 3b vs Phase 2 (mini30, paired, n=30):** all_found +0.033, 95% CI [-0.200, +0.100], McNemar p=1.00; gold recall +0.017, CI [-0.133, +0.083]; evidence recall +0.024, CI [-0.083, +0.033]. **No detectable difference**; do not claim a direction.
+
+**Phase 3b vs 3a ceiling (mini30, n=30):** 3a is ahead by +0.050 gold (CI [0.000, +0.133]), +0.067 all_found (CI [0.000, +0.167]), +0.017 evidence (CI [0.000, +0.050]), +0.100 judge (p=0.25). CIs touch zero; **no detectable difference** — 3b is close to the oracle on this small slice.
+
+**Full Phase 3a vs Phase 1 (n=212, paired):** all_found +0.335, 95% CI [+0.274, +0.396], McNemar p<0.0001; gold +0.322, CI [+0.269, +0.377]; evidence +0.311, CI [+0.266, +0.356]. The ceiling is clearly above the vector baseline at full scale.
 
 **Neighbour ablation (mini30):** baseline Phase 2 gold/evidence **0.822 / 0.959** vs
 `--no-neighbours` **0.739 / 0.809** (judge 0.733 vs 0.700). The 1-hop neighbours add real signal
@@ -55,6 +63,7 @@ on this corpus — but this is still 30 questions; do not turn it into a general
 |---|---|---|---|---|---|
 | Phase 1 — vector | **212/212, 0 errors** | 0.554 | 0.655 | 0.486 | 0.797 / 0.629 |
 | Phase 2 — graph | **not run** (full ingest parked; gpt-6-luna extraction measured at 13.1 min / 443 chunks → ~2.5 h and ~$3 for 4,950 chunks) | — | — | — | — |
+| Phase 3b — schema-constrained extraction | **not run** (mini30 certified; full 3b shares the ~2–3 h extraction cost) | — | — | — | — |
 | Phase 3a — ontology ceiling | **212/212, 0 errors** | **0.876** | **0.966** | **0.821** | 0.751 / 0.868 |
 
 Phase 1 ingest is deterministic: `hotpot-qa_metaqa` rebuilt to exactly **4,522 chunks**. Phase 3a
@@ -89,3 +98,5 @@ same prompt, fixed judge, and 500+ sampled questions. Not started.
   chunks/relations/errors/policy skips.
 - Phase 2 content-policy rejections are per-chunk skips (chunk keeps text/embedding), never fatal.
 - Phase 3a is a ceiling and must be presented as such.
+- Phase 3b is a separate `*-ontology-b-graph` database; it never overwrites 3a.
+- Paired comparisons use `python -m scripts.compare_runs` (exact McNemar + bootstrap CI). Mini30 n=30 is exploratory; full n=212 is the claim-level sample.

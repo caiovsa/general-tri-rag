@@ -139,8 +139,8 @@ def _chunks_for_titles(session, candidates: dict[str, int]) -> list[dict]:
     ))
 
 
-def retrieve_ontology_chunks(user_query: str, top_k: int | None = None):
-    dataset = dataset_config(phase=3)
+def retrieve_ontology_chunks(user_query: str, top_k: int | None = None, dataset=None):
+    dataset = dataset or dataset_config(phase=3)
     database = phase3_database(dataset)
     if top_k is None:
         top_k = dataset.top_k
@@ -199,6 +199,19 @@ def retrieve_ontology_chunks(user_query: str, top_k: int | None = None):
                         if len(entries) >= top_k:
                             break
 
+                # 3b can match an entity whose extraction yielded no movie candidates.
+                # Fall back to the unfiltered vector hits instead of an empty context.
+                fallback = False
+                if not entries:
+                    for row in hits:
+                        if row["text"] and row["text"] not in seen:
+                            seen.add(row["text"])
+                            entries.append({"text": row["text"], "source": "vector_no_candidates",
+                                            "movie": row["movie"], "distance": None})
+                        if len(entries) >= top_k:
+                            break
+                    fallback = "vector_no_candidates" if entries else False
+
         counts = {
             "chunks_in_prompt": len(entries),
             "seeds": len(entries),
@@ -208,7 +221,7 @@ def retrieve_ontology_chunks(user_query: str, top_k: int | None = None):
             "movies_used": len({entry["movie"] for entry in entries}),
             "entity": entity,
             "entity_type": kind,
-            "fallback": False,
+            "fallback": fallback,
             "truncated": truncated,
             "hops": MAX_HOPS,
         }
@@ -219,8 +232,8 @@ def retrieve_ontology_chunks(user_query: str, top_k: int | None = None):
         driver.close()
 
 
-def retrieve_ontology_contexts(user_query: str, top_k: int | None = None) -> list[str]:
-    entries, _ = retrieve_ontology_chunks(user_query, top_k)
+def retrieve_ontology_contexts(user_query: str, top_k: int | None = None, dataset=None) -> list[str]:
+    entries, _ = retrieve_ontology_chunks(user_query, top_k, dataset=dataset)
     return [entry["text"] for entry in entries]
 
 
