@@ -40,11 +40,10 @@
 
 ## Next
 
-- [ ] **Phase 1 and Phase 2 clean baselines** — same top_k and chunk budget in both phases,
-      no temperature parameter, no per-question tuning, complete `run_meta.json`
-      (protocol: `docs/EXPERIMENT_LOG.md`).
-- [ ] **Full MetaQA Phase 2** — 994-doc ingest with gpt-6-luna extraction (measured: 13.1 min / 443 chunks;
-      ~2.5 h and ~$3 for 4,950 chunks). Answers/bench scripts are ready (`make answers-p2 DATASET=metaqa`).
+- [x] **Phase 1 and Phase 2 clean baselines** — same top_k/chunk budget, no temperature,
+      complete `run_meta.json`; full Phase 2 now exists.
+- [x] **Full MetaQA Phase 2** — 4,522 chunks / 127,797 relationships, 212/212 answers,
+      0 errors; gold .757 / evidence .841 / all_found .656. ~1.5–2 h ingest.
 - [x] **Phase 3a — oracle graph from `kb.txt`** — typed schema, no extraction noise; upper bound
       for graph retrieval quality and the sanity check for the eval set (212/212, evidence .966).
 - [x] **Phase 3b (mini30) — schema-constrained LLM extraction** — implemented and certified on

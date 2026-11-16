@@ -141,6 +141,10 @@ def get_extraction_chunker(dataset=None) -> TokenTextSplitter:
 def build_graph_store(dataset=None):
     dataset = dataset or dataset_config(phase=2)
     print(f"Connecting to Neo4j at {dataset.neo4j_uri} (database={dataset.neo4j_database})...")
+    # PropertyGraphIndex refreshes the whole schema with apoc.meta.subGraph({})
+    # after every insert. On the full 4.5k-chunk graph that scan takes >16 min.
+    # The ingest does not need the schema, so disable the refresh.
+    Neo4jPropertyGraphStore.supports_structured_queries = False
     # HotpotQA and MetaQA must never share a graph: see dataset_config().
     graph_store = Neo4jPropertyGraphStore(
         username=settings.NEO4J_USER,

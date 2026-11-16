@@ -59,18 +59,25 @@ on this corpus — but this is still 30 questions; do not turn it into a general
 
 ## MetaQA full (212 q / 994 docs)
 
-| Phase | status | gold recall | evidence recall | judge | RAGAS faith / ctx |
-|---|---|---|---|---|---|
-| Phase 1 — vector | **212/212, 0 errors** | 0.554 | 0.655 | 0.486 | 0.797 / 0.629 |
-| Phase 2 — graph | **not run** (full ingest parked; gpt-6-luna extraction measured at 13.1 min / 443 chunks → ~2.5 h and ~$3 for 4,950 chunks) | — | — | — | — |
-| Phase 3b — schema-constrained extraction | **not run** (mini30 certified; full 3b shares the ~2–3 h extraction cost) | — | — | — | — |
-| Phase 3a — ontology ceiling | **212/212, 0 errors** | **0.876** | **0.966** | **0.821** | 0.751 / 0.868 |
+| Phase | status | all found | gold recall | evidence recall | judge | RAGAS faith / ctx |
+|---|---|---|---|---|---|---|
+| Phase 1 — vector | **212/212, 0 errors** | 0.476 | 0.554 | 0.655 | 0.486 | 0.797 / 0.629 |
+| Phase 2 — graph | **212/212, 0 errors** | 0.656 | 0.757 | 0.841 | 0.660 | 0.785 / 0.751 |
+| Phase 3b — schema-constrained extraction | **not run** (mini30 certified; full 3b shares the ~1.5–2 h extraction cost) | — | — | — | — | — |
+| Phase 3a — ontology ceiling | **212/212, 0 errors** | **0.811** | **0.876** | **0.966** | **0.821** | 0.751 / 0.868 |
 
-Phase 1 ingest is deterministic: `hotpot-qa_metaqa` rebuilt to exactly **4,522 chunks**. Phase 3a
-uses its own `metaqa-ontology-graph` and records the ontology sha256 in `run_meta.json`.
+Phase 1 ingest is deterministic: `hotpot-qa_metaqa` rebuilt to exactly **4,522 chunks**.
+Full Phase 2 graph: **4,522 chunks / 127,797 relationships** in `metaqa-graph`; the
+LlamaIndex end-of-ingest `apoc.meta.subGraph({})` schema refresh was terminated after the graph
+was complete, and the retriever now uses a raw Neo4j driver (no schema scan). Phase 3a uses
+`metaqa-ontology-graph` and records the ontology sha256 in `run_meta.json`.
 
-**No Phase 1 vs Phase 2 comparison exists on the full MetaQA set** (Phase 2 not run). The
-mini30/12 numbers are not a substitute.
+**Full paired results (n=212):**
+- Phase 2 vs Phase 1: all_found **+0.179** [95% CI +0.127, +0.236], McNemar p<0.0001; gold +0.203 [+0.155, +0.253]; evidence +0.186 [+0.146, +0.226]; judge +0.175 [+0.118, +0.231].
+- Phase 3a vs Phase 2: all_found **+0.156** [+0.104, +0.212], p<0.0001; gold +0.119 [+0.076, +0.166]; evidence +0.125 [+0.096, +0.157]; judge +0.160 [+0.109, +0.217].
+- Phase 3a vs Phase 1: all_found **+0.335** [+0.274, +0.396], p<0.0001; gold +0.322 [+0.269, +0.377]; evidence +0.311 [+0.266, +0.356].
+
+The full three-way comparison now exists. Phase 3a remains a **ceiling** (oracle KB), not a competitor.
 
 ## Generic local track smoke
 

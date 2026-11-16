@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 import llama_index.core
-from llama_index.graph_stores.neo4j import Neo4jPropertyGraphStore
+from neo4j import GraphDatabase
 
 from shared.config import dataset_config, settings, get_llamaindex_settings
 from shared.llm import generate_completion
@@ -42,6 +42,28 @@ def _load_entity_cache(path: Path) -> None:
 def _write_entity_cache(path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(_ENTITY_CACHE, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+class _RawStore:
+    """Minimal structured-query wrapper over the raw Neo4j driver.
+
+    `Neo4jPropertyGraphStore` calls `get_schema(refresh=True)` (an
+    `apoc.meta.subGraph({})` scan) on construction/first use, which is
+    pathological on the full 4.5k-chunk graph. The retriever only needs
+    Cypher, so use the driver directly and keep every query bounded.
+    """
+
+    def __init__(self, dataset):
+        self._database = dataset.neo4j_database
+        self._driver = GraphDatabase.driver(
+            dataset.neo4j_uri, auth=(settings.NEO4J_USER, settings.NEO4J_PASSWORD))
+
+    def structured_query(self, query: str, param_map: dict | None = None):
+        with self._driver.session(database=self._database) as session:
+            return [record.data() for record in session.run(query, **(param_map or {}))]
+
+    def close(self):
+        self._driver.close()
 
 
 # ─────────────────────────────────────────────
@@ -172,17 +194,16 @@ def retrieve_graph_chunks_with_sources(user_query: str, top_k: int = None, inclu
     # ── Connect ──────────────────────────────
     print(f"Connecting to Neo4j at {dataset.neo4j_uri} (database={dataset.neo4j_database})...")
     try:
-        graph_store = Neo4jPropertyGraphStore(
-            username=settings.NEO4J_USER,
-            password=settings.NEO4J_PASSWORD,
-            url=dataset.neo4j_uri,
-            database=dataset.neo4j_database,
-        )
+        graph_store = _RawStore(dataset)
         # cheap preflight
         graph_store.structured_query("RETURN 1 AS ok")
     except Exception as e:
         print(f"Error: Neo4j not reachable at {dataset.neo4j_uri} (db={dataset.neo4j_database}): {e}")
         print("Hint: run `docker compose up -d neo4j` or check Neo4j Desktop and NEO4J_DATABASE in .env")
+        try:
+            graph_store.close()
+        except Exception:
+            pass
         return [], empty_counts
 
     # ── Step 1: Vector seeds (TOP_K // 2 of the budget) ──
@@ -261,6 +282,7 @@ def retrieve_graph_chunks_with_sources(user_query: str, top_k: int = None, inclu
                                else "mixed")
     print(f"-> Context budget: {counts['chunks_in_prompt']}/{top_k} chunks "
           f"(seeds {counts['seeds']}, anchors {counts['anchors']}, neighbours {counts['neighbours']})")
+    graph_store.close()
     return entries, counts
 
 
@@ -297,17 +319,16 @@ def _retrieve_graph_chunks_legacy(user_query: str, top_k: int = None) -> list[st
     # ── Connect ──────────────────────────────
     print(f"Connecting to Neo4j at {dataset.neo4j_uri} (database={dataset.neo4j_database})...")
     try:
-        graph_store = Neo4jPropertyGraphStore(
-            username=settings.NEO4J_USER,
-            password=settings.NEO4J_PASSWORD,
-            url=dataset.neo4j_uri,
-            database=dataset.neo4j_database,
-        )
+        graph_store = _RawStore(dataset)
         # cheap preflight
         graph_store.structured_query("RETURN 1 AS ok")
     except Exception as e:
         print(f"Error: Neo4j not reachable at {dataset.neo4j_uri} (db={dataset.neo4j_database}): {e}")
         print("Hint: run `docker compose up -d neo4j` or check Neo4j Desktop and NEO4J_DATABASE in .env")
+        try:
+            graph_store.close()
+        except Exception:
+            pass
         return []
 
     # ── Step 1: Vector search ─────────────────
@@ -421,6 +442,7 @@ def _retrieve_graph_chunks_legacy(user_query: str, top_k: int = None) -> list[st
         chunks.append(f"[Relevance: {score:.4f}]\n{chunk_text}{neighbor_text}")
 
     print(f"-> Returning {len(chunks)} unique enriched chunks.")
+    graph_store.close()
     return chunks
 
 
