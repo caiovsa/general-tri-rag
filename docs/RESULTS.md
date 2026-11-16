@@ -1,4 +1,4 @@
-# Results — corrected baselines (2026-11-12)
+# Results — corrected baselines (updated 2026-11-16)
 
 > Authoritative per-question data lives in `results/<track>/phaseN/` (gitignored). This page
 > records the protocol each number belongs to. **Mini tracks are plumbing checks**: tiny corpora,
@@ -39,11 +39,11 @@ Phase 2 ingest with gpt-6-luna extraction: 443 chunks, 12,485 graph relationship
 KB (16,427 movies, 21,731 people, 134k facts) with the 443-chunk index, entity match 30/30,
 evidence recall 1.0.
 
-**Phase 3b vs Phase 2 (mini30, paired, n=30):** all_found +0.033, 95% CI [-0.200, +0.100], McNemar p=1.00; gold recall +0.017, CI [-0.133, +0.083]; evidence recall +0.024, CI [-0.083, +0.033]. **No detectable difference**; do not claim a direction.
+**Phase 3b vs Phase 2 (mini30, paired, n=30):** 3b − P2 all_found +0.033, 95% CI [-0.100, +0.200], McNemar p=1.00; gold recall +0.017, CI [-0.083, +0.133]; evidence recall +0.024, CI [-0.033, +0.083]. **No detectable difference**; do not claim a direction.
 
-**Phase 3b vs 3a ceiling (mini30, n=30):** 3a is ahead by +0.050 gold (CI [0.000, +0.133]), +0.067 all_found (CI [0.000, +0.167]), +0.017 evidence (CI [0.000, +0.050]), +0.100 judge (p=0.25). CIs touch zero; **no detectable difference** — 3b is close to the oracle on this small slice.
+**Phase 3a vs Phase 3b (mini30, n=30):** 3a − 3b is +0.050 gold (CI [0.000, +0.133]), +0.067 all_found (CI [0.000, +0.167]), +0.017 evidence (CI [0.000, +0.050]), +0.100 judge (p=0.25). CIs touch zero; **no detectable difference** — 3b is close to the oracle on this small slice.
 
-**Full Phase 3a vs Phase 1 (n=212, paired):** all_found +0.335, 95% CI [+0.274, +0.396], McNemar p<0.0001; gold +0.322, CI [+0.269, +0.377]; evidence +0.311, CI [+0.266, +0.356]. The ceiling is clearly above the vector baseline at full scale.
+**Full Phase 3a − Phase 1 (n=212, paired):** all_found +0.335, 95% CI [+0.274, +0.396], McNemar p<0.0001; gold +0.322, CI [+0.269, +0.377]; evidence +0.311, CI [+0.266, +0.356]. The ceiling is clearly above the vector baseline at full scale.
 
 **Neighbour ablation (mini30):** baseline Phase 2 gold/evidence **0.822 / 0.959** vs
 `--no-neighbours` **0.739 / 0.809** (judge 0.733 vs 0.700). The 1-hop neighbours add real signal
@@ -75,11 +75,11 @@ was complete, and the retriever now uses a raw Neo4j driver (no schema scan). Fu
 Phase 3a uses `metaqa-ontology-graph` and records the ontology sha256 in `run_meta.json`.
 
 **Full paired results (n=212):**
-- Phase 2 vs Phase 1: all_found **+0.179** [95% CI +0.127, +0.236], McNemar p<0.0001; gold +0.203 [+0.155, +0.253]; evidence +0.186 [+0.146, +0.226]; judge +0.175 [+0.118, +0.231].
-- Phase 3a vs Phase 2: all_found **+0.156** [+0.104, +0.212], p<0.0001; gold +0.119 [+0.076, +0.166]; evidence +0.125 [+0.096, +0.157]; judge +0.160 [+0.109, +0.217].
-- Phase 3a vs Phase 1: all_found **+0.335** [+0.274, +0.396], p<0.0001; gold +0.322 [+0.269, +0.377]; evidence +0.311 [+0.266, +0.356].
-- Phase 3b vs Phase 2: all_found +0.028 [−0.080, +0.019], p=0.36; gold +0.022 [−0.063, +0.018]; **evidence +0.052 [−0.083, −0.022] (3b better, CI excludes 0)**; judge +0.033 [−0.090, +0.019], p=0.31.
-- Phase 3a vs Phase 3b: all_found **+0.127** [+0.085, +0.175], p<0.0001; gold +0.097 [+0.064, +0.132]; evidence +0.073 [+0.050, +0.098]; judge +0.127 [+0.080, +0.175].
+- Phase 2 − Phase 1: all_found **+0.179** [95% CI +0.127, +0.236], McNemar p<0.0001; gold +0.203 [+0.155, +0.253]; evidence +0.186 [+0.146, +0.226]; judge +0.175 [+0.118, +0.231].
+- Phase 3a − Phase 2: all_found **+0.156** [+0.104, +0.212], p<0.0001; gold +0.119 [+0.076, +0.166]; evidence +0.125 [+0.096, +0.157]; judge +0.160 [+0.109, +0.217].
+- Phase 3a − Phase 1: all_found **+0.335** [+0.274, +0.396], p<0.0001; gold +0.322 [+0.269, +0.377]; evidence +0.311 [+0.266, +0.356].
+- Phase 3b − Phase 2: all_found +0.028 [−0.019, +0.080], p=0.36; gold +0.022 [−0.018, +0.063]; **evidence +0.052 [+0.022, +0.083] (3b better, CI excludes 0)**; judge +0.033 [−0.019, +0.090], p=0.31.
+- Phase 3a − Phase 3b: all_found **+0.127** [+0.085, +0.175], p<0.0001; gold +0.097 [+0.064, +0.132]; evidence +0.073 [+0.050, +0.098]; judge +0.127 [+0.080, +0.175].
 
 The full four-way comparison now exists. **Phase 3b improves evidence recall over Phase 2 but not answer-level metrics at n=212; Phase 3a remains a ceiling (oracle KB), not a competitor.**
 

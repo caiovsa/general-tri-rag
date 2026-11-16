@@ -23,8 +23,8 @@
 - **Phase 2 mini30 certificate**: 100 docs / 443 chunks / 0 extraction errors, 30/30 answers,
   full metric stack; the recorded `--no-neighbours` ablation shows the 1-hop neighbours add
   +18 gold recall and +11 evidence recall points on mini30 after ranking them by shared entities.
-- **Full MetaQA baselines**: Phase 1 (212/212) and Phase 3a oracle graph (212/212, evidence
-  recall .966, gold recall .876) are complete; Phase 2 full is pending a time/budget call.
+- **Full MetaQA baselines**: Phase 1, Phase 2, Phase 3b and Phase 3a all complete at 212/212;
+  Phase 3a is the oracle ceiling (evidence .966, gold .876), Phase 2/3b are the fair graph runs.
 - **Metric corrections (2026-11-12)**: judge parser fixed (previous judge columns were refusal
   rates), Extracted EM fixed for yes/no, RAGAS Answer Correctness removed, judge separated from
   the generator, Luna models used with no temperature parameter, neighbours ranked by shared
