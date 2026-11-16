@@ -71,7 +71,7 @@ make bench-p3b DATASET=metaqa_mini30
 
 Phase 3a is the oracle graph (no extraction); Phase 3b is schema-constrained LLM extraction.
 They use separate `*-ontology-graph` / `*-ontology-b-graph` databases and never touch the Phase 2 DB.
-Full MetaQA results: vector .554 gold / .655 evidence, graph .757 / .841, 3a ceiling .876 / .966
+Full MetaQA results: vector .554 gold / .655 evidence, graph .757 / .841, 3b .779 / .893, 3a ceiling .876 / .966
 (see `docs/RESULTS.md`).
 Paired comparisons: `python -m scripts.compare_runs <run_a> <run_b> --metric all_found`.
 

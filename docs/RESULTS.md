@@ -63,21 +63,25 @@ on this corpus — but this is still 30 questions; do not turn it into a general
 |---|---|---|---|---|---|---|
 | Phase 1 — vector | **212/212, 0 errors** | 0.476 | 0.554 | 0.655 | 0.486 | 0.797 / 0.629 |
 | Phase 2 — graph | **212/212, 0 errors** | 0.656 | 0.757 | 0.841 | 0.660 | 0.785 / 0.751 |
-| Phase 3b — schema-constrained extraction | **not run** (mini30 certified; full 3b shares the ~1.5–2 h extraction cost) | — | — | — | — | — |
+| Phase 3b — schema-constrained extraction | **212/212, 0 errors** | 0.684 | 0.779 | 0.893 | 0.693 | 0.809 / 0.782 |
 | Phase 3a — ontology ceiling | **212/212, 0 errors** | **0.811** | **0.876** | **0.966** | **0.821** | 0.751 / 0.868 |
 
 Phase 1 ingest is deterministic: `hotpot-qa_metaqa` rebuilt to exactly **4,522 chunks**.
 Full Phase 2 graph: **4,522 chunks / 127,797 relationships** in `metaqa-graph`; the
 LlamaIndex end-of-ingest `apoc.meta.subGraph({})` schema refresh was terminated after the graph
-was complete, and the retriever now uses a raw Neo4j driver (no schema scan). Phase 3a uses
-`metaqa-ontology-graph` and records the ontology sha256 in `run_meta.json`.
+was complete, and the retriever now uses a raw Neo4j driver (no schema scan). Full Phase 3b graph:
+**4,522 chunks / 26,617 relationships**, 15,353 actors / 1,129 directors / 1,995 writers /
+1,519 genres / 1,106 languages / 993 years, **0 parse errors / 0 extraction errors**, 29.8 min.
+Phase 3a uses `metaqa-ontology-graph` and records the ontology sha256 in `run_meta.json`.
 
 **Full paired results (n=212):**
 - Phase 2 vs Phase 1: all_found **+0.179** [95% CI +0.127, +0.236], McNemar p<0.0001; gold +0.203 [+0.155, +0.253]; evidence +0.186 [+0.146, +0.226]; judge +0.175 [+0.118, +0.231].
 - Phase 3a vs Phase 2: all_found **+0.156** [+0.104, +0.212], p<0.0001; gold +0.119 [+0.076, +0.166]; evidence +0.125 [+0.096, +0.157]; judge +0.160 [+0.109, +0.217].
 - Phase 3a vs Phase 1: all_found **+0.335** [+0.274, +0.396], p<0.0001; gold +0.322 [+0.269, +0.377]; evidence +0.311 [+0.266, +0.356].
+- Phase 3b vs Phase 2: all_found +0.028 [−0.080, +0.019], p=0.36; gold +0.022 [−0.063, +0.018]; **evidence +0.052 [−0.083, −0.022] (3b better, CI excludes 0)**; judge +0.033 [−0.090, +0.019], p=0.31.
+- Phase 3a vs Phase 3b: all_found **+0.127** [+0.085, +0.175], p<0.0001; gold +0.097 [+0.064, +0.132]; evidence +0.073 [+0.050, +0.098]; judge +0.127 [+0.080, +0.175].
 
-The full three-way comparison now exists. Phase 3a remains a **ceiling** (oracle KB), not a competitor.
+The full four-way comparison now exists. **Phase 3b improves evidence recall over Phase 2 but not answer-level metrics at n=212; Phase 3a remains a ceiling (oracle KB), not a competitor.**
 
 ## Generic local track smoke
 

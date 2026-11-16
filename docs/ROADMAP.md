@@ -46,11 +46,11 @@
       0 errors; gold .757 / evidence .841 / all_found .656. ~1.5–2 h ingest.
 - [x] **Phase 3a — oracle graph from `kb.txt`** — typed schema, no extraction noise; upper bound
       for graph retrieval quality and the sanity check for the eval set (212/212, evidence .966).
-- [x] **Phase 3b (mini30) — schema-constrained LLM extraction** — implemented and certified on
-      mini30 (443 chunks, 0 parse/extraction errors; .839 gold / .983 evidence). Paired n=30:
-      no detectable difference vs Phase 2, and 3a remains the ceiling. Full 3b deferred.
-- [ ] **Paired statistics on every comparison** — `scripts/compare_runs.py` (exact McNemar +
-      bootstrap CI); use full 212 for claims, mini30 for wiring only.
+- [x] **Phase 3b — schema-constrained LLM extraction** — full 212 done: 4,522 chunks /
+      26,617 relationships, 0 parse/extraction errors; .779 gold / .893 evidence / .684 all_found.
+      vs Phase 2: evidence +.052 (CI excludes 0), answer metrics tied; 3a remains the ceiling.
+- [x] **Paired statistics on every comparison** — `scripts/compare_runs.py` (exact McNemar +
+      bootstrap CI); full 212 used for the P1/P2/3b/3a claims.
 - [ ] **Phase 1b — hybrid (dense + BM25) baseline** — second Phase 1 retrieval baseline.
 - [ ] **HotpotQA controlled v2 (optional)** — retired from headline comparisons; if it returns,
       use 256/20 chunks, one prompt, same top_k/context budget, fixed judge, 500+ sampled questions.

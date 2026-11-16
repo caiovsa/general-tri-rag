@@ -107,7 +107,7 @@ def write_facts(session, facts_by_movie: dict) -> dict:
 
 
 async def ingest(dataset, reset: bool = False, limit_docs: int | None = None,
-                 workers: int = 8) -> dict:
+                 workers: int = 8, force_exit: bool = False) -> dict:
     database = phase3_database(dataset)
     check_neo4j_target(dataset.neo4j_uri, database)
     driver = connect(dataset)
@@ -212,6 +212,14 @@ async def ingest(dataset, reset: bool = False, limit_docs: int | None = None,
             docs=docs, chunks=chunks, facts=fact_counts, parse_errors=len(parse_errors),
             errors=llm.errors, policy_skips=llm.policy_skips, reset=reset,
         )
+        if force_exit:
+            # litellm's async client can hold non-daemon threads; the graph and
+            # ingest_meta.json are written, so exit without waiting for teardown.
+            import os
+            import sys
+            sys.stdout.flush()
+            sys.stderr.flush()
+            os._exit(0)
         return {"docs": docs, "chunks": chunks, "facts": fact_counts,
                 "parse_errors": len(parse_errors)}
     finally:
@@ -229,11 +237,5 @@ def parse_args() -> argparse.Namespace:
 if __name__ == "__main__":
     args = parse_args()
     dataset = phase3b_dataset(3)
-    asyncio.run(ingest(dataset, reset=args.reset, limit_docs=args.limit_docs, workers=args.workers))
-    # litellm's async HTTP client can leave non-daemon threads behind; the graph
-    # and ingest_meta.json are already written, so force a clean CLI exit.
-    import os
-    import sys
-    sys.stdout.flush()
-    sys.stderr.flush()
-    os._exit(0)
+    asyncio.run(ingest(dataset, reset=args.reset, limit_docs=args.limit_docs,
+                       workers=args.workers, force_exit=True))
