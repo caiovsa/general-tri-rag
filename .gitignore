@@ -52,3 +52,4 @@ results/
 
 # Large detailed checkpoints (MetaQA document context text; keep local)
 checkpoints/*/archive/
+checkpoints/**/archive/

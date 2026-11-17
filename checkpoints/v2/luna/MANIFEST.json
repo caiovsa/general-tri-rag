@@ -1,0 +1,352 @@
+{
+  "schema_version": 2,
+  "checkpoint": "v2",
+  "model_label": "luna",
+  "created_at": "2026-11-17T19:00:53+00:00",
+  "source_commit": "c13c9f71d63505ce2bc8103ac8e656ceee503759",
+  "results_tag": "luna_v2",
+  "protocol": {
+    "dataset": "metaqa",
+    "chunk_size": 256,
+    "chunk_overlap": 32,
+    "top_k": 20
+  },
+  "models": {
+    "answer": {
+      "model": "gpt-6-luna",
+      "provider": "default",
+      "reasoning_effort": "none",
+      "temperature": 0
+    },
+    "judge": {
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "low"
+    },
+    "ragas": {
+      "model": "gpt-6-luna",
+      "reasoning_effort": "none",
+      "temperature": 0
+    },
+    "extraction": {
+      "model": "gpt-6-luna (reused v1 graphs)"
+    }
+  },
+  "runs": [
+    {
+      "run": "phase1_luna_v2",
+      "n": 212,
+      "metrics": {
+        "num_examples": 212,
+        "gold_recall": 0.539,
+        "all_found": 0.4717,
+        "evidence_recall": 0.655,
+        "exact_match": 0.2311,
+        "relaxed_em": 0.4434,
+        "extracted_em": 0.2311,
+        "token_f1": 0.4293,
+        "semantic_similarity": 0.5947,
+        "llm_judge": 0.4764,
+        "ragas_faithfulness": 0.1,
+        "ragas_context_recall": 0.5291
+      },
+      "fingerprint": {
+        "dataset": "metaqa",
+        "phase": 1,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_v1.jsonl",
+        "eval_sha256": "824acf90381417721406146ff6263dc8ecb5bcde9f95d3dff70ed72300849cc6",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest.txt",
+          "sha256": "4e10fa73d3ae839aae6b0a0ac76c4fe6e8b4c97beb6dbe414c30bf7ca5fd1f29",
+          "files": 994
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "generation_provider": "default",
+        "openrouter_provider_only": null,
+        "openrouter_allow_fallbacks": null,
+        "generation_reasoning_effort": "none",
+        "judge_model": "gpt-6.1-sol",
+        "judge_reasoning_effort": "low",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": 0.0,
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "metaqa-graph"
+      },
+      "answered": 212,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "sha256": "acd24480e225fa4e62833c2850a95092ae80da3dbacb9abab10afc9b735d2c96",
+          "bytes": 61206
+        },
+        "eval_results.json": {
+          "sha256": "f664ca832f2e19fdf033556813c7b0efb067e4efae14c86dba033db70f6511d7",
+          "bytes": 112813
+        },
+        "per_question.jsonl": {
+          "sha256": "540d94864bd9cb8dac22922f39e902b60394e36ab238102ada3fc5d4aa5d57fb",
+          "bytes": 66753
+        },
+        "results.json": {
+          "sha256": "78f4f245e6d56d2c026ac50e2d3daa79637d0fe2b2b5c52bb91f06d520bbb680",
+          "bytes": 31009
+        },
+        "run_meta.json": {
+          "sha256": "a103f02aaaf7d088c60008d3c18751a515bf6f07d67608d7321bacac5928eed3",
+          "bytes": 2151
+        }
+      }
+    },
+    {
+      "run": "phase2_luna_v2",
+      "n": 212,
+      "metrics": {
+        "num_examples": 212,
+        "gold_recall": 0.7133,
+        "all_found": 0.6179,
+        "evidence_recall": 0.8412,
+        "exact_match": 0.2547,
+        "relaxed_em": 0.4953,
+        "extracted_em": 0.2547,
+        "token_f1": 0.5568,
+        "semantic_similarity": 0.6944,
+        "llm_judge": 0.6226,
+        "ragas_faithfulness": NaN,
+        "ragas_context_recall": 0.7192
+      },
+      "fingerprint": {
+        "dataset": "metaqa",
+        "phase": 2,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_v1.jsonl",
+        "eval_sha256": "824acf90381417721406146ff6263dc8ecb5bcde9f95d3dff70ed72300849cc6",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest.txt",
+          "sha256": "4e10fa73d3ae839aae6b0a0ac76c4fe6e8b4c97beb6dbe414c30bf7ca5fd1f29",
+          "files": 994
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "generation_provider": "default",
+        "openrouter_provider_only": null,
+        "openrouter_allow_fallbacks": null,
+        "generation_reasoning_effort": "none",
+        "judge_model": "gpt-6.1-sol",
+        "judge_reasoning_effort": "low",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": 0.0,
+        "extraction_temperature": "default",
+        "include_neighbours": true,
+        "graph_database": "metaqa-graph"
+      },
+      "answered": 212,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "entity_cache.json": {
+          "sha256": "8dad3bc2f1638c21dcd297ab79f55320c8a426c750d1f1d1167ebf042964edd9",
+          "bytes": 19206
+        },
+        "eval_report.txt": {
+          "sha256": "cc50b6cda8d7f9bed45a9fdd93175574619746bae7c46cb9ddf7e478f9f62148",
+          "bytes": 61531
+        },
+        "eval_results.json": {
+          "sha256": "c77897007507e755433c9474ababae2a742e27efcf0195c34180cdb46c83ddc0",
+          "bytes": 113626
+        },
+        "per_question.jsonl": {
+          "sha256": "cb2b64a4a2f7dd753022fccbe2adcb40244e793062b921d48374c5cc839e20f7",
+          "bytes": 69432
+        },
+        "results.json": {
+          "sha256": "38b27402b33012b432f2214bc86c04593b85f10cc104ea389d912ed2ad403b46",
+          "bytes": 31401
+        },
+        "run_meta.json": {
+          "sha256": "667e17ba240369caeb1bc47c128aa797ee054dc52b125aebd0b6e761d73c91b7",
+          "bytes": 2164
+        }
+      }
+    },
+    {
+      "run": "phase3_luna_v2",
+      "n": 212,
+      "metrics": {
+        "num_examples": 212,
+        "gold_recall": 0.8405,
+        "all_found": 0.7736,
+        "evidence_recall": 0.9657,
+        "exact_match": 0.283,
+        "relaxed_em": 0.5566,
+        "extracted_em": 0.283,
+        "token_f1": 0.6279,
+        "semantic_similarity": 0.7491,
+        "llm_judge": 0.7783,
+        "ragas_faithfulness": NaN,
+        "ragas_context_recall": 0.8421
+      },
+      "fingerprint": {
+        "dataset": "metaqa",
+        "phase": 3,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_v1.jsonl",
+        "eval_sha256": "824acf90381417721406146ff6263dc8ecb5bcde9f95d3dff70ed72300849cc6",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest.txt",
+          "sha256": "4e10fa73d3ae839aae6b0a0ac76c4fe6e8b4c97beb6dbe414c30bf7ca5fd1f29",
+          "files": 994
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "generation_provider": "default",
+        "openrouter_provider_only": null,
+        "openrouter_allow_fallbacks": null,
+        "generation_reasoning_effort": "none",
+        "judge_model": "gpt-6.1-sol",
+        "judge_reasoning_effort": "low",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": 0.0,
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "metaqa-ontology-graph",
+        "ontology_sha256": "461f37ed9d3cf260672b58018918941d65a99cbc0f6caa0e1d3c246ca79379a8"
+      },
+      "answered": 212,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "sha256": "8a3f4c87ceb6d9694714d4c48708e9c87e17c84d44a8ccc8ea7c75c70584cc25",
+          "bytes": 63265
+        },
+        "eval_results.json": {
+          "sha256": "bfe4cf6e9884d80cc69f1afd19b7db66a82221795e2d4c9f75b71a27838c2307",
+          "bytes": 117179
+        },
+        "per_question.jsonl": {
+          "sha256": "271e871c5dd510aedd9c09b509602b5caf87e19a30e903fd74d131ed4b6478ba",
+          "bytes": 64533
+        },
+        "results.json": {
+          "sha256": "4d2ecbdcb913aea9f1f53ce12dd1ed81c9032ff13c207cd493e8953b2899eab7",
+          "bytes": 33200
+        },
+        "run_meta.json": {
+          "sha256": "aeb5b7d0ac7c1728a7f446520058d6b59f576d72a66654b87fef2a0fa89270f6",
+          "bytes": 2257
+        }
+      }
+    },
+    {
+      "run": "phase3b_luna_v2",
+      "n": 212,
+      "metrics": {
+        "num_examples": 212,
+        "gold_recall": 0.7415,
+        "all_found": 0.6415,
+        "evidence_recall": 0.8929,
+        "exact_match": 0.2642,
+        "relaxed_em": 0.5189,
+        "extracted_em": 0.2642,
+        "token_f1": 0.5722,
+        "semantic_similarity": 0.7136,
+        "llm_judge": 0.6462,
+        "ragas_faithfulness": 1.0,
+        "ragas_context_recall": 0.7441
+      },
+      "fingerprint": {
+        "dataset": "metaqa",
+        "phase": 3,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_v1.jsonl",
+        "eval_sha256": "824acf90381417721406146ff6263dc8ecb5bcde9f95d3dff70ed72300849cc6",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest.txt",
+          "sha256": "4e10fa73d3ae839aae6b0a0ac76c4fe6e8b4c97beb6dbe414c30bf7ca5fd1f29",
+          "files": 994
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "generation_provider": "default",
+        "openrouter_provider_only": null,
+        "openrouter_allow_fallbacks": null,
+        "generation_reasoning_effort": "none",
+        "judge_model": "gpt-6.1-sol",
+        "judge_reasoning_effort": "low",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": 0.0,
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "metaqa-ontology-b-graph",
+        "ontology_sha256": "461f37ed9d3cf260672b58018918941d65a99cbc0f6caa0e1d3c246ca79379a8"
+      },
+      "answered": 212,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "sha256": "b0366079d1722383f76d41a84ea24414826e034a94afb764b1e94efe062787a7",
+          "bytes": 62313
+        },
+        "eval_results.json": {
+          "sha256": "e82234a01319643bc5b80709b6496464ea01367555165c3115758726cf6f69d4",
+          "bytes": 115255
+        },
+        "per_question.jsonl": {
+          "sha256": "34f056e7b8add80a5742c46ec8bcb583af1efeb50058913b1cb9c55c1fdf28b5",
+          "bytes": 65476
+        },
+        "results.json": {
+          "sha256": "5b4149613d464906249479f63c75173d7dabcfa4d0a8912c90bb62607c257abe",
+          "bytes": 32169
+        },
+        "run_meta.json": {
+          "sha256": "cf70d5b4bfc054df695c31196ac8bb3b9b94427a5e3cd58550e1bd25da3066ec",
+          "bytes": 2278
+        }
+      }
+    }
+  ],
+  "archive": {
+    "path": "checkpoints/v2/luna/archive/results_detailed_luna_v2.tar.zst",
+    "sha256": "f6ae6bf9c23dd966a1852fc32a88ad765a069e74a19443628cad940d12feccc1",
+    "bytes": 1185834,
+    "tracked": false
+  },
+  "caveats": [
+    "v1 generated each question once; v1 noise is unmeasured.",
+    "RAGAS with gpt-6-luna@none emitted 'No statements' warnings and NaN faithfulness on some phases; treat RAGAS as diagnostic only."
+  ]
+}
