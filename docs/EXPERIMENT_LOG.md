@@ -85,3 +85,15 @@ The `--no-neighbours` Phase 2 ablation is allowed only as an explicitly recorded
 - RAGAS Answer Correctness was removed from the headline (exact answers scored ~0.24).
 - Phase 2 neighbours are ranked by shared entities; `anchor_search` records fulltext vs CONTAINS.
 - HotpotQA is retired as a headline comparison (uncontrolled protocol; historical numbers invalid).
+
+### 2026-11-17 — v1 frozen; single-generation limitation
+
+- v1 is frozen at tag `metaqa-results-v1-default-medium`
+  (`checkpoints/v1/README.md`). It uses provider-default medium reasoning, not a
+  no-reasoning protocol.
+- **v1 generated each of the 212 full-MetaQA questions exactly once. No three-run
+  noise/replay check was performed; v1 answer variance is unmeasured.**
+- v2 (`reasoning_effort=none`, `temperature=0`, judge `gpt-6.1-sol` low) will measure
+  the per-question flip rate on frozen contexts and report it. Near-zero variance is
+  an acceptable result, not a failed experiment.
+- The frozen v1 tag/checksums are not to be edited; v2 results go in `checkpoints/v2/`.

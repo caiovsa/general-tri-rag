@@ -2,6 +2,8 @@
 
 > **Frozen v1:** `checkpoints/v1/README.md` (tag `metaqa-results-v1-default-medium`).
 > This v1 is provider-default **medium reasoning**, not a no-reasoning baseline.
+>
+> **Post-freeze diagnostics:** [slices + 3a audit](RESULTS_SLICES.md), [3b→3a graph gap](RESULTS_3B_GAP.md), [Phase 1b hybrid](RESULTS_PHASE1B.md), [easy cross-ablation](RESULTS_CROSS_ABLATION.md).
 
 > Authoritative per-question data lives in `results/<track>/phaseN/` (gitignored). This page
 > records the protocol each number belongs to. **Mini tracks are plumbing checks**: tiny corpora,
