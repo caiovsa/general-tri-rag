@@ -33,6 +33,9 @@ class Settings:
     # Optional OpenRouter route. Use a model prefixed with "openrouter/".
     OPENROUTER_API_KEY: str = os.getenv("OPENROUTER_API_KEY", "")
     OPENROUTER_API_BASE: str = os.getenv("OPENROUTER_API_BASE", "https://openrouter.ai/api/v1")
+    # Optional provider pin for OpenRouter, e.g. "primeintellect/bf16".
+    OPENROUTER_PROVIDER_ONLY: str = os.getenv("OPENROUTER_PROVIDER_ONLY", "")
+    OPENROUTER_ALLOW_FALLBACKS: bool = os.getenv("OPENROUTER_ALLOW_FALLBACKS", "false").strip().lower() in {"1", "true", "yes", "on"}
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
     EMBEDDING_DIMENSION: int = int(os.getenv("EMBEDDING_DIMENSION", "1536"))
     GENERATION_MODEL: str = os.getenv("GENERATION_MODEL", "gpt-6-luna")

@@ -112,6 +112,11 @@ def run_fingerprint(dataset, phase: int, closed_book: bool = False) -> dict:
         "prompt_style": dataset.prompt_style,
         "prompt_sha256": metaqa_prompt_template_hash() if shared_prompt else None,
         "generation_model": settings.GENERATION_MODEL,
+        "generation_provider": "openrouter" if settings.GENERATION_MODEL.startswith("openrouter/") else "default",
+        "openrouter_provider_only": (settings.OPENROUTER_PROVIDER_ONLY
+                                     if settings.GENERATION_MODEL.startswith("openrouter/") else None),
+        "openrouter_allow_fallbacks": (settings.OPENROUTER_ALLOW_FALLBACKS
+                                       if settings.GENERATION_MODEL.startswith("openrouter/") else None),
         "generation_reasoning_effort": settings.GENERATION_REASONING_EFFORT,
         "judge_model": settings.JUDGE_MODEL,
         "extraction_model": settings.EXTRACTION_MODEL,
@@ -390,6 +395,11 @@ def run_phase(pipeline_func, phase: int, phase_name: str, closed_book: bool = Fa
     if dataset.prompt_style == "shared":
         run_meta.update({
             "generation_model": settings.GENERATION_MODEL,
+            "generation_provider": "openrouter" if settings.GENERATION_MODEL.startswith("openrouter/") else "default",
+            "openrouter_provider_only": (settings.OPENROUTER_PROVIDER_ONLY
+                                         if settings.GENERATION_MODEL.startswith("openrouter/") else None),
+            "openrouter_allow_fallbacks": (settings.OPENROUTER_ALLOW_FALLBACKS
+                                           if settings.GENERATION_MODEL.startswith("openrouter/") else None),
             "generation_reasoning_effort": settings.GENERATION_REASONING_EFFORT,
             "judge_model": settings.JUDGE_MODEL,
             "extraction_model": settings.EXTRACTION_MODEL,

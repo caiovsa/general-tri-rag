@@ -40,6 +40,8 @@ GENERATION_MODEL=openrouter/qwen/qwen3.5-9b
 GENERATION_TEMPERATURE=0
 GENERATION_REASONING_EFFORT=none
 OPENROUTER_API_KEY=sk-or-v1-...
+OPENROUTER_PROVIDER_ONLY=primeintellect/bf16
+OPENROUTER_ALLOW_FALLBACKS=false
 ```
 
 The existing Luna path is unchanged: `GENERATION_MODEL=gpt-6-luna` continues to use the

@@ -5,6 +5,30 @@ from litellm.exceptions import APIError, AuthenticationError, RateLimitError
 from shared.config import llm_route, settings
 
 
+
+def openrouter_extra_body(reasoning_effort: str | None = None,
+                         provider_only: str | None = None,
+                         allow_fallbacks: bool | None = None) -> dict:
+    """Build OpenRouter's unified reasoning/provider payload.
+
+    Provider pinning is opt-in. ``allow_fallbacks=False`` means OpenRouter must
+    use one of the listed providers or fail, rather than silently routing to a
+    different quantization/provider.
+    """
+    body: dict = {}
+    effort = reasoning_effort if reasoning_effort is not None else settings.GENERATION_REASONING_EFFORT
+    if effort:
+        body["reasoning"] = {"effort": effort}
+    only = provider_only if provider_only is not None else settings.OPENROUTER_PROVIDER_ONLY
+    providers = [item.strip() for item in (only or "").split(",") if item.strip()]
+    if providers:
+        body["provider"] = {
+            "only": providers,
+            "allow_fallbacks": (settings.OPENROUTER_ALLOW_FALLBACKS
+                                if allow_fallbacks is None else allow_fallbacks),
+        }
+    return body
+
 def generate_completion(
     prompt: str,
     system_message: str = "You are a helpful assistant.",
@@ -31,9 +55,14 @@ def generate_completion(
         if settings.GENERATION_MODEL.startswith("openrouter/"):
             # OpenRouter's unified reasoning field; ``exclude`` only hides the
             # trace, while ``effort: none`` actually disables reasoning.
-            reasoning_kwargs = {"extra_body": {"reasoning": {"effort": reasoning_effort}}}
+            reasoning_kwargs = {"extra_body": openrouter_extra_body(reasoning_effort)}
         else:
             reasoning_kwargs = {"reasoning_effort": reasoning_effort}
+    elif settings.GENERATION_MODEL.startswith("openrouter/"):
+        # Provider pinning can apply even when reasoning is left at its default.
+        extra_body = openrouter_extra_body(reasoning_effort)
+        if extra_body:
+            reasoning_kwargs = {"extra_body": extra_body}
 
     last_exc: Exception | None = None
     for attempt in range(max_retries + 1):

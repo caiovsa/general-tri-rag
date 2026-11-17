@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 
 from shared.config import llm_route, settings
+from shared.llm import openrouter_extra_body
 
 
 class LLMRouteTests(unittest.TestCase):
@@ -30,6 +31,21 @@ class LLMRouteTests(unittest.TestCase):
             route = llm_route("gpt-6-luna")
         self.assertEqual(route["api_key"], "m-key")
         self.assertEqual(route["api_base"], "https://maritaca.test")
+
+
+    def test_openrouter_provider_pin(self):
+        with patch.object(settings, "OPENROUTER_PROVIDER_ONLY", "primeintellect/bf16"), \
+             patch.object(settings, "OPENROUTER_ALLOW_FALLBACKS", False):
+            body = openrouter_extra_body("none")
+        self.assertEqual(body["reasoning"], {"effort": "none"})
+        self.assertEqual(body["provider"], {
+            "only": ["primeintellect/bf16"], "allow_fallbacks": False,
+        })
+
+    def test_openrouter_no_provider_pin(self):
+        with patch.object(settings, "OPENROUTER_PROVIDER_ONLY", ""):
+            body = openrouter_extra_body("none")
+        self.assertNotIn("provider", body)
 
 
 if __name__ == "__main__":
