@@ -29,6 +29,22 @@ shared between questions, so never compare Phase 1 vs Phase 2 (or mini vs full) 
 - Pinned models: generation/extraction `gpt-6-luna`, judge `gpt-5.6-luna` (no temperature parameter — Luna only accepts the default)
 - MetaQA track only: `WIKI_CONTACT` for the Wikimedia User-Agent
 
+### Model routing
+
+The answer/extraction model is selected with `GENERATION_MODEL`. An OpenRouter model
+must use the `openrouter/` prefix so the wrapper selects the OpenRouter key and base URL:
+
+```bash
+# .env
+GENERATION_MODEL=openrouter/qwen/qwen3.5-9b
+GENERATION_TEMPERATURE=0
+OPENROUTER_API_KEY=sk-or-v1-...
+```
+
+The existing Luna path is unchanged: `GENERATION_MODEL=gpt-6-luna` continues to use the
+OpenAI/Maritaca route. Judge (`JUDGE_MODEL`), extraction (`EXTRACTION_MODEL`) and RAGAS
+(`RAGAS_MODEL`) are separate knobs; changing `GENERATION_MODEL` does not change the judge.
+
 ## Quickstart
 
 ```bash

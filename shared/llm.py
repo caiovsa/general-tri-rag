@@ -2,7 +2,7 @@ import time
 
 from litellm import completion
 from litellm.exceptions import APIError, AuthenticationError, RateLimitError
-from shared.config import settings
+from shared.config import llm_route, settings
 
 
 def generate_completion(
@@ -33,8 +33,7 @@ def generate_completion(
                 messages=messages,
                 **temperature_kwargs,
                 #max_tokens=max_tokens,
-                api_key=settings.MARITACA_API_KEY or None,
-                api_base=settings.MARITACA_API_BASE or None,
+                **llm_route(settings.GENERATION_MODEL),
             )
             content = response.choices[0].message.content
             if content is None:

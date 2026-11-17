@@ -30,6 +30,9 @@ class Settings:
     
     # Models & Keys
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
+    # Optional OpenRouter route. Use a model prefixed with "openrouter/".
+    OPENROUTER_API_KEY: str = os.getenv("OPENROUTER_API_KEY", "")
+    OPENROUTER_API_BASE: str = os.getenv("OPENROUTER_API_BASE", "https://openrouter.ai/api/v1")
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
     EMBEDDING_DIMENSION: int = int(os.getenv("EMBEDDING_DIMENSION", "1536"))
     GENERATION_MODEL: str = os.getenv("GENERATION_MODEL", "gpt-6-luna")
@@ -407,9 +410,38 @@ def get_openai_client() -> OpenAI:
         raise ValueError("OPENAI_API_KEY is missing from the environment configuration.")
     return OpenAI(api_key=settings.OPENAI_API_KEY)
 
+def llm_route(model: str | None = None) -> dict[str, str | None]:
+    """Return the API key/base for a model, routing OpenRouter by model prefix.
+
+    A model is routed to OpenRouter only when it starts with ``openrouter/``.
+    All existing OpenAI/Luna and Maritaca paths keep their previous behavior.
+    Key values are never printed or written to run metadata.
+    """
+    model = model or settings.GENERATION_MODEL
+    if model.startswith("openrouter/"):
+        if not settings.OPENROUTER_API_KEY:
+            raise RuntimeError(
+                "OPENROUTER_API_KEY is not set; cannot route "
+                f"{model!r} through OpenRouter."
+            )
+        return {"api_key": settings.OPENROUTER_API_KEY,
+                "api_base": settings.OPENROUTER_API_BASE}
+    return {"api_key": settings.MARITACA_API_KEY or None,
+            "api_base": settings.MARITACA_API_BASE or None}
+
+
 def get_llamaindex_settings():
     """Configures LlamaIndex global settings for LLM and Embeddings."""
-    llm = LlamaOpenAI(model=settings.GENERATION_MODEL, api_key=settings.OPENAI_API_KEY)
+    route = llm_route(settings.GENERATION_MODEL)
+    if settings.GENERATION_MODEL.startswith("openrouter/"):
+        # LlamaIndex's OpenAI wrapper expects the model without the provider prefix.
+        # The routed LLM is only used by LlamaIndex internals; answer generation
+        # goes through shared.llm.generate_completion.
+        model = settings.GENERATION_MODEL.split("/", 1)[1]
+        llm = LlamaOpenAI(model=model, api_key=route["api_key"],
+                          api_base=route["api_base"])
+    else:
+        llm = LlamaOpenAI(model=settings.GENERATION_MODEL, api_key=settings.OPENAI_API_KEY)
     embed_model = OpenAIEmbedding(model=settings.EMBEDDING_MODEL, api_key=settings.OPENAI_API_KEY, embed_batch_size=100)
     return llm, embed_model
 
