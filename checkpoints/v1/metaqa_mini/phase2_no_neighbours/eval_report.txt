@@ -1,0 +1,107 @@
+================================================================================
+  Phase 2 (Graph RAG) — Evaluation Report
+================================================================================
+
+SUMMARY
+----------------------------------------
+  Total questions     : 12
+  Deterministic metrics
+  Gold Recall (set)   : 0.5417
+  All Found           : 0.5
+  Evidence Recall     : 0.7618
+  Other metrics
+  Exact Match         : 0.4167
+  Relaxed EM          : 0.5
+  Extracted EM        : 0.4167
+  Token F1            : 0.4778
+  Semantic Similarity : 0.6383
+  LLM-as-Judge (secondary): 0.5
+  RAGAS Faithfulness  : 0.7037
+  RAGAS Context Recall: 0.6667
+
+BY GROUP (hop / evidence size)
+----------------------------------------
+  group             n  gold_recall  all_found  evid_recall   judge
+  hop 1             4        1.000      1.000        1.000   1.000
+  hop 2             4        0.625      0.500        0.885   0.500
+  hop 3             4        0.000      0.000        0.400   0.000
+  hop 2+3           8        0.312      0.250        0.643   0.250
+  evidence 1        3        1.000      1.000        1.000   1.000
+  evidence 2        4        0.500      0.500        0.750   0.500
+  evidence 3-5      4        0.375      0.250        0.567   0.250
+  evidence 6+       1        0.000      0.000        0.875   0.000
+
+PER-QUESTION BREAKDOWN
+----------------------------------------
+
+Q1: what does Ted Wass appear in
+  Ground truth   : Sheena, Oh, God! You Devil
+  LLM answer     : Sheena, Oh, God! You Devil
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=0.3333  CtxRecall=1.0000
+
+Q2: William H. Macy was the director of which films
+  Ground truth   : Rudderless
+  LLM answer     : Rudderless
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q3: who directed My Voyage to Italy
+  Ground truth   : Martin Scorsese
+  LLM answer     : Martin Scorsese
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q4: what is the genre for the film The Princess Diaries
+  Ground truth   : Comedy
+  LLM answer     : Comedy
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q5: what are the languages spoken in the movies acted by Karin Viard
+  Ground truth   : French
+  LLM answer     : French
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q6: which person wrote the movies starred by William Haines
+  Ground truth   : Rida Johnson Young, E.J. Rath
+  LLM answer     : Melvin Ellis, Donald Ogden Stewart, A. P. Younger, Raymond L. Schrock, Dale Van Every, J.C. Nugent, Elliott Nugent, W. L. River, Sarah Y. Mason, Charles MacArthur, Byron Morgan, Robert Hopkins, Ralph Spence, Dwight Taylor, E. Richard Schayer
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.4078  Judge=INCORRECT  Faith=0.0000  CtxRecall=1.0000
+
+Q7: what were the release years the films starred by Alan Mowbray
+  Ground truth   : 1941, 1938
+  LLM answer     : 1934, 1935, 1937, 1938
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.3333
+  Semantic=0.6961  Judge=INCORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q8: what are the genres of the movies directed by Howard Franklin
+  Ground truth   : Comedy
+  LLM answer     : Crime comedy, crime thriller
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.4000
+  Semantic=0.6018  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q9: who directed films that share actors with the film Hereafter
+  Ground truth   : Luc Dardenne, Eric Rochant, Alexandre Aja
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1360  Judge=INCORRECT  Faith=nan  CtxRecall=0.0000
+
+Q10: who is listed as director of the movies starred by Alice Upside Down actors
+  Ground truth   : Jon M. Chu
+  LLM answer     : Sandy Tung
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.3036  Judge=INCORRECT  Faith=0.0000  CtxRecall=0.0000
+
+Q11: who are the screenwriters that the actors in their movies also appear in the movie He Knows You're Alone
+  Ground truth   : Jeff Lieberman
+  LLM answer     : Scott Parker
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2473  Judge=INCORRECT  Faith=nan  CtxRecall=0.0000
+
+Q12: the movies written by the screenwriter of Return to the Blue Lagoon were directed by who
+  Ground truth   : Leslie Stevens, Arthur Penn, Franklin J. Schaffner, Randal Kleiser
+  LLM answer     : William A. Graham
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2673  Judge=INCORRECT  Faith=nan  CtxRecall=0.0000

@@ -1,0 +1,30 @@
+================================================================================
+  Phase 1 (Vector RAG) — Evaluation Report
+================================================================================
+
+SUMMARY
+----------------------------------------
+  Total questions     : 2
+  Exact Match         : 1.0
+  Relaxed EM          : 1.0
+  Extracted EM        : 1.0
+  Token F1            : 1.0
+  Semantic Similarity : 1.0
+  LLM-as-Judge        : 1.0
+  RAGAS Faithfulness  : 1.0
+  RAGAS Context Recall: 1.0
+
+PER-QUESTION BREAKDOWN
+----------------------------------------
+
+Q1: Who founded the Zephyr Project?
+  Ground truth   : Mara Voss
+  LLM answer     : Mara Voss
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q2: Where did the Zephyr Project move in 2021?
+  Ground truth   : Porto
+  LLM answer     : Porto
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000

@@ -1,0 +1,212 @@
+================================================================================
+  Closed book (no retrieval) — Evaluation Report
+================================================================================
+
+SUMMARY
+----------------------------------------
+  Total questions     : 30
+  Deterministic metrics
+  Gold Recall (set)   : 0.0
+  All Found           : 0.0
+  Evidence Recall     : 0.0
+  Other metrics
+  Exact Match         : 0.0
+  Relaxed EM          : 0.0
+  Extracted EM        : 0.0
+  Token F1            : 0.0
+  Semantic Similarity : 0.1545
+  LLM-as-Judge (secondary): 0.0
+
+BY GROUP (hop / evidence size)
+----------------------------------------
+  group             n  gold_recall  all_found  evid_recall   judge
+  hop 1            10        0.000      0.000        0.000   0.000
+  hop 2            10        0.000      0.000        0.000   0.000
+  hop 3            10        0.000      0.000        0.000   0.000
+  hop 2+3          20        0.000      0.000        0.000   0.000
+  evidence 1       10        0.000      0.000        0.000   0.000
+  evidence 2       10        0.000      0.000        0.000   0.000
+  evidence 3-5     10        0.000      0.000        0.000   0.000
+
+PER-QUESTION BREAKDOWN
+----------------------------------------
+
+Q1: what movies was Thommy Berggren an actor in
+  Ground truth   : Giliap
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1408  Judge=INCORRECT
+
+Q2: what does Dida Diafat act in
+  Ground truth   : Mutants
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1694  Judge=INCORRECT
+
+Q3: which films did Abhinay Deo direct
+  Ground truth   : Delhi Belly
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1497  Judge=INCORRECT
+
+Q4: the movie Losing Isaiah starred who
+  Ground truth   : Halle Berry, Jessica Lange
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1410  Judge=INCORRECT
+
+Q5: who is the director of A Slipping-Down Life
+  Ground truth   : Toni Kalem
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1276  Judge=INCORRECT
+
+Q6: what kind of movie is Drones
+  Ground truth   : Comedy
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1891  Judge=INCORRECT
+
+Q7: what genre is Eyes of Laura Mars in
+  Ground truth   : Thriller
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1616  Judge=INCORRECT
+
+Q8: what language is Man Bites Dog in
+  Ground truth   : French
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1729  Judge=INCORRECT
+
+Q9: which film did Scott Prendergast write the story for
+  Ground truth   : Kabluey
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2095  Judge=INCORRECT
+
+Q10: what films did Patricia Hearst write
+  Ground truth   : Patty Hearst
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0983  Judge=INCORRECT
+
+Q11: the actor George Harrison appeared in the same movie with who
+  Ground truth   : John Lennon, The Beatles, Paul McCartney
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1334  Judge=INCORRECT
+
+Q12: the movies starred by Hanna Schygulla were in which languages
+  Ground truth   : German
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1487  Judge=INCORRECT
+
+Q13: what are the main languages in Nina Hoss acted films
+  Ground truth   : German
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1487  Judge=INCORRECT
+
+Q14: what were the release years the films starred by Alan Mowbray
+  Ground truth   : 1941, 1938
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0937  Judge=INCORRECT
+
+Q15: who acted in the films directed by Udayan Prasad
+  Ground truth   : Maria Bello, Eddie Redmayne, William Hurt, Kristen Stewart
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1094  Judge=INCORRECT
+
+Q16: the films directed by José Ferrer were written by who
+  Ground truth   : Ronald Alexander, Grace Metalious
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1370  Judge=INCORRECT
+
+Q17: which movies share the screenwriter with Caged Heat
+  Ground truth   : Stop Making Sense, The Truth About Charlie
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1694  Judge=INCORRECT
+
+Q18: who are the directors of the films written by Walter DeLeon
+  Ground truth   : Leo McCarey, George Marshall
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1753  Judge=INCORRECT
+
+Q19: which person directed the films written by Michael Arlen
+  Ground truth   : Clarence Brown, Alexander Hall
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1879  Judge=INCORRECT
+
+Q20: when were the movies written by Roland Kibbee released
+  Ground truth   : 1946, 1953
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1036  Judge=INCORRECT
+
+Q21: who directed films that share actors with the film Wheel of Time
+  Ground truth   : Rick Ray
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1525  Judge=INCORRECT
+
+Q22: what genres do the movies that share actors with One Man Up fall under
+  Ground truth   : Thriller
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1615  Judge=INCORRECT
+
+Q23: what are the languages spoken in the movies whose actors also appear in Tarzan's Greatest Adventure
+  Ground truth   : English
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2497  Judge=INCORRECT
+
+Q24: who are the actors in the movies directed by the director of Zombies of Mora Tau
+  Ground truth   : Michael Granger, Richard Denning
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1607  Judge=INCORRECT
+
+Q25: who starred films for the director of Son of the Bride
+  Ground truth   : Soledad Villamil, Ricardo Darín
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0790  Judge=INCORRECT
+
+Q26: what types are the movies directed by the director of Let's Go to Prison
+  Ground truth   : Comedy
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1890  Judge=INCORRECT
+
+Q27: the movies that share directors with the movie Ratcatcher were in which genres
+  Ground truth   : Drama
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1808  Judge=INCORRECT
+
+Q28: when did the films release whose directors also directed You, the Living
+  Ground truth   : 2014, 2000, 1975, 1970
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1596  Judge=INCORRECT
+
+Q29: who are the directors of films whose writers also wrote Nim's Island
+  Ground truth   : Mark Levin
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1810  Judge=INCORRECT
+
+Q30: what were the release years of the films that share writers with the film Red Salute
+  Ground truth   : 1935
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1554  Judge=INCORRECT

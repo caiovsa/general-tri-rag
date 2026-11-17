@@ -1,5 +1,8 @@
 # Results — corrected baselines (updated 2026-11-16)
 
+> **Frozen v1:** `checkpoints/v1/README.md` (tag `metaqa-results-v1-default-medium`).
+> This v1 is provider-default **medium reasoning**, not a no-reasoning baseline.
+
 > Authoritative per-question data lives in `results/<track>/phaseN/` (gitignored). This page
 > records the protocol each number belongs to. **Mini tracks are plumbing checks**: tiny corpora,
 > shared evidence, not for phase-vs-phase claims. Phase 3a is a **ceiling** (the graph is built

@@ -1,0 +1,2 @@
+{"id": null, "phase": 1, "dataset": "local", "top_k": 8, "hop": null, "evidence_n": 0, "gold_recall": null, "all_found": null, "evidence_recall": null, "judge": 1, "EM": 1, "F1": 1.0}
+{"id": null, "phase": 1, "dataset": "local", "top_k": 8, "hop": null, "evidence_n": 0, "gold_recall": null, "all_found": null, "evidence_recall": null, "judge": 1, "EM": 1, "F1": 1.0}

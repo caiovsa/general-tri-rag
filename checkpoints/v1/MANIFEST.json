@@ -1,0 +1,1233 @@
+{
+  "schema_version": 1,
+  "checkpoint": "v1",
+  "created_at": "2026-11-17T02:27:14+00:00",
+  "source_commit": "1135eea0b58d7c302493e4f26d21cedc7c376c1d",
+  "source_results": "results/",
+  "tag": "metaqa-results-v1-default-medium",
+  "dataset_scope": [
+    "local",
+    "metaqa (full)",
+    "metaqa_mini",
+    "metaqa_mini30"
+  ],
+  "protocol": {
+    "chunk_size": 256,
+    "chunk_overlap": 32,
+    "top_k": 20,
+    "prompt_style": "shared",
+    "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+    "full_eval_sha256": "824acf90381417721406146ff6263dc8ecb5bcde9f95d3dff70ed72300849cc6",
+    "full_corpus_sha256": "4e10fa73d3ae839aae6b0a0ac76c4fe6e8b4c97beb6dbe414c30bf7ca5fd1f29"
+  },
+  "models": {
+    "answer": {
+      "model": "gpt-6-luna",
+      "temperature": "omitted",
+      "reasoning_effort": "provider-default (medium; not explicitly set or recorded)"
+    },
+    "extraction": {
+      "model": "gpt-6-luna",
+      "temperature": "omitted",
+      "reasoning_effort": "provider-default (medium; not explicitly set or recorded)"
+    },
+    "judge": {
+      "model": "gpt-5.6-luna",
+      "temperature": "omitted"
+    },
+    "ragas": {
+      "model": "gpt-4o-mini",
+      "temperature": "0 / ragas default 1e-8"
+    },
+    "embeddings": {
+      "model": "text-embedding-3-small",
+      "dimensions": 1536
+    }
+  },
+  "runs": [
+    {
+      "track": "local",
+      "run": "phase1",
+      "path": "local/phase1",
+      "n": 2,
+      "metrics": {
+        "num_examples": 2,
+        "exact_match": 1.0,
+        "relaxed_em": 1.0,
+        "extracted_em": 1.0,
+        "token_f1": 1.0,
+        "semantic_similarity": 1.0,
+        "llm_judge": 1.0,
+        "gold_recall": null,
+        "all_found": null,
+        "evidence_recall": null,
+        "ragas_faithfulness": 1.0,
+        "ragas_context_recall": 1.0
+      },
+      "fingerprint": {
+        "dataset": "local",
+        "phase": 1,
+        "closed_book": false,
+        "eval_file": "/tmp/local_smoke/eval.jsonl",
+        "eval_sha256": "f3ab541614b3c6b51e0a8bfa1378369312a5fac3a1584cf71bd9ffa67649c666",
+        "corpus": {
+          "kind": "directory",
+          "path": "/tmp/local_smoke",
+          "pattern": "**/*.txt",
+          "sha256": "4a642137a6209fda857d619673594d83e3f06928c5b0616aa2bc55cd9c87b4fc",
+          "files": 1
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 8,
+        "tag_movies": false,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "judge_model": "gpt-5.6-luna",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": "default",
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "local-graph"
+      },
+      "run_meta_generated": "2026-11-13T01:40:01+00:00",
+      "answered": 2,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "bytes": 986,
+          "sha256": "d8e5869c31b0208aa930d9e5991696929ad735a993f69aa71c2d2de92de445d7"
+        },
+        "eval_results.json": {
+          "bytes": 4160,
+          "sha256": "80bcf7e66d49931f7d587bb3c57624efaf125468b2b36728a91fd622f3194b29"
+        },
+        "ingest_meta.json": {
+          "bytes": 248,
+          "sha256": "a392135d4ae771b7906633708df18b08abb85f3cb7f8d3b3c08d6e424bd45a56"
+        },
+        "per_question.jsonl": {
+          "bytes": 368,
+          "sha256": "938efd38769c12ee67fd797fb7e9adc173e6c938cdddfdc0ac6054ce6e64eed9"
+        },
+        "results.json": {
+          "bytes": 181,
+          "sha256": "cd31868e1de3447538bfabe15ee12063502a92d258044b6c6cce5a248cdd9d72"
+        },
+        "run_meta.json": {
+          "bytes": 1917,
+          "sha256": "9297ce03ae7c8def1a51c6b2802dc5542de1b0152bfe53e7c8da89247859843a"
+        }
+      }
+    },
+    {
+      "track": "local",
+      "run": "phase2",
+      "path": "local/phase2",
+      "n": 2,
+      "metrics": {
+        "num_examples": 2,
+        "exact_match": 1.0,
+        "relaxed_em": 1.0,
+        "extracted_em": 1.0,
+        "token_f1": 1.0,
+        "semantic_similarity": 1.0,
+        "llm_judge": 1.0,
+        "gold_recall": null,
+        "all_found": null,
+        "evidence_recall": null,
+        "ragas_faithfulness": 1.0,
+        "ragas_context_recall": 1.0
+      },
+      "fingerprint": {
+        "dataset": "local",
+        "phase": 2,
+        "closed_book": false,
+        "eval_file": "/tmp/local_smoke/eval.jsonl",
+        "eval_sha256": "f3ab541614b3c6b51e0a8bfa1378369312a5fac3a1584cf71bd9ffa67649c666",
+        "corpus": {
+          "kind": "directory",
+          "path": "/tmp/local_smoke",
+          "pattern": "**/*.txt",
+          "sha256": "4a642137a6209fda857d619673594d83e3f06928c5b0616aa2bc55cd9c87b4fc",
+          "files": 1
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 8,
+        "tag_movies": false,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "judge_model": "gpt-5.6-luna",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": "default",
+        "extraction_temperature": "default",
+        "include_neighbours": true,
+        "graph_database": "local-graph"
+      },
+      "run_meta_generated": "2026-11-13T03:00:35+00:00",
+      "answered": 2,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "bytes": 985,
+          "sha256": "1fa0963f6e141d8f6a4a7a0b1e6bfdbdf05f36f07d97083e44bd8ea5c97c909e"
+        },
+        "eval_results.json": {
+          "bytes": 4533,
+          "sha256": "54178b05c0138da92e42d5b1f522089c08e9ae2990de13a6ea6713b097b2469f"
+        },
+        "ingest_meta.json": {
+          "bytes": 400,
+          "sha256": "53596f9e777abd515b53fad1478b4ec677888f6c88239d1296d432bf89d3d237"
+        },
+        "per_question.jsonl": {
+          "bytes": 368,
+          "sha256": "2fe3b07f2959b0bf964289a706918865fd033d07724089d63065bde418910c4e"
+        },
+        "results.json": {
+          "bytes": 181,
+          "sha256": "cd31868e1de3447538bfabe15ee12063502a92d258044b6c6cce5a248cdd9d72"
+        },
+        "run_meta.json": {
+          "bytes": 2083,
+          "sha256": "441ade72a1d54e80e02e1faa08308df94d5bfc92aefb1a337f9b1ad1929f9de0"
+        }
+      }
+    },
+    {
+      "track": "metaqa",
+      "run": "phase1",
+      "path": "metaqa/phase1",
+      "n": 212,
+      "metrics": {
+        "num_examples": 212,
+        "gold_recall": 0.5538,
+        "all_found": 0.4764,
+        "evidence_recall": 0.655,
+        "exact_match": 0.25,
+        "relaxed_em": 0.4481,
+        "extracted_em": 0.25,
+        "token_f1": 0.4618,
+        "semantic_similarity": 0.6007,
+        "llm_judge": 0.4858,
+        "ragas_faithfulness": 0.7967,
+        "ragas_context_recall": 0.6294
+      },
+      "fingerprint": {
+        "dataset": "metaqa",
+        "phase": 1,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_v1.jsonl",
+        "eval_sha256": "824acf90381417721406146ff6263dc8ecb5bcde9f95d3dff70ed72300849cc6",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest.txt",
+          "sha256": "4e10fa73d3ae839aae6b0a0ac76c4fe6e8b4c97beb6dbe414c30bf7ca5fd1f29",
+          "files": 994
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "judge_model": "gpt-5.6-luna",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": "default",
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "metaqa-graph"
+      },
+      "run_meta_generated": "2026-11-13T01:52:10+00:00",
+      "answered": 212,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "bytes": 60569,
+          "sha256": "bc333bab3c634c663aef22a2dc8a4db5ca9f759dd4ef8d377888e8629b570d46"
+        },
+        "eval_results.json": {
+          "bytes": 110720,
+          "sha256": "b499bcfd0ae46b137037b34d4f7286dacd72ba3f397a5533dd4d92cc3337197c"
+        },
+        "ingest_meta.json": {
+          "bytes": 260,
+          "sha256": "9293a1e9c06ff70ac7888cb4c40642c638c6431910e21691860cc8269a3be89c"
+        },
+        "per_question.jsonl": {
+          "bytes": 66763,
+          "sha256": "bcb2d4557fc9d148806270cce58ad210efa4a39da38db826f9ee630a48dff427"
+        },
+        "results.json": {
+          "bytes": 29944,
+          "sha256": "f137b00f50fd5b4813dfaf36f01c5d1f106cc844ca3102b6afa9ca9534f37e35"
+        },
+        "run_meta.json": {
+          "bytes": 2079,
+          "sha256": "288a6cfff94fa28740c82b3a7ca08f81359b44c1d5bb7dcbfa496597bc48fd03"
+        }
+      }
+    },
+    {
+      "track": "metaqa",
+      "run": "phase2",
+      "path": "metaqa/phase2",
+      "n": 212,
+      "metrics": {
+        "num_examples": 212,
+        "gold_recall": 0.7568,
+        "all_found": 0.6557,
+        "evidence_recall": 0.8406,
+        "exact_match": 0.316,
+        "relaxed_em": 0.533,
+        "extracted_em": 0.316,
+        "token_f1": 0.5954,
+        "semantic_similarity": 0.7113,
+        "llm_judge": 0.6604,
+        "ragas_faithfulness": 0.7853,
+        "ragas_context_recall": 0.7511
+      },
+      "fingerprint": {
+        "dataset": "metaqa",
+        "phase": 2,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_v1.jsonl",
+        "eval_sha256": "824acf90381417721406146ff6263dc8ecb5bcde9f95d3dff70ed72300849cc6",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest.txt",
+          "sha256": "4e10fa73d3ae839aae6b0a0ac76c4fe6e8b4c97beb6dbe414c30bf7ca5fd1f29",
+          "files": 994
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "judge_model": "gpt-5.6-luna",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": "default",
+        "extraction_temperature": "default",
+        "include_neighbours": true,
+        "graph_database": "metaqa-graph"
+      },
+      "run_meta_generated": "2026-11-16T15:06:42+00:00",
+      "answered": 212,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "entity_cache.json": {
+          "bytes": 19206,
+          "sha256": "8dad3bc2f1638c21dcd297ab79f55320c8a426c750d1f1d1167ebf042964edd9"
+        },
+        "eval_report.txt": {
+          "bytes": 63355,
+          "sha256": "1d3641405ef063d70021a8e53790fbeb98749b39237617a3911f9f9dce8ce1d2"
+        },
+        "eval_results.json": {
+          "bytes": 117004,
+          "sha256": "5d1dfaa45b7f8b3796a25a70f56b0a0769bff23717b63c934c3927850d180572"
+        },
+        "ingest_meta.json": {
+          "bytes": 530,
+          "sha256": "6e9df56129c28b9ab97b8c00896053196611bc41e45ba084b4aaf41a15dd2dbe"
+        },
+        "per_question.jsonl": {
+          "bytes": 69458,
+          "sha256": "d96aa5b5460bc3394c5260b163e31b580a0f6ca68582ea5f1c3a2f6d1242c5d2"
+        },
+        "results.json": {
+          "bytes": 32794,
+          "sha256": "3b469ce11a77b70f3ddb6bbb6bf8e50733de5176d6b14705828980a9e3310e3b"
+        },
+        "run_meta.json": {
+          "bytes": 2376,
+          "sha256": "741ba1fbda6e660ae5741c4a36676afd66c868fb64f08d1d196218de3e1bbf77"
+        }
+      }
+    },
+    {
+      "track": "metaqa",
+      "run": "phase3",
+      "path": "metaqa/phase3",
+      "n": 212,
+      "metrics": {
+        "num_examples": 212,
+        "gold_recall": 0.8758,
+        "all_found": 0.8113,
+        "evidence_recall": 0.9657,
+        "exact_match": 0.3113,
+        "relaxed_em": 0.5472,
+        "extracted_em": 0.3113,
+        "token_f1": 0.6544,
+        "semantic_similarity": 0.7518,
+        "llm_judge": 0.8208,
+        "ragas_faithfulness": 0.7505,
+        "ragas_context_recall": 0.8676
+      },
+      "fingerprint": {
+        "dataset": "metaqa",
+        "phase": 3,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_v1.jsonl",
+        "eval_sha256": "824acf90381417721406146ff6263dc8ecb5bcde9f95d3dff70ed72300849cc6",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest.txt",
+          "sha256": "4e10fa73d3ae839aae6b0a0ac76c4fe6e8b4c97beb6dbe414c30bf7ca5fd1f29",
+          "files": 994
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "judge_model": "gpt-5.6-luna",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": "default",
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "metaqa-ontology-graph",
+        "ontology_sha256": "461f37ed9d3cf260672b58018918941d65a99cbc0f6caa0e1d3c246ca79379a8"
+      },
+      "run_meta_generated": "2026-11-13T02:08:25+00:00",
+      "answered": 212,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "bytes": 67387,
+          "sha256": "98c855136cb1d13acab76c0eb80d81016b8c5df880fd9fc64bdb8722e581e6af"
+        },
+        "eval_results.json": {
+          "bytes": 125048,
+          "sha256": "9c84b8991efa23afd3ef3ffb24e78462fc0a99e20db1c6593248694f6515e75d"
+        },
+        "ingest_meta.json": {
+          "bytes": 540,
+          "sha256": "5cc5c8378dd363c05a40375ac5016682ea13317b21a73642c11a2d605d2dad7c"
+        },
+        "per_question.jsonl": {
+          "bytes": 64507,
+          "sha256": "3e0da40e878cfd0c227ece22b295fa21b1db0a971400ca0c6aff8f86f833c3c9"
+        },
+        "results.json": {
+          "bytes": 36819,
+          "sha256": "8faaef477505e14d80b6de2a1a14076fe977b1b17e9c18c187c7acd8bebc677f"
+        },
+        "run_meta.json": {
+          "bytes": 2477,
+          "sha256": "a0c4c4987669faf995ebb5986532234bc8d044536cc77aa2453f587b464273d4"
+        }
+      }
+    },
+    {
+      "track": "metaqa",
+      "run": "phase3b",
+      "path": "metaqa/phase3b",
+      "n": 212,
+      "metrics": {
+        "num_examples": 212,
+        "gold_recall": 0.7787,
+        "all_found": 0.684,
+        "evidence_recall": 0.8929,
+        "exact_match": 0.2783,
+        "relaxed_em": 0.5047,
+        "extracted_em": 0.2783,
+        "token_f1": 0.5807,
+        "semantic_similarity": 0.7082,
+        "llm_judge": 0.6934,
+        "ragas_faithfulness": 0.8093,
+        "ragas_context_recall": 0.7823
+      },
+      "fingerprint": {
+        "dataset": "metaqa",
+        "phase": 3,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_v1.jsonl",
+        "eval_sha256": "824acf90381417721406146ff6263dc8ecb5bcde9f95d3dff70ed72300849cc6",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest.txt",
+          "sha256": "4e10fa73d3ae839aae6b0a0ac76c4fe6e8b4c97beb6dbe414c30bf7ca5fd1f29",
+          "files": 994
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "judge_model": "gpt-5.6-luna",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": "default",
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "metaqa-ontology-b-graph",
+        "ontology_sha256": "461f37ed9d3cf260672b58018918941d65a99cbc0f6caa0e1d3c246ca79379a8"
+      },
+      "run_meta_generated": "2026-11-16T16:36:03+00:00",
+      "answered": 212,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "bytes": 67145,
+          "sha256": "b8a728bd5c8e5a577e891553188432e693fc6a6af9413a46ef5b8d112a06df9f"
+        },
+        "eval_results.json": {
+          "bytes": 125192,
+          "sha256": "25d18dc67685e8f6075e2b5add02295e2df473880ce22c14c5a35179ac813213"
+        },
+        "ingest_meta.json": {
+          "bytes": 735,
+          "sha256": "fded5abcc4f70f861469059d9ff914ebe0b78074ac7c5ca3d9e0159a6e81e2c4"
+        },
+        "per_question.jsonl": {
+          "bytes": 65478,
+          "sha256": "37406010acb6f377b4d097db873e2daf3e4fe5a28586e1ea0ef173b609abb8ad"
+        },
+        "results.json": {
+          "bytes": 36569,
+          "sha256": "bd4809930b775e97039584b16ed80c31e52b78966605687fd9fc1faaf76f2e67"
+        },
+        "run_meta.json": {
+          "bytes": 2713,
+          "sha256": "07baa0caca686f5f37cf7e651ee423b2a0dc0856fe2864acd2ffe3c1bc308829"
+        }
+      }
+    },
+    {
+      "track": "metaqa_mini",
+      "run": "phase1",
+      "path": "metaqa_mini/phase1",
+      "n": 12,
+      "metrics": {
+        "num_examples": 12,
+        "gold_recall": 0.5,
+        "all_found": 0.4167,
+        "evidence_recall": 0.7861,
+        "exact_match": 0.25,
+        "relaxed_em": 0.5833,
+        "extracted_em": 0.25,
+        "token_f1": 0.4685,
+        "semantic_similarity": 0.6008,
+        "llm_judge": 0.3333,
+        "ragas_faithfulness": 0.8889,
+        "ragas_context_recall": 0.6389
+      },
+      "fingerprint": {
+        "dataset": "metaqa_mini",
+        "phase": 1,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_mini.jsonl",
+        "eval_sha256": "48a62a9aedef6a282acff1c20b04ac8fbc80b3054ae6e0a36b08d155277dd270",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest_mini.txt",
+          "sha256": "f83ea02b90b098842331615ca14dc1450c9979d73178424fecb1b195953702a4",
+          "files": 50
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "judge_model": "gpt-5.6-luna",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": "default",
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "metaqa-mini-graph"
+      },
+      "run_meta_generated": "2026-11-13T01:13:21+00:00",
+      "answered": 12,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "bytes": 4675,
+          "sha256": "b53bcc889871d9f626809bb1d84a94d63d87eda30d95a6c44067f07e115e2ef6"
+        },
+        "eval_results.json": {
+          "bytes": 9204,
+          "sha256": "0827f81444121554656dd620289ccc9aa330840964d434f21f656e49963de795"
+        },
+        "per_question.jsonl": {
+          "bytes": 3804,
+          "sha256": "309628d17d8b847a954bf221a5e5dc83370bb53cc4ff9c04da892a73a48e9ee4"
+        },
+        "results.json": {
+          "bytes": 1694,
+          "sha256": "c4192ca3f486168f6bf10fff41765d88505524a57445ff61cf4a96a0ff533608"
+        },
+        "run_meta.json": {
+          "bytes": 1803,
+          "sha256": "4a5a8ea64f7705e4b34469102ccb54ce08ea95a8e46b266a1794b329ea4c0fe2"
+        }
+      }
+    },
+    {
+      "track": "metaqa_mini",
+      "run": "phase2",
+      "path": "metaqa_mini/phase2",
+      "n": 12,
+      "metrics": {
+        "num_examples": 12,
+        "gold_recall": 0.5417,
+        "all_found": 0.5,
+        "evidence_recall": 0.9056,
+        "exact_match": 0.25,
+        "relaxed_em": 0.4167,
+        "extracted_em": 0.25,
+        "token_f1": 0.4431,
+        "semantic_similarity": 0.6155,
+        "llm_judge": 0.5,
+        "ragas_faithfulness": 0.7593,
+        "ragas_context_recall": 0.625
+      },
+      "fingerprint": {
+        "dataset": "metaqa_mini",
+        "phase": 2,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_mini.jsonl",
+        "eval_sha256": "48a62a9aedef6a282acff1c20b04ac8fbc80b3054ae6e0a36b08d155277dd270",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest_mini.txt",
+          "sha256": "f83ea02b90b098842331615ca14dc1450c9979d73178424fecb1b195953702a4",
+          "files": 50
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "judge_model": "gpt-5.6-luna",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": "default",
+        "extraction_temperature": "default",
+        "include_neighbours": true,
+        "graph_database": "metaqa-mini-graph"
+      },
+      "run_meta_generated": "2026-11-13T03:06:43+00:00",
+      "answered": 12,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "entity_cache.json": {
+          "bytes": 1152,
+          "sha256": "2a978887e4fd8e2734c75fa0cf04e84eddabbe52da54e1f4bdd40b16c1ca44af"
+        },
+        "eval_report.txt": {
+          "bytes": 4721,
+          "sha256": "01bec042dd0da30e71cec6cd180bd7c100acbbdc69330f583ca5dde5190b0e8d"
+        },
+        "eval_results.json": {
+          "bytes": 10370,
+          "sha256": "889a579f7a51410625f4895d84e0df6a0ddfe18cb98a481d396e26b21afb5873"
+        },
+        "ingest_meta.json": {
+          "bytes": 418,
+          "sha256": "15ebc0f189f8610d6b14a70617fcf740f495e4574d20b40fada03e138c2420fc"
+        },
+        "per_question.jsonl": {
+          "bytes": 3964,
+          "sha256": "07ff52b15b146f9f06a79f9fd0b31e44b34b55ba14884c1af61f6c5eed3880d1"
+        },
+        "results.json": {
+          "bytes": 1749,
+          "sha256": "304e7d488d97955313e00822387f0d9b8dd4c7c61b8a316f4dd1c362a6c671dd"
+        },
+        "run_meta.json": {
+          "bytes": 2280,
+          "sha256": "ec2f66a467d58880d48cae1a22956259564a984ccc61a8a2292692281fe9108c"
+        }
+      }
+    },
+    {
+      "track": "metaqa_mini",
+      "run": "phase2_no_neighbours",
+      "path": "metaqa_mini/phase2_no_neighbours",
+      "n": 12,
+      "metrics": {
+        "num_examples": 12,
+        "gold_recall": 0.5417,
+        "all_found": 0.5,
+        "evidence_recall": 0.7618,
+        "exact_match": 0.4167,
+        "relaxed_em": 0.5,
+        "extracted_em": 0.4167,
+        "token_f1": 0.4778,
+        "semantic_similarity": 0.6383,
+        "llm_judge": 0.5,
+        "ragas_faithfulness": 0.7037,
+        "ragas_context_recall": 0.6667
+      },
+      "fingerprint": {
+        "dataset": "metaqa_mini",
+        "phase": 2,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_mini.jsonl",
+        "eval_sha256": "48a62a9aedef6a282acff1c20b04ac8fbc80b3054ae6e0a36b08d155277dd270",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest_mini.txt",
+          "sha256": "f83ea02b90b098842331615ca14dc1450c9979d73178424fecb1b195953702a4",
+          "files": 50
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "judge_model": "gpt-5.6-luna",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": "default",
+        "extraction_temperature": "default",
+        "include_neighbours": false,
+        "graph_database": "metaqa-mini-graph"
+      },
+      "run_meta_generated": "2026-11-13T03:08:55+00:00",
+      "answered": 12,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "entity_cache.json": {
+          "bytes": 1152,
+          "sha256": "2a978887e4fd8e2734c75fa0cf04e84eddabbe52da54e1f4bdd40b16c1ca44af"
+        },
+        "eval_report.txt": {
+          "bytes": 4658,
+          "sha256": "b60492ecd6f35431ee96fc171f17830e7986045d4b1e2378594cd8fa3b508811"
+        },
+        "eval_results.json": {
+          "bytes": 9193,
+          "sha256": "0c22cc3ca8e23b465cef08cc97b9231e96b6c8771aa87cabebe591d1d159611c"
+        },
+        "per_question.jsonl": {
+          "bytes": 3961,
+          "sha256": "5ef1645af1e6aa336e367b84b9e42ab21d26729220efeadad438e059c4be9046"
+        },
+        "results.json": {
+          "bytes": 1684,
+          "sha256": "9cf571d675f248a9c544da07863da4d4332fbda7eb3b35dcacdf7114596cca3f"
+        },
+        "run_meta.json": {
+          "bytes": 1811,
+          "sha256": "67a74faed025fa85372f57bd9b787af706133a81b429834ed612a8be44bdbb10"
+        }
+      }
+    },
+    {
+      "track": "metaqa_mini30",
+      "run": "closed_book",
+      "path": "metaqa_mini30/closed_book",
+      "n": 30,
+      "metrics": {
+        "num_examples": 30,
+        "gold_recall": 0.0,
+        "all_found": 0.0,
+        "evidence_recall": 0.0,
+        "exact_match": 0.0,
+        "relaxed_em": 0.0,
+        "extracted_em": 0.0,
+        "token_f1": 0.0,
+        "semantic_similarity": 0.1545,
+        "llm_judge": 0.0
+      },
+      "fingerprint": {
+        "dataset": "metaqa_mini30",
+        "phase": 1,
+        "closed_book": true,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_mini30.jsonl",
+        "eval_sha256": "87dfa72b64f0663f02960048b6bb0019477cdaa091880b4bf5c63c5b8fcf5de5",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest_mini30.txt",
+          "sha256": "3f82509622721c299e99bcb8f4053d1f3b0ae3316ad9ef43c3a0ff77d515a839",
+          "files": 100
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "judge_model": "gpt-5.6-luna",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": "default",
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "metaqa-mini30-graph"
+      },
+      "run_meta_generated": "2026-11-13T01:12:18+00:00",
+      "answered": 30,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "bytes": 7614,
+          "sha256": "758b41e0981a7cd785083d333d570ca5aa19020b1ad3d15134a758060659282b"
+        },
+        "eval_results.json": {
+          "bytes": 14338,
+          "sha256": "408123377f2b807171ef191700e3c121b4e18182f1556e2cca9e853a0f3a2e33"
+        },
+        "per_question.jsonl": {
+          "bytes": 9210,
+          "sha256": "7573aaa7754702f87a502c4dddcbe55569997df825212f5255940d6c7e72dafb"
+        },
+        "results.json": {
+          "bytes": 3407,
+          "sha256": "ca4e8fdc2ce636864cfd41c95255c97cee5ca4b97b8f04784382eb2b0317b39c"
+        },
+        "run_meta.json": {
+          "bytes": 1812,
+          "sha256": "8cdf873fe39bf9739fac8cfcff80721cb27cf3cb79cedd5002c3fa9492ec75ab"
+        }
+      }
+    },
+    {
+      "track": "metaqa_mini30",
+      "run": "phase1",
+      "path": "metaqa_mini30/phase1",
+      "n": 30,
+      "metrics": {
+        "num_examples": 30,
+        "gold_recall": 0.6806,
+        "all_found": 0.6,
+        "evidence_recall": 0.8133,
+        "exact_match": 0.3667,
+        "relaxed_em": 0.5333,
+        "extracted_em": 0.3667,
+        "token_f1": 0.5271,
+        "semantic_similarity": 0.6469,
+        "llm_judge": 0.6333,
+        "ragas_faithfulness": 0.8792,
+        "ragas_context_recall": 0.7367
+      },
+      "fingerprint": {
+        "dataset": "metaqa_mini30",
+        "phase": 1,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_mini30.jsonl",
+        "eval_sha256": "87dfa72b64f0663f02960048b6bb0019477cdaa091880b4bf5c63c5b8fcf5de5",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest_mini30.txt",
+          "sha256": "3f82509622721c299e99bcb8f4053d1f3b0ae3316ad9ef43c3a0ff77d515a839",
+          "files": 100
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "judge_model": "gpt-5.6-luna",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": "default",
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "metaqa-mini30-graph"
+      },
+      "run_meta_generated": "2026-11-13T00:56:48+00:00",
+      "answered": 30,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "bytes": 9510,
+          "sha256": "de4831d6cb0268d9a99b908ac2c57cd313c72d6011a2402a56d6f91395b5d104"
+        },
+        "eval_results.json": {
+          "bytes": 19022,
+          "sha256": "7d91c7c2e59c96cc98cc29bb01658175d2efffa7cd2fc1783e36785e00197a9a"
+        },
+        "ingest_meta.json": {
+          "bytes": 273,
+          "sha256": "64db9625b39c14dd089b23c0076878a7cfe3a635d3075fcb75d2d38136472624"
+        },
+        "per_question.jsonl": {
+          "bytes": 9629,
+          "sha256": "73afe9a9d2686f5b0c40355ae409954c98c79fd1bb5c5d4710265775f71f3d13"
+        },
+        "results.json": {
+          "bytes": 4334,
+          "sha256": "90cee73afdfb093ab79445bfc22252bb85ac1cb536a65b63b7fe4ed1ac11d877"
+        },
+        "run_meta.json": {
+          "bytes": 2125,
+          "sha256": "3c4f0f008c49d73a29a898f4cf75f393802cf2e819a25c4c0d6ec34985dcbf86"
+        }
+      }
+    },
+    {
+      "track": "metaqa_mini30",
+      "run": "phase2",
+      "path": "metaqa_mini30/phase2",
+      "n": 30,
+      "metrics": {
+        "num_examples": 30,
+        "gold_recall": 0.8222,
+        "all_found": 0.7333,
+        "evidence_recall": 0.9589,
+        "exact_match": 0.3333,
+        "relaxed_em": 0.5667,
+        "extracted_em": 0.3333,
+        "token_f1": 0.562,
+        "semantic_similarity": 0.6833,
+        "llm_judge": 0.7333,
+        "ragas_faithfulness": 0.7192,
+        "ragas_context_recall": 0.9194
+      },
+      "fingerprint": {
+        "dataset": "metaqa_mini30",
+        "phase": 2,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_mini30.jsonl",
+        "eval_sha256": "87dfa72b64f0663f02960048b6bb0019477cdaa091880b4bf5c63c5b8fcf5de5",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest_mini30.txt",
+          "sha256": "3f82509622721c299e99bcb8f4053d1f3b0ae3316ad9ef43c3a0ff77d515a839",
+          "files": 100
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "judge_model": "gpt-5.6-luna",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": "default",
+        "extraction_temperature": "default",
+        "include_neighbours": true,
+        "graph_database": "metaqa-mini30-graph"
+      },
+      "run_meta_generated": "2026-11-13T02:58:33+00:00",
+      "answered": 30,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "entity_cache.json": {
+          "bytes": 2687,
+          "sha256": "0f73601f1b160ef45c726f6cecc58d444d59138888011e3b46e3a967420c8caf"
+        },
+        "eval_report.txt": {
+          "bytes": 10287,
+          "sha256": "27550366c389316347ce6cd5d6909ee850b372d398f8e2129a8985ea93256d87"
+        },
+        "eval_results.json": {
+          "bytes": 20952,
+          "sha256": "3749f96e8c2e29e186996780b28f9c741e53effcfaa4273cbed90158fc27ae5b"
+        },
+        "ingest_meta.json": {
+          "bytes": 424,
+          "sha256": "a6469d1eea1b06efad69457bfab4d3ff85367b36adac61e1a0eaa220db49d1f5"
+        },
+        "per_question.jsonl": {
+          "bytes": 9938,
+          "sha256": "ec944b8d1d1530fcb7424e85a04728cd0ee83c2d414a11423d068ad8dd66ce8f"
+        },
+        "results.json": {
+          "bytes": 5107,
+          "sha256": "0cff520513d6012f2d7998e80047744463b6b053d6bedeaa1be919800247c24e"
+        },
+        "run_meta.json": {
+          "bytes": 2296,
+          "sha256": "2157b90417e3b6d4901a61365eec75d5e34013eb1f4d93c4bc9ec178733b60a5"
+        }
+      }
+    },
+    {
+      "track": "metaqa_mini30",
+      "run": "phase2_no_neighbours",
+      "path": "metaqa_mini30/phase2_no_neighbours",
+      "n": 30,
+      "metrics": {
+        "num_examples": 30,
+        "gold_recall": 0.7389,
+        "all_found": 0.6667,
+        "evidence_recall": 0.8089,
+        "exact_match": 0.3333,
+        "relaxed_em": 0.5333,
+        "extracted_em": 0.3333,
+        "token_f1": 0.5682,
+        "semantic_similarity": 0.6853,
+        "llm_judge": 0.7,
+        "ragas_faithfulness": 0.8314,
+        "ragas_context_recall": 0.8167
+      },
+      "fingerprint": {
+        "dataset": "metaqa_mini30",
+        "phase": 2,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_mini30.jsonl",
+        "eval_sha256": "87dfa72b64f0663f02960048b6bb0019477cdaa091880b4bf5c63c5b8fcf5de5",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest_mini30.txt",
+          "sha256": "3f82509622721c299e99bcb8f4053d1f3b0ae3316ad9ef43c3a0ff77d515a839",
+          "files": 100
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "judge_model": "gpt-5.6-luna",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": "default",
+        "extraction_temperature": "default",
+        "include_neighbours": false,
+        "graph_database": "metaqa-mini30-graph"
+      },
+      "run_meta_generated": "2026-11-13T03:17:39+00:00",
+      "answered": 30,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "entity_cache.json": {
+          "bytes": 2687,
+          "sha256": "0f73601f1b160ef45c726f6cecc58d444d59138888011e3b46e3a967420c8caf"
+        },
+        "eval_report.txt": {
+          "bytes": 9413,
+          "sha256": "781bb5d30c0c9f2808fd78f98377f6f4f5758f2e915e2df52f5385e8960aa7b8"
+        },
+        "eval_results.json": {
+          "bytes": 19291,
+          "sha256": "3d716fe1170fe56a23cba628f1db32418d9b93d4e7e8c9bb2d2ff55bedc1f836"
+        },
+        "ingest_meta.json": {
+          "bytes": 459,
+          "sha256": "bcac2cae68507537fd2b5cc85a708f6d79ff9ab704ea1d1ddc1ca5c676149b67"
+        },
+        "per_question.jsonl": {
+          "bytes": 10008,
+          "sha256": "2c619d5c9d6e0c55316f738af42a616c7d4f3dbfc9645368c1bb7d016ee33ea9"
+        },
+        "results.json": {
+          "bytes": 4236,
+          "sha256": "e43f8f18fe3c354d7d66b24f19529ebba10a8eac38771370ed0ca32389d065ee"
+        },
+        "run_meta.json": {
+          "bytes": 2335,
+          "sha256": "e6c5fc5f55fccdf2056b30c1b035f5c5051d1f399bb935f0871f6ac2190ae1da"
+        }
+      }
+    },
+    {
+      "track": "metaqa_mini30",
+      "run": "phase3",
+      "path": "metaqa_mini30/phase3",
+      "n": 30,
+      "metrics": {
+        "num_examples": 30,
+        "gold_recall": 0.8889,
+        "all_found": 0.8333,
+        "evidence_recall": 1.0,
+        "exact_match": 0.3667,
+        "relaxed_em": 0.6,
+        "extracted_em": 0.3667,
+        "token_f1": 0.6045,
+        "semantic_similarity": 0.7114,
+        "llm_judge": 0.8667,
+        "ragas_faithfulness": 0.772,
+        "ragas_context_recall": 0.9139
+      },
+      "fingerprint": {
+        "dataset": "metaqa_mini30",
+        "phase": 3,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_mini30.jsonl",
+        "eval_sha256": "87dfa72b64f0663f02960048b6bb0019477cdaa091880b4bf5c63c5b8fcf5de5",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest_mini30.txt",
+          "sha256": "3f82509622721c299e99bcb8f4053d1f3b0ae3316ad9ef43c3a0ff77d515a839",
+          "files": 100
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "judge_model": "gpt-5.6-luna",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": "default",
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "metaqa-mini30-ontology-graph",
+        "ontology_sha256": "461f37ed9d3cf260672b58018918941d65a99cbc0f6caa0e1d3c246ca79379a8"
+      },
+      "run_meta_generated": "2026-11-13T01:10:09+00:00",
+      "answered": 30,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "bytes": 10251,
+          "sha256": "4396559e15d5145bfecf986041e4706454a9ff107b40a76aab4beee9f9b4b8c6"
+        },
+        "eval_results.json": {
+          "bytes": 21311,
+          "sha256": "e52589b2a2b90d638a2d516c165a9a0618a82c8a4dfc6cc48bf15127268842cf"
+        },
+        "ingest_meta.json": {
+          "bytes": 595,
+          "sha256": "23a0393ea49c88afa44e048f3b68d8fa647cc8381718acfef0d16dfcbc31de49"
+        },
+        "per_question.jsonl": {
+          "bytes": 9296,
+          "sha256": "618d1198bad82f7200e7be211e52ca025f8b6845fd7e282ac0cbb27145922c49"
+        },
+        "results.json": {
+          "bytes": 5076,
+          "sha256": "5689e5e422afcd7bb5c8abe361f76444daa4d25287458584e538ae7d82cff8da"
+        },
+        "run_meta.json": {
+          "bytes": 2566,
+          "sha256": "c1816e9ca5985623ed0f22129550c06ecb5e3150d7bb8b2f424f76f6feb4996b"
+        }
+      }
+    },
+    {
+      "track": "metaqa_mini30",
+      "run": "phase3b",
+      "path": "metaqa_mini30/phase3b",
+      "n": 30,
+      "metrics": {
+        "num_examples": 30,
+        "gold_recall": 0.8389,
+        "all_found": 0.7667,
+        "evidence_recall": 0.9833,
+        "exact_match": 0.2667,
+        "relaxed_em": 0.5667,
+        "extracted_em": 0.2667,
+        "token_f1": 0.5521,
+        "semantic_similarity": 0.6623,
+        "llm_judge": 0.7667,
+        "ragas_faithfulness": 0.6813,
+        "ragas_context_recall": 0.8883
+      },
+      "fingerprint": {
+        "dataset": "metaqa_mini30",
+        "phase": 3,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_mini30.jsonl",
+        "eval_sha256": "87dfa72b64f0663f02960048b6bb0019477cdaa091880b4bf5c63c5b8fcf5de5",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest_mini30.txt",
+          "sha256": "3f82509622721c299e99bcb8f4053d1f3b0ae3316ad9ef43c3a0ff77d515a839",
+          "files": 100
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "judge_model": "gpt-5.6-luna",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": "default",
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "metaqa-mini30-ontology-b-graph",
+        "ontology_sha256": "461f37ed9d3cf260672b58018918941d65a99cbc0f6caa0e1d3c246ca79379a8"
+      },
+      "run_meta_generated": "2026-11-13T22:56:36+00:00",
+      "answered": 30,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "bytes": 10275,
+          "sha256": "0dc4eda5b77ca3e41c05555a28f1c8984810a025eec0ce63d5b855456d65a2f5"
+        },
+        "eval_results.json": {
+          "bytes": 21772,
+          "sha256": "cfe41734e415268b4f0af97be2bdea7f284db56ef79faac8c92f57ee903e588b"
+        },
+        "ingest_meta.json": {
+          "bytes": 743,
+          "sha256": "f60fba32516eb2e116e5a4eca531737072d3a0cfa4fcb8ecf3d95f00adc54b8a"
+        },
+        "per_question.jsonl": {
+          "bytes": 9398,
+          "sha256": "014d26bee254f76349f0bd48ab07b6f3761483f37fbe3c548f336db37cf03ba2"
+        },
+        "results.json": {
+          "bytes": 5078,
+          "sha256": "9ca556d467d8891c8a35e02ea009fdebcd03810731df1c88492ee88d65d22e29"
+        },
+        "run_meta.json": {
+          "bytes": 2753,
+          "sha256": "db39d9131277078d14e041e5644e5c4edb9ec3a3c16835ec964c2ba2dcee0e57"
+        }
+      }
+    }
+  ],
+  "archive": {
+    "path": "checkpoints/v1/archive/results_detailed_v1.tar.zst",
+    "sha256": "6c2f32799fb679b8d85a0f24dda22e93b32ce23ae4865d08c5e95bc7baa8b47d",
+    "bytes": 1218083,
+    "tracked": false,
+    "reason": "Contains MetaQA document context text; keep local per repository data policy. Compact metrics/per-question files are tracked."
+  },
+  "excluded": [
+    "results/_archive/** (old failed/stale runs)",
+    "results/**/results_detailed.json (archived locally, not tracked)",
+    "results/**/entity_cache.json is included for Phase 2 runs"
+  ],
+  "status": {
+    "full_metaqa": "P1/P2/P3a/P3b all 212/212 with 0 errors; benchmarks complete",
+    "full_closed_book": "not run",
+    "hotpotqa": "historical/retired, not part of this freeze"
+  }
+}

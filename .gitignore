@@ -47,3 +47,6 @@ digest.txt
 # phase2_graph_rag/hotpot_*.txt
 # MetaQA/phase run outputs (generated)
 results/
+
+# Large detailed checkpoints (MetaQA document context text; keep local)
+checkpoints/*/archive/

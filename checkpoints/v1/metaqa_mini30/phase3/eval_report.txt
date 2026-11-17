@@ -1,0 +1,214 @@
+================================================================================
+  Phase 3 (Ontology RAG) — Evaluation Report
+================================================================================
+
+SUMMARY
+----------------------------------------
+  Total questions     : 30
+  Deterministic metrics
+  Gold Recall (set)   : 0.8889
+  All Found           : 0.8333
+  Evidence Recall     : 1.0
+  Other metrics
+  Exact Match         : 0.3667
+  Relaxed EM          : 0.6
+  Extracted EM        : 0.3667
+  Token F1            : 0.6045
+  Semantic Similarity : 0.7114
+  LLM-as-Judge (secondary): 0.8667
+  RAGAS Faithfulness  : 0.772
+  RAGAS Context Recall: 0.9139
+
+BY GROUP (hop / evidence size)
+----------------------------------------
+  group             n  gold_recall  all_found  evid_recall   judge
+  hop 1            10        0.800      0.800        1.000   0.800
+  hop 2            10        0.867      0.700        1.000   0.800
+  hop 3            10        1.000      1.000        1.000   1.000
+  hop 2+3          20        0.933      0.850        1.000   0.900
+  evidence 1       10        0.800      0.800        1.000   0.800
+  evidence 2       10        0.967      0.900        1.000   1.000
+  evidence 3-5     10        0.900      0.800        1.000   0.800
+
+PER-QUESTION BREAKDOWN
+----------------------------------------
+
+Q1: what movies was Thommy Berggren an actor in
+  Ground truth   : Giliap
+  LLM answer     : Giliap
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q2: what does Dida Diafat act in
+  Ground truth   : Mutants
+  LLM answer     : Virgile
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1330  Judge=INCORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q3: which films did Abhinay Deo direct
+  Ground truth   : Delhi Belly
+  LLM answer     : Delhi Belly
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q4: the movie Losing Isaiah starred who
+  Ground truth   : Halle Berry, Jessica Lange
+  LLM answer     : Jessica Lange, Halle Berry, David Strathairn, Cuba Gooding Jr., Samuel L. Jackson
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.5000
+  Semantic=0.6945  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q5: who is the director of A Slipping-Down Life
+  Ground truth   : Toni Kalem
+  LLM answer     : Toni Kalem
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q6: what kind of movie is Drones
+  Ground truth   : Comedy
+  LLM answer     : Office comedy film
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.5000
+  Semantic=0.5907  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q7: what genre is Eyes of Laura Mars in
+  Ground truth   : Thriller
+  LLM answer     : Supernatural horror thriller, giallo, slasher film
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.2857
+  Semantic=0.4470  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q8: what language is Man Bites Dog in
+  Ground truth   : French
+  LLM answer     : French
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q9: which film did Scott Prendergast write the story for
+  Ground truth   : Kabluey
+  LLM answer     : Kabluey
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q10: what films did Patricia Hearst write
+  Ground truth   : Patty Hearst
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0983  Judge=INCORRECT  Faith=nan  CtxRecall=0.6667
+
+Q11: the actor George Harrison appeared in the same movie with who
+  Ground truth   : John Lennon, The Beatles, Paul McCartney
+  LLM answer     : John Lennon, Paul McCartney, and Ringo Starr
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.6667
+  Semantic=0.8479  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q12: the movies starred by Hanna Schygulla were in which languages
+  Ground truth   : German
+  LLM answer     : Lili Marleen — German; The Marriage of Maria Braun — German, English; Beware of a Holy Whore — German, English, French, Spanish
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.0952
+  Semantic=0.3447  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q13: what are the main languages in Nina Hoss acted films
+  Ground truth   : German
+  LLM answer     : German
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q14: what were the release years the films starred by Alan Mowbray
+  Ground truth   : 1941, 1938
+  LLM answer     : 1934, 1935, 1937, 1938, 1941
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.5714
+  Semantic=0.7180  Judge=CORRECT  Faith=0.8000  CtxRecall=0.5000
+
+Q15: who acted in the films directed by Udayan Prasad
+  Ground truth   : Maria Bello, Eddie Redmayne, William Hurt, Kristen Stewart
+  LLM answer     : Om Puri, Rachel Griffiths, Akbar Kurtha, Stellan Skarsgård, Gopi Desai, Harish Patel, Sarah-Jane Potts, Geoffrey Bateman, Judi Jones, Rowena King, William Hurt, Maria Bello, Kristen Stewart, Eddie Redmayne, Kaori Momoi, Ashlynn Ross
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.4000
+  Semantic=0.5114  Judge=CORRECT  Faith=1.0000  CtxRecall=0.2500
+
+Q16: the films directed by José Ferrer were written by who
+  Ground truth   : Ronald Alexander, Grace Metalious
+  LLM answer     : Gore Vidal, Bryan Forbes, Richard Maibaum, Ronald Alexander
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.3333
+  Semantic=0.4656  Judge=INCORRECT  Faith=0.0000  CtxRecall=0.5000
+
+Q17: which movies share the screenwriter with Caged Heat
+  Ground truth   : Stop Making Sense, The Truth About Charlie
+  LLM answer     : The Truth About Charlie
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.6667
+  Semantic=0.7299  Judge=INCORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q18: who are the directors of the films written by Walter DeLeon
+  Ground truth   : Leo McCarey, George Marshall
+  LLM answer     : George Marshall, Leo McCarey
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=1.0000
+  Semantic=0.8633  Judge=CORRECT  Faith=0.5000  CtxRecall=1.0000
+
+Q19: which person directed the films written by Michael Arlen
+  Ground truth   : Clarence Brown, Alexander Hall
+  LLM answer     : Clarence Brown, Alexander Hall
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=0.0000  CtxRecall=1.0000
+
+Q20: when were the movies written by Roland Kibbee released
+  Ground truth   : 1946, 1953
+  LLM answer     : A Night in Casablanca: May 10, 1946; Angel on My Shoulder: September 20, 1946; Three Sailors and a Girl: November 23, 1953
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.1818
+  Semantic=0.3942  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q21: who directed films that share actors with the film Wheel of Time
+  Ground truth   : Rick Ray
+  LLM answer     : Rick Ray
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=0.0000  CtxRecall=1.0000
+
+Q22: what genres do the movies that share actors with One Man Up fall under
+  Ground truth   : Thriller
+  LLM answer     : Thriller
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=0.0000  CtxRecall=0.5000
+
+Q23: what are the languages spoken in the movies whose actors also appear in Tarzan's Greatest Adventure
+  Ground truth   : English
+  LLM answer     : English
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=nan  CtxRecall=1.0000
+
+Q24: who are the actors in the movies directed by the director of Zombies of Mora Tau
+  Ground truth   : Michael Granger, Richard Denning
+  LLM answer     : Gregg Palmer, Allison Hayes, Autumn Russell, Joel Ashley, Morris Ankrum, Marjorie Eaton, Gene Roth, Leonard P. Geer, Karl Davis, William Baskin, Richard Denning, Angela Stevens, S. John Launer, Michael Granger, Gregory Gaye, Linda Bennett, Tristram Coffin, Harry Lauter, Larry J. Blake, Charles Evans, Marshall Thompson, Shirley Patterson (as Shawn Smith), Kim Spalding, Dabbs Greer, Paul Langton, Robert Bice, Richard Benedict, Ann Doran, Richard Hervey, Thom Carney, Ray Corrigan
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.1111
+  Semantic=0.4964  Judge=CORRECT  Faith=nan  CtxRecall=1.0000
+
+Q25: who starred films for the director of Son of the Bride
+  Ground truth   : Soledad Villamil, Ricardo Darín
+  LLM answer     : Ricardo Darín, Héctor Alterio, Norma Aleandro, Eduardo Blanco, Natalia Verbeke, Denis Leary, Terence Stamp, Aitana Sánchez-Gijón, Michael Badalucco, Gene Canfield, Marj Dusay, Danny Nucci, Soledad Villamil, Pablo Rago, Javier Godino, Guillermo Francella
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.2222
+  Semantic=0.6612  Judge=CORRECT  Faith=nan  CtxRecall=1.0000
+
+Q26: what types are the movies directed by the director of Let's Go to Prison
+  Ground truth   : Comedy
+  LLM answer     : Comedy, sketch comedy, film adaptation
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.3333
+  Semantic=0.6538  Judge=CORRECT  Faith=0.0000  CtxRecall=1.0000
+
+Q27: the movies that share directors with the movie Ratcatcher were in which genres
+  Ground truth   : Drama
+  LLM answer     : Psychological drama, psychological drama
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.4000
+  Semantic=0.6787  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q28: when did the films release whose directors also directed You, the Living
+  Ground truth   : 2014, 2000, 1975, 1970
+  LLM answer     : A Swedish Love Story: April 24, 1970; Giliap: November 16, 1975; Songs from the Second Floor: May 2000 (Cannes), October 6, 2000 (Sweden); A Pigeon Sat on a Branch Reflecting on Existence: September 2, 2014 (Venice), November 14, 2014 (Sweden)
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.2000
+  Semantic=0.3266  Judge=CORRECT  Faith=nan  CtxRecall=1.0000
+
+Q29: who are the directors of films whose writers also wrote Nim's Island
+  Ground truth   : Mark Levin
+  LLM answer     : Jennifer Flackett, Mark Levin
+  EM=0  RelaxedEM=1  ExtractedEM=0  F1=0.6667
+  Semantic=0.6879  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
+
+Q30: what were the release years of the films that share writers with the film Red Salute
+  Ground truth   : 1935
+  LLM answer     : 1935
+  EM=1  RelaxedEM=1  ExtractedEM=1  F1=1.0000
+  Semantic=1.0000  Judge=CORRECT  Faith=1.0000  CtxRecall=1.0000
