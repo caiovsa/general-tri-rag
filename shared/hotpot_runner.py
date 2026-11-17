@@ -112,6 +112,7 @@ def run_fingerprint(dataset, phase: int, closed_book: bool = False) -> dict:
         "prompt_style": dataset.prompt_style,
         "prompt_sha256": metaqa_prompt_template_hash() if shared_prompt else None,
         "generation_model": settings.GENERATION_MODEL,
+        "generation_reasoning_effort": settings.GENERATION_REASONING_EFFORT,
         "judge_model": settings.JUDGE_MODEL,
         "extraction_model": settings.EXTRACTION_MODEL,
         "embedding_model": settings.EMBEDDING_MODEL,
@@ -371,7 +372,8 @@ def run_phase(pipeline_func, phase: int, phase_name: str, closed_book: bool = Fa
     print(f"  top_k      : {dataset.top_k}")
     temp = settings.GENERATION_TEMPERATURE if settings.GENERATION_TEMPERATURE is not None else "default (1)"
     print(f"  models     : gen={settings.GENERATION_MODEL} judge={settings.JUDGE_MODEL} "
-          f"extract={settings.EXTRACTION_MODEL} | temperature={temp}")
+          f"extract={settings.EXTRACTION_MODEL} | temperature={temp} "
+          f"| reasoning={settings.GENERATION_REASONING_EFFORT or 'default'}")
     if dataset.doc_list:
         print(f"  corpus     : {dataset.doc_list}")
     print()
@@ -388,6 +390,7 @@ def run_phase(pipeline_func, phase: int, phase_name: str, closed_book: bool = Fa
     if dataset.prompt_style == "shared":
         run_meta.update({
             "generation_model": settings.GENERATION_MODEL,
+            "generation_reasoning_effort": settings.GENERATION_REASONING_EFFORT,
             "judge_model": settings.JUDGE_MODEL,
             "extraction_model": settings.EXTRACTION_MODEL,
             "temperature": settings.GENERATION_TEMPERATURE if settings.GENERATION_TEMPERATURE is not None else "default",

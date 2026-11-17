@@ -571,6 +571,8 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
     run_meta = _read_run_meta(Path(data_file))
     fingerprint = (run_meta or {}).get("fingerprint") or {}
     generation_model = fingerprint.get("generation_model", settings.GENERATION_MODEL)
+    generation_reasoning_effort = fingerprint.get(
+        "generation_reasoning_effort", settings.GENERATION_REASONING_EFFORT)
     judge_model = fingerprint.get("judge_model", settings.JUDGE_MODEL)
     temperature = fingerprint.get("temperature", settings.GENERATION_TEMPERATURE)
     if temperature is None:
@@ -683,6 +685,7 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
         "data_file": str(data_file),
         "runner": runner_command,
         "generation_model": generation_model,
+        "generation_reasoning_effort": generation_reasoning_effort,
         "judge_model": judge_model,
         "ragas_model": settings.RAGAS_MODEL,
         "extraction_model": fingerprint.get("extraction_model", settings.EXTRACTION_MODEL),

@@ -42,6 +42,9 @@ class Settings:
     # gpt-5 / gpt-6 families accept only the provider default (1); when unset we
     # send no temperature parameter at all and record "default".
     GENERATION_TEMPERATURE: float | None = _optional_float("GENERATION_TEMPERATURE")
+    # "none" disables reasoning on models that support it; None leaves the
+    # provider default untouched (v1 behavior).
+    GENERATION_REASONING_EFFORT: str | None = os.getenv("GENERATION_REASONING_EFFORT") or None
     EXTRACTION_TEMPERATURE: float | None = _optional_float("EXTRACTION_TEMPERATURE")
     # RAGAS injects temperature=1e-8, which gpt-5/gpt-6 models reject. Keep this
     # on a model that supports it (recorded in run_meta / eval metadata).

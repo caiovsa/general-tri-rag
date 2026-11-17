@@ -38,6 +38,7 @@ must use the `openrouter/` prefix so the wrapper selects the OpenRouter key and 
 # .env
 GENERATION_MODEL=openrouter/qwen/qwen3.5-9b
 GENERATION_TEMPERATURE=0
+GENERATION_REASONING_EFFORT=none
 OPENROUTER_API_KEY=sk-or-v1-...
 ```
 

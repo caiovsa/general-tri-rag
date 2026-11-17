@@ -9,6 +9,7 @@ def generate_completion(
     prompt: str,
     system_message: str = "You are a helpful assistant.",
     temperature: float | None = None,  # None -> settings.GENERATION_TEMPERATURE
+    reasoning_effort: str | None = None,  # None -> settings.GENERATION_REASONING_EFFORT
     max_retries: int = 3,
     #max_tokens: int = 1024,
 ) -> str:
@@ -24,6 +25,15 @@ def generate_completion(
     # Luna models accept only the provider default; omit the parameter entirely
     # instead of sending a value that would 400.
     temperature_kwargs = {} if temperature is None else {"temperature": temperature}
+    reasoning_effort = reasoning_effort or settings.GENERATION_REASONING_EFFORT
+    reasoning_kwargs = {}
+    if reasoning_effort:
+        if settings.GENERATION_MODEL.startswith("openrouter/"):
+            # OpenRouter's unified reasoning field; ``exclude`` only hides the
+            # trace, while ``effort: none`` actually disables reasoning.
+            reasoning_kwargs = {"extra_body": {"reasoning": {"effort": reasoning_effort}}}
+        else:
+            reasoning_kwargs = {"reasoning_effort": reasoning_effort}
 
     last_exc: Exception | None = None
     for attempt in range(max_retries + 1):
@@ -32,6 +42,7 @@ def generate_completion(
                 model=settings.GENERATION_MODEL,
                 messages=messages,
                 **temperature_kwargs,
+                **reasoning_kwargs,
                 #max_tokens=max_tokens,
                 **llm_route(settings.GENERATION_MODEL),
             )
