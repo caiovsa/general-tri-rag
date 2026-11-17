@@ -2,8 +2,8 @@
   "schema_version": 2,
   "checkpoint": "v2",
   "model_label": "luna",
-  "created_at": "2026-11-17T20:04:59+00:00",
-  "source_commit": "5f8510170842662ba6b8cd10e6d6dc8df96ccc1a",
+  "created_at": "2026-11-17T23:34:02+00:00",
+  "source_commit": "262f94932d66af0eead18de4928987d84be3150c",
   "results_tag": "luna_v2",
   "protocol": {
     "dataset": "metaqa",
@@ -26,7 +26,9 @@
     "ragas": {
       "model": "gpt-6-luna",
       "reasoning_effort": "none",
-      "temperature": 0
+      "temperature": 0,
+      "version": "0.4.4",
+      "max_tokens": 4096
     },
     "extraction": {
       "model": "gpt-6-luna (reused v1 graphs)"
@@ -47,8 +49,8 @@
         "token_f1": 0.4293,
         "semantic_similarity": 0.5947,
         "llm_judge": 0.4764,
-        "ragas_faithfulness": 0.1,
-        "ragas_context_recall": 0.5291
+        "ragas_faithfulness": 0.6303,
+        "ragas_context_recall": 0.5156
       },
       "fingerprint": {
         "dataset": "metaqa",
@@ -87,12 +89,12 @@
       "empty_contexts": 0,
       "files": {
         "eval_report.txt": {
-          "sha256": "acd24480e225fa4e62833c2850a95092ae80da3dbacb9abab10afc9b735d2c96",
-          "bytes": 61206
+          "sha256": "376fae1ccbf3897b4eb6fb4a54d0894a26258ad084cb5086db4fe509fc997df4",
+          "bytes": 61821
         },
         "eval_results.json": {
-          "sha256": "f664ca832f2e19fdf033556813c7b0efb067e4efae14c86dba033db70f6511d7",
-          "bytes": 112813
+          "sha256": "8e2b8d0e55d534b3d55a3624c4a8d7fdb296085106c50f3f82df8f976a2f103a",
+          "bytes": 112863
         },
         "per_question.jsonl": {
           "sha256": "540d94864bd9cb8dac22922f39e902b60394e36ab238102ada3fc5d4aa5d57fb",
@@ -122,8 +124,8 @@
         "token_f1": 0.5568,
         "semantic_similarity": 0.6944,
         "llm_judge": 0.6226,
-        "ragas_faithfulness": NaN,
-        "ragas_context_recall": 0.7192
+        "ragas_faithfulness": 0.7319,
+        "ragas_context_recall": 0.7441
       },
       "fingerprint": {
         "dataset": "metaqa",
@@ -166,12 +168,12 @@
           "bytes": 19206
         },
         "eval_report.txt": {
-          "sha256": "cc50b6cda8d7f9bed45a9fdd93175574619746bae7c46cb9ddf7e478f9f62148",
-          "bytes": 61531
+          "sha256": "f109ebb5c6e06452db40cd37eada9b85e3f950a7eb198c832544c2940c2d2c75",
+          "bytes": 62161
         },
         "eval_results.json": {
-          "sha256": "c77897007507e755433c9474ababae2a742e27efcf0195c34180cdb46c83ddc0",
-          "bytes": 113626
+          "sha256": "0292ed85b93a96057004b9ab430b3fc7f2a848fceb5550086a625195db2a8fa0",
+          "bytes": 113686
         },
         "per_question.jsonl": {
           "sha256": "cb2b64a4a2f7dd753022fccbe2adcb40244e793062b921d48374c5cc839e20f7",
@@ -201,8 +203,8 @@
         "token_f1": 0.6279,
         "semantic_similarity": 0.7491,
         "llm_judge": 0.7783,
-        "ragas_faithfulness": NaN,
-        "ragas_context_recall": 0.8421
+        "ragas_faithfulness": 0.8036,
+        "ragas_context_recall": 0.8833
       },
       "fingerprint": {
         "dataset": "metaqa",
@@ -242,12 +244,12 @@
       "empty_contexts": 0,
       "files": {
         "eval_report.txt": {
-          "sha256": "8a3f4c87ceb6d9694714d4c48708e9c87e17c84d44a8ccc8ea7c75c70584cc25",
-          "bytes": 63265
+          "sha256": "36cad4271fc49be44e9d31bdaa3bfae7270d23893a75098f5999f85a5c3715e3",
+          "bytes": 63904
         },
         "eval_results.json": {
-          "sha256": "bfe4cf6e9884d80cc69f1afd19b7db66a82221795e2d4c9f75b71a27838c2307",
-          "bytes": 117179
+          "sha256": "34a54ee48a1ed8a57e1bf2ac52ecee5846285a00151f0120774cb78a2b907096",
+          "bytes": 117234
         },
         "per_question.jsonl": {
           "sha256": "271e871c5dd510aedd9c09b509602b5caf87e19a30e903fd74d131ed4b6478ba",
@@ -277,8 +279,8 @@
         "token_f1": 0.5722,
         "semantic_similarity": 0.7136,
         "llm_judge": 0.6462,
-        "ragas_faithfulness": 1.0,
-        "ragas_context_recall": 0.7441
+        "ragas_faithfulness": 0.7667,
+        "ragas_context_recall": 0.753
       },
       "fingerprint": {
         "dataset": "metaqa",
@@ -318,12 +320,12 @@
       "empty_contexts": 0,
       "files": {
         "eval_report.txt": {
-          "sha256": "b0366079d1722383f76d41a84ea24414826e034a94afb764b1e94efe062787a7",
-          "bytes": 62313
+          "sha256": "233b69fbd63850141888614c19055e0f872b7a4bf90a37c2593737657ed303d6",
+          "bytes": 62937
         },
         "eval_results.json": {
-          "sha256": "e82234a01319643bc5b80709b6496464ea01367555165c3115758726cf6f69d4",
-          "bytes": 115255
+          "sha256": "52d20bcd7ba5455be1895411b30605652db47577764304b9f845843998712c38",
+          "bytes": 115307
         },
         "per_question.jsonl": {
           "sha256": "34f056e7b8add80a5742c46ec8bcb583af1efeb50058913b1cb9c55c1fdf28b5",

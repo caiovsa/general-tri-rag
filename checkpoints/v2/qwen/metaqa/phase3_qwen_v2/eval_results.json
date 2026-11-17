@@ -91,7 +91,8 @@
       "seeds_total": 3026,
       "anchors_total": 0,
       "neighbours_total": 0
-    }
+    },
+    "ragas_version": "0.4.4"
   },
   "summary": {
     "num_examples": 212,
@@ -104,8 +105,8 @@
     "token_f1": 0.626,
     "semantic_similarity": 0.7368,
     "llm_judge": 0.7406,
-    "ragas_faithfulness": 1.0,
-    "ragas_context_recall": 0.8448
+    "ragas_faithfulness": 0.7308,
+    "ragas_context_recall": 0.8812
   },
   "per_question": [
     {
@@ -120,7 +121,7 @@
       "Semantic": 0.9474,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.7778,
       "ragas_context_recall": 1.0
     },
     {
@@ -135,7 +136,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -150,7 +151,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -165,7 +166,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -180,7 +181,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -195,7 +196,7 @@
       "Semantic": 0.8776,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -210,7 +211,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -225,7 +226,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -240,7 +241,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -255,7 +256,7 @@
       "Semantic": 0.8949,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -270,7 +271,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -285,7 +286,7 @@
       "Semantic": 0.8205,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -300,7 +301,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -315,7 +316,7 @@
       "Semantic": 0.9421,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.5,
       "ragas_context_recall": 1.0
     },
     {
@@ -330,7 +331,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -345,7 +346,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -360,7 +361,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -375,7 +376,7 @@
       "Semantic": 0.784,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -390,7 +391,7 @@
       "Semantic": 0.8256,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -405,7 +406,7 @@
       "Semantic": 0.5657,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -420,7 +421,7 @@
       "Semantic": 0.6645,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -435,7 +436,7 @@
       "Semantic": 0.6944,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -450,7 +451,7 @@
       "Semantic": 0.7341,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -465,7 +466,7 @@
       "Semantic": 0.7291,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -480,7 +481,7 @@
       "Semantic": 0.5444,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -495,7 +496,7 @@
       "Semantic": 0.6813,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -510,7 +511,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -525,7 +526,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -540,7 +541,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -555,7 +556,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -570,7 +571,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -585,7 +586,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -600,7 +601,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -615,7 +616,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -630,7 +631,7 @@
       "Semantic": 0.5714,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -645,7 +646,7 @@
       "Semantic": 0.8872,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -660,7 +661,7 @@
       "Semantic": 0.4844,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -675,7 +676,7 @@
       "Semantic": 0.6936,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -690,7 +691,7 @@
       "Semantic": 0.6852,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -705,7 +706,7 @@
       "Semantic": 0.8982,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -720,7 +721,7 @@
       "Semantic": 0.5469,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -735,7 +736,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -750,7 +751,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -765,7 +766,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -780,7 +781,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -795,7 +796,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -810,7 +811,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -825,7 +826,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -840,7 +841,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -855,7 +856,7 @@
       "Semantic": 0.6358,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -870,7 +871,7 @@
       "Semantic": 0.9754,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -885,7 +886,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -900,7 +901,7 @@
       "Semantic": 0.9338,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -915,7 +916,7 @@
       "Semantic": 0.9732,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -930,7 +931,7 @@
       "Semantic": 0.2618,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 0.0
     },
     {
@@ -945,7 +946,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -960,7 +961,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -975,7 +976,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -990,7 +991,7 @@
       "Semantic": 0.4618,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1005,7 +1006,7 @@
       "Semantic": 0.4792,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.5,
       "ragas_context_recall": 1.0
     },
     {
@@ -1020,7 +1021,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1035,7 +1036,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1050,7 +1051,7 @@
       "Semantic": 0.4761,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1065,7 +1066,7 @@
       "Semantic": 0.3388,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1080,7 +1081,7 @@
       "Semantic": 0.6927,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1095,7 +1096,7 @@
       "Semantic": 0.528,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1110,7 +1111,7 @@
       "Semantic": 0.9975,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1125,7 +1126,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1140,7 +1141,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1155,7 +1156,7 @@
       "Semantic": 0.4152,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 0.0
     },
     {
@@ -1170,7 +1171,7 @@
       "Semantic": 0.1932,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 0.0
     },
     {
@@ -1185,8 +1186,8 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 1.0
+      "ragas_faithfulness": 0.0,
+      "ragas_context_recall": 0.0
     },
     {
       "question": "what is a film written by Jimmy Zeilinger",
@@ -1200,7 +1201,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1215,7 +1216,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1230,7 +1231,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1245,7 +1246,7 @@
       "Semantic": 0.7348,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1260,8 +1261,8 @@
       "Semantic": 0.511,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.1429
+      "ragas_faithfulness": 1.0,
+      "ragas_context_recall": 0.2857
     },
     {
       "question": "the actor George Harrison appeared in the same movie with who",
@@ -1275,7 +1276,7 @@
       "Semantic": 0.6983,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1290,7 +1291,7 @@
       "Semantic": 0.6365,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.5909,
       "ragas_context_recall": 1.0
     },
     {
@@ -1305,7 +1306,7 @@
       "Semantic": 0.8953,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1320,7 +1321,7 @@
       "Semantic": 0.709,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1335,7 +1336,7 @@
       "Semantic": 0.8641,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1350,7 +1351,7 @@
       "Semantic": 0.8347,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.75,
       "ragas_context_recall": 1.0
     },
     {
@@ -1365,7 +1366,7 @@
       "Semantic": 0.7037,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1380,7 +1381,7 @@
       "Semantic": 0.7132,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.75,
       "ragas_context_recall": 0.6667
     },
     {
@@ -1395,7 +1396,7 @@
       "Semantic": 0.6018,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.25,
       "ragas_context_recall": 1.0
     },
     {
@@ -1410,7 +1411,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1425,7 +1426,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1440,8 +1441,8 @@
       "Semantic": 0.4056,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 1.0
+      "ragas_faithfulness": 0.9375,
+      "ragas_context_recall": 0.5
     },
     {
       "question": "who are the writers of the movies acted by Ulrich Tukur",
@@ -1455,7 +1456,7 @@
       "Semantic": 0.8538,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.7143,
       "ragas_context_recall": 1.0
     },
     {
@@ -1470,7 +1471,7 @@
       "Semantic": 0.4412,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1485,7 +1486,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1500,7 +1501,7 @@
       "Semantic": 0.8906,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1515,7 +1516,7 @@
       "Semantic": 0.5499,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1530,7 +1531,7 @@
       "Semantic": 0.7668,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 0.6667
     },
     {
@@ -1545,7 +1546,7 @@
       "Semantic": 0.4882,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1560,7 +1561,7 @@
       "Semantic": 0.8519,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1590,7 +1591,7 @@
       "Semantic": 0.6438,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1605,7 +1606,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1620,7 +1621,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1635,7 +1636,7 @@
       "Semantic": 0.5651,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.75,
       "ragas_context_recall": 0.5
     },
     {
@@ -1650,8 +1651,8 @@
       "Semantic": 0.5291,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.0
+      "ragas_faithfulness": 0.0,
+      "ragas_context_recall": 1.0
     },
     {
       "question": "what are the genres of the movies directed by Howard Franklin",
@@ -1665,7 +1666,7 @@
       "Semantic": 0.5825,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1680,7 +1681,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1695,7 +1696,7 @@
       "Semantic": 0.5591,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.3333,
       "ragas_context_recall": 1.0
     },
     {
@@ -1710,8 +1711,8 @@
       "Semantic": 0.2851,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.0
+      "ragas_faithfulness": 1.0,
+      "ragas_context_recall": 1.0
     },
     {
       "question": "which person wrote the movies directed by Rolf de Heer",
@@ -1725,8 +1726,8 @@
       "Semantic": 0.8475,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.5
+      "ragas_faithfulness": 1.0,
+      "ragas_context_recall": 1.0
     },
     {
       "question": "the films directed by José Ferrer were written by who",
@@ -1740,8 +1741,8 @@
       "Semantic": 0.4655,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 1.0
+      "ragas_faithfulness": 0.0,
+      "ragas_context_recall": 0.5
     },
     {
       "question": "what were the release dates of David Twohy directed movies",
@@ -1755,7 +1756,7 @@
       "Semantic": 0.6176,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.8571,
       "ragas_context_recall": 1.0
     },
     {
@@ -1770,7 +1771,7 @@
       "Semantic": 0.7029,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1785,7 +1786,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1800,7 +1801,7 @@
       "Semantic": 0.9439,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1815,7 +1816,7 @@
       "Semantic": 0.7907,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1830,7 +1831,7 @@
       "Semantic": 0.875,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1845,8 +1846,8 @@
       "Semantic": 0.7676,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.5
+      "ragas_faithfulness": 1.0,
+      "ragas_context_recall": 0.375
     },
     {
       "question": "the actor of The Olsen Gang on the Track also starred in which movies",
@@ -1860,7 +1861,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1875,7 +1876,7 @@
       "Semantic": 0.931,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1890,7 +1891,7 @@
       "Semantic": 0.8683,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1905,7 +1906,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1920,7 +1921,7 @@
       "Semantic": 0.821,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -1935,7 +1936,7 @@
       "Semantic": 0.0904,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "REFUSED",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 0.0
     },
     {
@@ -1950,7 +1951,7 @@
       "Semantic": 0.5717,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 0.3333
     },
     {
@@ -1965,7 +1966,7 @@
       "Semantic": 0.1694,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "REFUSED",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 0.5
     },
     {
@@ -1980,8 +1981,8 @@
       "Semantic": 0.8474,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.8571
+      "ragas_faithfulness": 1.0,
+      "ragas_context_recall": 1.0
     },
     {
       "question": "who are the actors in the films written by Simon Boyes",
@@ -1995,7 +1996,7 @@
       "Semantic": 0.6985,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2010,7 +2011,7 @@
       "Semantic": 0.8572,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2025,7 +2026,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2040,7 +2041,7 @@
       "Semantic": 0.8633,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.5,
       "ragas_context_recall": 1.0
     },
     {
@@ -2055,7 +2056,7 @@
       "Semantic": 0.5307,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2070,7 +2071,7 @@
       "Semantic": 0.7342,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2085,7 +2086,7 @@
       "Semantic": 0.7365,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2100,7 +2101,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2115,7 +2116,7 @@
       "Semantic": 0.7017,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2130,7 +2131,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2145,7 +2146,7 @@
       "Semantic": 0.6269,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2160,8 +2161,8 @@
       "Semantic": 0.3765,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.2
+      "ragas_faithfulness": 0.0,
+      "ragas_context_recall": 0.0
     },
     {
       "question": "the screenwriter Frank Gruber co-wrote films with who",
@@ -2175,7 +2176,7 @@
       "Semantic": 0.7162,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 0.5
     },
     {
@@ -2190,7 +2191,7 @@
       "Semantic": 0.9678,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2205,7 +2206,7 @@
       "Semantic": 0.5759,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.6667,
       "ragas_context_recall": 1.0
     },
     {
@@ -2220,7 +2221,7 @@
       "Semantic": 0.5133,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2235,7 +2236,7 @@
       "Semantic": 0.9139,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2250,7 +2251,7 @@
       "Semantic": 0.9719,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2265,8 +2266,8 @@
       "Semantic": 0.1944,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.0
+      "ragas_faithfulness": 0.0,
+      "ragas_context_recall": 1.0
     },
     {
       "question": "which person directed the films acted by the actors in Chronicle of an Escape",
@@ -2280,7 +2281,7 @@
       "Semantic": 0.2757,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2295,7 +2296,7 @@
       "Semantic": 0.3095,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 0.0
     },
     {
@@ -2310,7 +2311,7 @@
       "Semantic": 0.3036,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2325,7 +2326,7 @@
       "Semantic": 0.4968,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2340,7 +2341,7 @@
       "Semantic": 0.6016,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 0.5
     },
     {
@@ -2355,8 +2356,8 @@
       "Semantic": 0.6531,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.0
+      "ragas_faithfulness": 1.0,
+      "ragas_context_recall": 1.0
     },
     {
       "question": "what are the languages spoken in the movies whose actors also appear in Tarzan's Greatest Adventure",
@@ -2370,7 +2371,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2385,8 +2386,8 @@
       "Semantic": 0.7656,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.0
+      "ragas_faithfulness": 0.0,
+      "ragas_context_recall": 1.0
     },
     {
       "question": "the films that share actors with the film Four Friends are written by who",
@@ -2400,7 +2401,7 @@
       "Semantic": 0.5846,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2415,7 +2416,7 @@
       "Semantic": 0.2476,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 0.0
     },
     {
@@ -2430,7 +2431,7 @@
       "Semantic": 0.9646,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2445,8 +2446,8 @@
       "Semantic": 0.1123,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "REFUSED",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.5714
+      "ragas_faithfulness": 0.0,
+      "ragas_context_recall": 0.0
     },
     {
       "question": "which person wrote the movies starred by the actors in Trader Horn",
@@ -2460,7 +2461,7 @@
       "Semantic": 0.4126,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 0.5
     },
     {
@@ -2475,7 +2476,7 @@
       "Semantic": 0.6706,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2490,7 +2491,7 @@
       "Semantic": 0.9823,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2505,7 +2506,7 @@
       "Semantic": 0.9383,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 0.8
     },
     {
@@ -2520,7 +2521,7 @@
       "Semantic": 0.4336,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 0.0
     },
     {
@@ -2535,7 +2536,7 @@
       "Semantic": 0.9547,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 0.8571
     },
     {
@@ -2550,8 +2551,8 @@
       "Semantic": 0.3788,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.0
+      "ragas_faithfulness": 1.0,
+      "ragas_context_recall": 1.0
     },
     {
       "question": "the movies directed by the director of Smashing Time starred who",
@@ -2565,7 +2566,7 @@
       "Semantic": 0.8997,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.5,
       "ragas_context_recall": 1.0
     },
     {
@@ -2580,7 +2581,7 @@
       "Semantic": 0.4161,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2595,7 +2596,7 @@
       "Semantic": 0.5251,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2610,7 +2611,7 @@
       "Semantic": 0.7504,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 0.5714
     },
     {
@@ -2625,7 +2626,7 @@
       "Semantic": 0.6444,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.75,
       "ragas_context_recall": 1.0
     },
     {
@@ -2640,8 +2641,8 @@
       "Semantic": 0.7657,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.0
+      "ragas_faithfulness": 0.0,
+      "ragas_context_recall": 1.0
     },
     {
       "question": "what are the genres of the movies whose directors also directed Iron Man",
@@ -2655,7 +2656,7 @@
       "Semantic": 0.3285,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 0.0
     },
     {
@@ -2670,7 +2671,7 @@
       "Semantic": 0.6035,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.5,
       "ragas_context_recall": 1.0
     },
     {
@@ -2685,8 +2686,8 @@
       "Semantic": 0.7963,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.5
+      "ragas_faithfulness": 1.0,
+      "ragas_context_recall": 1.0
     },
     {
       "question": "what genres are the movies directed by the Iron Man 3 director",
@@ -2700,7 +2701,7 @@
       "Semantic": 0.3285,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2715,8 +2716,8 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.0
+      "ragas_faithfulness": 0.0,
+      "ragas_context_recall": 1.0
     },
     {
       "question": "what languages are the films that share directors with Pope Joan in",
@@ -2730,7 +2731,7 @@
       "Semantic": 0.6785,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2745,8 +2746,8 @@
       "Semantic": 0.8704,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.6667
+      "ragas_faithfulness": 0.0,
+      "ragas_context_recall": 1.0
     },
     {
       "question": "what are the languages spoken in the films directed by the Utamaro and His Five Women director",
@@ -2760,7 +2761,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2775,8 +2776,8 @@
       "Semantic": 0.7742,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.3333
+      "ragas_faithfulness": 0.0,
+      "ragas_context_recall": 0.6667
     },
     {
       "question": "who are the screenwriters that the directors of their movies also directed It All Starts Today",
@@ -2790,7 +2791,7 @@
       "Semantic": 0.4026,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 0.6
     },
     {
@@ -2805,7 +2806,7 @@
       "Semantic": 0.3015,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 0.5
     },
     {
@@ -2820,8 +2821,8 @@
       "Semantic": 0.4385,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.0
+      "ragas_faithfulness": 1.0,
+      "ragas_context_recall": 0.25
     },
     {
       "question": "the films that share directors with the films Take a Giant Step are written by who",
@@ -2835,7 +2836,7 @@
       "Semantic": 0.4412,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2850,7 +2851,7 @@
       "Semantic": 0.42,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2865,7 +2866,7 @@
       "Semantic": 0.4668,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2880,7 +2881,7 @@
       "Semantic": 0.5253,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2895,7 +2896,7 @@
       "Semantic": 0.41,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2910,7 +2911,7 @@
       "Semantic": 0.9328,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2925,7 +2926,7 @@
       "Semantic": 0.4638,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2940,8 +2941,8 @@
       "Semantic": 0.8763,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 1.0
+      "ragas_faithfulness": 0.0,
+      "ragas_context_recall": 0.75
     },
     {
       "question": "who are the actors in the films written by the screenwriter of Jab We Met",
@@ -2955,7 +2956,7 @@
       "Semantic": 0.6052,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.7222,
       "ragas_context_recall": 1.0
     },
     {
@@ -2970,7 +2971,7 @@
       "Semantic": 0.4642,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -2985,7 +2986,7 @@
       "Semantic": 0.3832,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 0.0
     },
     {
@@ -3000,8 +3001,8 @@
       "Semantic": 0.4305,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 1.0
+      "ragas_faithfulness": 0.0,
+      "ragas_context_recall": 0.0
     },
     {
       "question": "who acted in the movies written by the writer of My Forbidden Past",
@@ -3015,8 +3016,8 @@
       "Semantic": 0.928,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.0
+      "ragas_faithfulness": 0.0,
+      "ragas_context_recall": 1.0
     },
     {
       "question": "who are the directors of films whose writers also wrote Nim's Island",
@@ -3030,7 +3031,7 @@
       "Semantic": 0.2371,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -3045,7 +3046,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 0.0
     },
     {
@@ -3060,7 +3061,7 @@
       "Semantic": 0.2262,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 0.0
     },
     {
@@ -3075,7 +3076,7 @@
       "Semantic": 0.6082,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -3090,7 +3091,7 @@
       "Semantic": 0.3723,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -3105,7 +3106,7 @@
       "Semantic": 0.6446,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 0.6667
     },
     {
@@ -3120,7 +3121,7 @@
       "Semantic": 0.7071,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -3135,8 +3136,8 @@
       "Semantic": 0.7565,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.6667
+      "ragas_faithfulness": 0.25,
+      "ragas_context_recall": 0.3333
     },
     {
       "question": "what types are the movies written by the screenwriter of The English Patient",
@@ -3150,7 +3151,7 @@
       "Semantic": 0.6346,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.8333,
       "ragas_context_recall": 1.0
     },
     {
@@ -3165,7 +3166,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -3180,8 +3181,8 @@
       "Semantic": 0.4467,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
-      "ragas_context_recall": 0.0
+      "ragas_faithfulness": 0.0,
+      "ragas_context_recall": 1.0
     },
     {
       "question": "what are the primary languages in the movies written by the writer of The Croods",
@@ -3195,7 +3196,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -3210,7 +3211,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -3225,7 +3226,7 @@
       "Semantic": 0.6639,
       "LLM_Judge": "INCORRECT",
       "judge_raw": "INCORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -3240,7 +3241,7 @@
       "Semantic": 0.7177,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.5,
       "ragas_context_recall": 1.0
     },
     {
@@ -3255,7 +3256,7 @@
       "Semantic": 0.6078,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 0.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -3270,7 +3271,7 @@
       "Semantic": 0.4915,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     },
     {
@@ -3285,7 +3286,7 @@
       "Semantic": 1.0,
       "LLM_Judge": "CORRECT",
       "judge_raw": "CORRECT",
-      "ragas_faithfulness": NaN,
+      "ragas_faithfulness": 1.0,
       "ragas_context_recall": 1.0
     }
   ]

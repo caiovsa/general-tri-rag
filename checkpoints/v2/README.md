@@ -13,27 +13,30 @@
 Both runs use:
 
 - Judge: `gpt-6.1-sol`, reasoning `low`
-- RAGAS: `gpt-6-luna`, reasoning `none`, temperature `0`
+- RAGAS: `gpt-6-luna`, reasoning `none`, temperature `0`, **RAGAS 0.4.4**
 - Extraction: `gpt-6-luna`; Phase 2/3b graphs are the v1 graphs (not re-extracted)
 - Prompt/chunking/top_k: shared prompt, 256/32, top_k 20
 
 ## Results
 
-| Phase | Luna all found | Luna judge | Qwen all found | Qwen judge |
-|---|---:|---:|---:|---:|
-| P1 | .4717 | .4764 | .4670 | .4717 |
-| P2 | .6179 | .6226 | .6038 | .6085 |
-| P3a | .7736 | .7783 | .7264 | .7406 |
-| P3b | .6415 | .6462 | .6462 | .6604 |
+| Phase | Luna all found | Luna judge | Luna RAGAS faith/ctx | Qwen all found | Qwen judge | Qwen RAGAS faith/ctx |
+|---|---:|---:|---:|---:|---:|---:|
+| P1 | .4717 | .4764 | .6303 / .5156 | .4670 | .4717 | .5879 / .5142 |
+| P2 | .6179 | .6226 | .7319 / .7441 | .6038 | .6085 | .6877 / .7374 |
+| P3a | .7736 | .7783 | .8036 / .8833 | .7264 | .7406 | .7308 / .8812 |
+| P3b | .6415 | .6462 | .7667 / .7530 | .6462 | .6604 | .6986 / .7723 |
+
+RAGAS coverage: 206–212/212 valid per phase; the means ignore the few null samples.
 
 Detailed tables are in [luna/README.md](luna/README.md) and [qwen/README.md](qwen/README.md).
 The Markdown reports are `docs/RESULTS_V2_LUNA.md` and `docs/RESULTS_V2_QWEN.md`.
 
-## RAGAS warning
+## RAGAS note
 
-RAGAS with `gpt-6-luna@none` produced `No statements` warnings and NaN faithfulness
-on different phases for each model. Those RAGAS numbers are **diagnostic only** and
-are not a clean comparison. Do not use them as a headline result.
+RAGAS 0.4.4 (`gpt-6-luna`, reasoning `none`, `max_tokens=4096`) produced valid scores
+on 206–212 of 212 questions per phase. A few null samples are excluded from the means.
+RAGAS 0.4.4 uses a newer metric implementation than v1's 0.1.21, so its scores are not
+directly comparable to v1 RAGAS. RAGAS remains a secondary diagnostic.
 
 ## Layout
 
