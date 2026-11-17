@@ -1,0 +1,19 @@
+{
+  "dataset": "metaqa",
+  "phase": 2,
+  "top_k": 20,
+  "chunk_size": 256,
+  "chunk_overlap": 32,
+  "generated": "2026-11-16T14:29:20+00:00",
+  "graph_database": "metaqa-graph",
+  "extraction_model": "gpt-6-luna",
+  "extraction_temperature": "default",
+  "docs": 994,
+  "chunks": 4522,
+  "relationships": 127797,
+  "errors": "unknown (ingest report lost to apoc schema refresh)",
+  "policy_skips": "unknown",
+  "retries": 0,
+  "reset": true,
+  "note": "graph complete; apoc.meta.subGraph schema refresh terminated after 16+ min"
+}

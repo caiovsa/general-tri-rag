@@ -21,6 +21,8 @@ lightrag_storage/
 checkpoint_lightrag.json
 checkpoint_lightrag.json.bak
 ingest_meta.json
+# Checkpoint manifests preserve ingest provenance; do not let the generic rule hide them.
+!checkpoints/**/ingest_meta.json
 digest.txt
 .DS_Store
 

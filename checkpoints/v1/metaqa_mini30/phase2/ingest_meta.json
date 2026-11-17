@@ -1,0 +1,19 @@
+{
+  "dataset": "metaqa_mini30",
+  "phase": 2,
+  "top_k": 20,
+  "chunk_size": 256,
+  "chunk_overlap": 32,
+  "generated": "2026-11-13T02:30:15+00:00",
+  "graph_database": "metaqa-mini30-graph",
+  "extraction_model": "gpt-6-luna",
+  "extraction_temperature": "default",
+  "docs": 100,
+  "chunks": 443,
+  "relationships": 12485,
+  "errors": 0,
+  "policy_skips": 0,
+  "retries": 0,
+  "reset": true,
+  "include_neighbours": true
+}

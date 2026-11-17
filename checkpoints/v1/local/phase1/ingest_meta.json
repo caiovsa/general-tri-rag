@@ -1,0 +1,12 @@
+{
+  "dataset": "local",
+  "phase": 1,
+  "top_k": 8,
+  "chunk_size": 256,
+  "chunk_overlap": 32,
+  "generated": "2026-11-09T22:54:13+00:00",
+  "collection": "rag_local",
+  "chunks": 1,
+  "embedding_model": "text-embedding-3-small",
+  "reset": true
+}

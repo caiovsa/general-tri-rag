@@ -1,0 +1,19 @@
+{
+  "dataset": "local",
+  "phase": 2,
+  "top_k": 8,
+  "chunk_size": 256,
+  "chunk_overlap": 32,
+  "generated": "2026-11-13T03:00:21+00:00",
+  "graph_database": "local-graph",
+  "extraction_model": "gpt-6-luna",
+  "extraction_temperature": "default",
+  "docs": 1,
+  "chunks": 1,
+  "relationships": 22,
+  "errors": 0,
+  "policy_skips": 0,
+  "retries": 0,
+  "reset": true,
+  "include_neighbours": true
+}

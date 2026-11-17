@@ -1,0 +1,12 @@
+{
+  "dataset": "metaqa_mini30",
+  "phase": 1,
+  "top_k": 20,
+  "chunk_size": 256,
+  "chunk_overlap": 32,
+  "generated": "2026-11-09T21:59:42+00:00",
+  "collection": "hotpot-qa_metaqa_mini30",
+  "chunks": 443,
+  "embedding_model": "text-embedding-3-small",
+  "reset": true
+}

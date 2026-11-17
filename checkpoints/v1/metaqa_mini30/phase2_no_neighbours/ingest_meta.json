@@ -1,0 +1,20 @@
+{
+  "dataset": "metaqa_mini30",
+  "phase": 2,
+  "top_k": 20,
+  "chunk_size": 256,
+  "chunk_overlap": 32,
+  "generated": "2026-11-09T22:09:38+00:00",
+  "graph_database": "metaqa-mini30-graph",
+  "extraction_model": "gpt-5-mini",
+  "extraction_temperature": 1.0,
+  "docs": 100,
+  "chunks": 443,
+  "relationships": 12555,
+  "errors": 0,
+  "policy_skips": 0,
+  "retries": 0,
+  "reset": true,
+  "empty_placeholders": 98,
+  "note": "backfilled from ingest report"
+}

@@ -1,0 +1,28 @@
+{
+  "dataset": "metaqa_mini30",
+  "phase": 3,
+  "top_k": 20,
+  "chunk_size": 256,
+  "chunk_overlap": 32,
+  "generated": "2026-11-13T22:52:26+00:00",
+  "variant": "3b",
+  "graph_database": "metaqa-mini30-ontology-b-graph",
+  "ontology_sha256": "461f37ed9d3cf260672b58018918941d65a99cbc0f6caa0e1d3c246ca79379a8",
+  "ontology_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/phase3_ontology_rag/ontology/metaqa.ttl",
+  "extraction_model": "gpt-6-luna",
+  "extraction_temperature": "default",
+  "docs": 100,
+  "chunks": 443,
+  "facts": {
+    "actors": 1617,
+    "directors": 126,
+    "writers": 226,
+    "genres": 155,
+    "languages": 119,
+    "year": 100
+  },
+  "parse_errors": 0,
+  "errors": 0,
+  "policy_skips": 0,
+  "reset": true
+}

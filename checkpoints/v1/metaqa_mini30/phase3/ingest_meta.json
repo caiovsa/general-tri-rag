@@ -1,0 +1,19 @@
+{
+  "dataset": "metaqa_mini30",
+  "phase": 3,
+  "top_k": 20,
+  "chunk_size": 256,
+  "chunk_overlap": 32,
+  "generated": "2026-11-09T21:59:33+00:00",
+  "graph_database": "metaqa-mini30-ontology-graph",
+  "ontology_sha256": "461f37ed9d3cf260672b58018918941d65a99cbc0f6caa0e1d3c246ca79379a8",
+  "ontology_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/phase3_ontology_rag/ontology/metaqa.ttl",
+  "movies": 16427,
+  "persons": 21731,
+  "chunks": 443,
+  "embedded_chunks": 443,
+  "relationships": 134025,
+  "orphan_movies": 0,
+  "reset": true,
+  "note": "backfilled from ingest report"
+}
