@@ -2,8 +2,8 @@
   "schema_version": 2,
   "checkpoint": "v2",
   "model_label": "luna",
-  "created_at": "2026-11-17T19:00:53+00:00",
-  "source_commit": "c13c9f71d63505ce2bc8103ac8e656ceee503759",
+  "created_at": "2026-11-17T20:04:59+00:00",
+  "source_commit": "5f8510170842662ba6b8cd10e6d6dc8df96ccc1a",
   "results_tag": "luna_v2",
   "protocol": {
     "dataset": "metaqa",
@@ -15,6 +15,7 @@
     "answer": {
       "model": "gpt-6-luna",
       "provider": "default",
+      "provider_pin": null,
       "reasoning_effort": "none",
       "temperature": 0
     },

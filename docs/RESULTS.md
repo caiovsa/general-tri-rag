@@ -5,6 +5,8 @@
 >
 > **Post-freeze diagnostics:** [slices + 3a audit](RESULTS_SLICES.md), [3b→3a graph gap](RESULTS_3B_GAP.md), [Phase 1b hybrid](RESULTS_PHASE1B.md), [easy cross-ablation](RESULTS_CROSS_ABLATION.md).
 
+> **v2 full runs:** [Luna report](RESULTS_V2_LUNA.md) and [Qwen report](RESULTS_V2_QWEN.md).
+
 > Authoritative per-question data lives in `results/<track>/phaseN/` (gitignored). This page
 > records the protocol each number belongs to. **Mini tracks are plumbing checks**: tiny corpora,
 > shared evidence, not for phase-vs-phase claims. Phase 3a is a **ceiling** (the graph is built

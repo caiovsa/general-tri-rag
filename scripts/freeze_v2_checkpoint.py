@@ -22,6 +22,7 @@ def main() -> None:
     ap.add_argument("--label", required=True, help="checkpoint label, e.g. luna")
     ap.add_argument("--answer-model", required=True)
     ap.add_argument("--answer-provider", default="default")
+    ap.add_argument("--provider-pin", default="")
     ap.add_argument("--answer-reasoning", default="none")
     ap.add_argument("--judge-model", default="gpt-6.1-sol")
     ap.add_argument("--judge-reasoning", default="low")
@@ -76,6 +77,7 @@ def main() -> None:
         "protocol": {"dataset": "metaqa", "chunk_size": 256, "chunk_overlap": 32, "top_k": 20},
         "models": {
             "answer": {"model": args.answer_model, "provider": args.answer_provider,
+                       "provider_pin": args.provider_pin or None,
                        "reasoning_effort": args.answer_reasoning, "temperature": 0},
             "judge": {"model": args.judge_model, "reasoning_effort": args.judge_reasoning},
             "ragas": {"model": args.ragas_model, "reasoning_effort": args.ragas_reasoning, "temperature": 0},
@@ -101,6 +103,7 @@ def main() -> None:
         f"**Results tag:** `{args.tag}`  ",
         f"**Source commit:** `{source_commit}`  ",
         f"**Answer model:** `{args.answer_model}` via `{args.answer_provider}`, reasoning `{args.answer_reasoning}`, temperature `0`  ",
+        f"**OpenRouter provider pin:** `{args.provider_pin or 'none'}`  ",
         f"**Judge:** `{args.judge_model}` reasoning `{args.judge_reasoning}`  ",
         f"**RAGAS:** `{args.ragas_model}` reasoning `{args.ragas_reasoning}`",
         "", "This is a v2 run: answer reasoning is explicitly disabled and temperature is 0.",
@@ -114,7 +117,7 @@ def main() -> None:
         "", "## Important notes",
         "",
         "- Phase 2/P3b graphs are the v1 graphs; v2 changes the answer model/protocol, not extraction.",
-        "- `gpt-6-luna@none` RAGAS produced `No statements` warnings and NaN faithfulness on P2/P3a; RAGAS is secondary and should not be treated as a clean score.",
+        "- RAGAS with `gpt-6-luna@none` produced `No statements` warnings and NaN faithfulness on different phases for each model; RAGAS is secondary and should not be treated as a clean/comparable score.",
         "- v1 generated each question once; no three-run noise check was performed. v1 variance is unmeasured.",
         "- The detailed contexts archive is local and not committed: it contains MetaQA document text.",
         "", "## Files",
