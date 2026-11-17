@@ -97,3 +97,18 @@ The `--no-neighbours` Phase 2 ablation is allowed only as an explicitly recorded
   the per-question flip rate on frozen contexts and report it. Near-zero variance is
   an acceptable result, not a failed experiment.
 - The frozen v1 tag/checksums are not to be edited; v2 results go in `checkpoints/v2/`.
+
+### 2026-11-17 — v2 tag moved; v2 remains provisional
+
+- The tag `metaqa-results-v2-luna-qwen` was force-moved after it had been pushed,
+  first when RAGAS was refreshed and again while correcting the RAGAS 0.4.4 update.
+  This violates the immutable-tag rule; do not move it again.
+- The tag is **provisional**. v2 is not complete: Phase 1b full-answer runs, full
+  closed-book, the noise/flip-rate check, judge sensitivity, and mini-track v2 are
+  still missing.
+- The next final tag must use a new name (e.g. `metaqa-results-v2.1`) and be cut only
+  after those checks are complete.
+- RAGAS 0.4.4 is a different metric implementation from v1's 0.1.21. RAGAS columns
+  must be labeled by version and never compared across v1/v2 as if identical.
+- RAGAS nulls are not evenly distributed; report n valid and use the common valid
+  intersection when comparing phases.

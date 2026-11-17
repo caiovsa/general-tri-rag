@@ -1,6 +1,9 @@
 # RAG Trilogy — v2 full MetaQA (Luna + Qwen)
 
-**Status:** frozen after the Qwen run; tag `metaqa-results-v2-luna-qwen`.  
+**Status:** provisional — v2 is not complete. The current tag
+`metaqa-results-v2-luna-qwen` was force-moved after being pushed; do not move it
+again. Final tag will be a new name (e.g. `metaqa-results-v2.1`) only after Phase 1b,
+closed-book, noise, and judge-sensitivity checks.  
 **Scope:** full MetaQA, four phases (P1/P2/P3a/P3b), two answer models.
 
 ## Answer models
@@ -19,7 +22,7 @@ Both runs use:
 
 ## Results
 
-| Phase | Luna all found | Luna judge | Luna RAGAS faith/ctx | Qwen all found | Qwen judge | Qwen RAGAS faith/ctx |
+| Phase | Luna all found | Luna judge | Luna RAGAS 0.4.4 faith/ctx | Qwen all found | Qwen judge | Qwen RAGAS 0.4.4 faith/ctx |
 |---|---:|---:|---:|---:|---:|---:|
 | P1 | .4717 | .4764 | .6303 / .5156 | .4670 | .4717 | .5879 / .5142 |
 | P2 | .6179 | .6226 | .7319 / .7441 | .6038 | .6085 | .6877 / .7374 |
@@ -59,10 +62,17 @@ large detailed-context archives are local because they contain MetaQA document t
 
 ## Not yet run
 
+- **Phase 1b full answers** (both generators); only retrieval-only screening exists
 - Full closed-book under v2
 - Three-run v2 noise check / flip-rate report
+- Judge sensitivity (old judge on a subset)
 - Mini-track v2 runs
 - Any Qwen extraction re-ingest (Qwen is an answer model here; graphs are v1)
+
+Qwen answer runs record provider, reasoning=none, temperature=0, provider pin and
+allow_fallbacks. **Answer `max_tokens` was not set or recorded**; only the RAGAS
+`max_tokens=4096` is recorded. The 0-reasoning-token check was a probe, not persisted
+per benchmark answer.
 
 ## v1 limitation
 
