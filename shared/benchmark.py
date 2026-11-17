@@ -333,10 +333,12 @@ def compute_semantic_similarity(data):
         return None, [None] * len(data), False
 
 
-def compute_llm_judge(data, dataset=None, judge_model: str | None = None):
+def compute_llm_judge(data, dataset=None, judge_model: str | None = None,
+                      judge_reasoning_effort: str | None = None):
     """LLM-as-Judge with a whole-word verdict parser (raw verdict is kept)."""
     metaqa = bool(getattr(dataset, "tag_movies", False))
     judge_model = judge_model or settings.JUDGE_MODEL
+    judge_reasoning_effort = judge_reasoning_effort or settings.JUDGE_REASONING_EFFORT
     if not settings.OPENAI_API_KEY:
         print("  OPENAI_API_KEY not set — skipping LLM-as-Judge.")
         return None, [None] * len(data), False, [None] * len(data)
@@ -370,9 +372,13 @@ def compute_llm_judge(data, dataset=None, judge_model: str | None = None):
                       if item.get("answers") else
                       JUDGE_PROMPT.format(question=item["question"], ground_truth=item["ground_truth"], answer=ans))
 
+            judge_kwargs = {}
+            if judge_reasoning_effort:
+                judge_kwargs["reasoning_effort"] = judge_reasoning_effort
             resp = client.chat.completions.create(
                 model=judge_model,
                 messages=[{"role": "user", "content": prompt}],
+                **judge_kwargs,
             )
             raw = resp.choices[0].message.content or ""
             parsed, raw = parse_judge_verdict(raw)
@@ -394,13 +400,15 @@ def compute_llm_judge(data, dataset=None, judge_model: str | None = None):
         return None, [None] * len(data), False, [None] * len(data)
 
 
-def compute_ragas(data, ragas_model: str | None = None):
+def compute_ragas(data, ragas_model: str | None = None,
+                  ragas_reasoning_effort: str | None = None):
     """RAGAS diagnostics: faithfulness and context recall only.
 
     Answer Correctness was removed from the headline: it assigns ~0.24 to
     answers identical to the ground truth (e.g. "World War II.").
     """
     ragas_model = ragas_model or settings.RAGAS_MODEL
+    ragas_reasoning_effort = ragas_reasoning_effort or settings.RAGAS_REASONING_EFFORT
     if not any(item.get("contexts") for item in data):
         print("  RAGAS skipped: no retrieved contexts (closed-book control).")
         return None, False
@@ -415,10 +423,14 @@ def compute_ragas(data, ragas_model: str | None = None):
         from ragas.llms import LangchainLLMWrapper
         from langchain_openai import ChatOpenAI
 
+        llm_kwargs = {}
+        if ragas_reasoning_effort:
+            llm_kwargs["reasoning_effort"] = ragas_reasoning_effort
         llm = ChatOpenAI(
             model=ragas_model,
             api_key=settings.OPENAI_API_KEY,
             temperature=0,
+            **llm_kwargs,
         )
         llm_wrapper = LangchainLLMWrapper(llm)
 
@@ -577,6 +589,8 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
     openrouter_provider_only = fingerprint.get("openrouter_provider_only")
     openrouter_allow_fallbacks = fingerprint.get("openrouter_allow_fallbacks")
     judge_model = fingerprint.get("judge_model", settings.JUDGE_MODEL)
+    judge_reasoning_effort = fingerprint.get(
+        "judge_reasoning_effort", settings.JUDGE_REASONING_EFFORT)
     temperature = fingerprint.get("temperature", settings.GENERATION_TEMPERATURE)
     if temperature is None:
         temperature = "default"
@@ -599,10 +613,13 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
 
     print("\n--- LLM-as-Judge ---")
     avg_judge, judge_scores, judge_ok, judge_raw = compute_llm_judge(
-        data, dataset=dataset, judge_model=judge_model)
+        data, dataset=dataset, judge_model=judge_model,
+        judge_reasoning_effort=judge_reasoning_effort)
 
     print("\n--- RAGAS (secondary diagnostics) ---")
-    ragas_results, ragas_ok = compute_ragas(data, ragas_model=settings.RAGAS_MODEL)
+    ragas_results, ragas_ok = compute_ragas(
+        data, ragas_model=settings.RAGAS_MODEL,
+        ragas_reasoning_effort=settings.RAGAS_REASONING_EFFORT)
 
 
     if not tagged:
@@ -693,7 +710,9 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
         "openrouter_allow_fallbacks": openrouter_allow_fallbacks,
         "generation_reasoning_effort": generation_reasoning_effort,
         "judge_model": judge_model,
+        "judge_reasoning_effort": judge_reasoning_effort,
         "ragas_model": settings.RAGAS_MODEL,
+        "ragas_reasoning_effort": settings.RAGAS_REASONING_EFFORT,
         "extraction_model": fingerprint.get("extraction_model", settings.EXTRACTION_MODEL),
         "temperature": temperature,
         "prompt_style": getattr(dataset, "prompt_style", "phase"),

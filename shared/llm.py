@@ -57,7 +57,10 @@ def generate_completion(
             # trace, while ``effort: none`` actually disables reasoning.
             reasoning_kwargs = {"extra_body": openrouter_extra_body(reasoning_effort)}
         else:
-            reasoning_kwargs = {"reasoning_effort": reasoning_effort}
+            # LiteLLM's OpenAI mapping rejects reasoning_effort before sending,
+            # even though the OpenAI-compatible endpoint accepts it. Pass it via
+            # extra_body so the provider receives the actual request field.
+            reasoning_kwargs = {"extra_body": {"reasoning_effort": reasoning_effort}}
     elif settings.GENERATION_MODEL.startswith("openrouter/"):
         # Provider pinning can apply even when reasoning is left at its default.
         extra_body = openrouter_extra_body(reasoning_effort)

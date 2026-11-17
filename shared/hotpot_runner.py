@@ -119,6 +119,7 @@ def run_fingerprint(dataset, phase: int, closed_book: bool = False) -> dict:
                                        if settings.GENERATION_MODEL.startswith("openrouter/") else None),
         "generation_reasoning_effort": settings.GENERATION_REASONING_EFFORT,
         "judge_model": settings.JUDGE_MODEL,
+        "judge_reasoning_effort": settings.JUDGE_REASONING_EFFORT,
         "extraction_model": settings.EXTRACTION_MODEL,
         "embedding_model": settings.EMBEDDING_MODEL,
         "temperature": settings.GENERATION_TEMPERATURE if settings.GENERATION_TEMPERATURE is not None else "default",
@@ -387,7 +388,7 @@ def run_phase(pipeline_func, phase: int, phase_name: str, closed_book: bool = Fa
     run_meta = {"dataset": dataset.name, "phase": phase, "top_k": dataset.top_k,
                 "eval_file": str(dataset.eval_file), "limit": args.limit,
                 "closed_book": closed_book}
-    if dataset.results_file.parent.name == "phase3b":
+    if dataset.results_file.parent.name.startswith("phase3b"):
         run_meta["variant"] = "3b"
     ingest_meta = read_ingest_meta(dataset)
     if ingest_meta is not None:
@@ -402,6 +403,7 @@ def run_phase(pipeline_func, phase: int, phase_name: str, closed_book: bool = Fa
                                            if settings.GENERATION_MODEL.startswith("openrouter/") else None),
             "generation_reasoning_effort": settings.GENERATION_REASONING_EFFORT,
             "judge_model": settings.JUDGE_MODEL,
+            "judge_reasoning_effort": settings.JUDGE_REASONING_EFFORT,
             "extraction_model": settings.EXTRACTION_MODEL,
             "temperature": settings.GENERATION_TEMPERATURE if settings.GENERATION_TEMPERATURE is not None else "default",
             "prompt_template_hash": metaqa_prompt_template_hash(),

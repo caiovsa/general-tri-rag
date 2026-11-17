@@ -41,6 +41,7 @@ class Settings:
     GENERATION_MODEL: str = os.getenv("GENERATION_MODEL", "gpt-6-luna")
     # Judge must differ from the generator; pinned in .env and every run_meta.
     JUDGE_MODEL: str = os.getenv("JUDGE_MODEL", "gpt-5.6-luna")
+    JUDGE_REASONING_EFFORT: str | None = os.getenv("JUDGE_REASONING_EFFORT") or None
     EXTRACTION_MODEL: str = os.getenv("EXTRACTION_MODEL", "gpt-6-luna")
     # gpt-5 / gpt-6 families accept only the provider default (1); when unset we
     # send no temperature parameter at all and record "default".
@@ -52,6 +53,7 @@ class Settings:
     # RAGAS injects temperature=1e-8, which gpt-5/gpt-6 models reject. Keep this
     # on a model that supports it (recorded in run_meta / eval metadata).
     RAGAS_MODEL: str = os.getenv("RAGAS_MODEL", "gpt-4o-mini")
+    RAGAS_REASONING_EFFORT: str | None = os.getenv("RAGAS_REASONING_EFFORT") or None
 
     # RAG parameters
     QDRANT_COLLECTION_NAME: str = os.getenv("QDRANT_COLLECTION_NAME", "rag_phase_1_baseline")
@@ -194,7 +196,8 @@ def phase3b_dataset(phase: int = 3) -> "Dataset":
     base = dataset_config(phase)
     if not base.tag_movies:
         raise SystemExit("Phase 3b is MetaQA-only for now (DATASET=metaqa|metaqa_mini|metaqa_mini30).")
-    directory = REPO_ROOT / "results" / base.name / "phase3b"
+    tag = f"_{settings.RESULTS_TAG}" if settings.RESULTS_TAG else ""
+    directory = REPO_ROOT / "results" / base.name / f"phase3b{tag}"
     return replace(
         base,
         results_file=directory / "results.json",
@@ -329,7 +332,8 @@ def closed_book_dataset(phase: int = 1) -> Dataset:
             "Closed-book mode is only implemented for the MetaQA tracks "
             "(DATASET=metaqa or DATASET=metaqa_mini)."
         )
-    directory = REPO_ROOT / "results" / dataset.name / "closed_book"
+    tag = f"_{settings.RESULTS_TAG}" if settings.RESULTS_TAG else ""
+    directory = REPO_ROOT / "results" / dataset.name / f"closed_book{tag}"
     return replace(
         dataset,
         results_file=directory / "results.json",
