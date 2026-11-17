@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Freeze a v2 model checkpoint from tagged results (no API)."""
 from __future__ import annotations
-import argparse, hashlib, json, shutil, subprocess
+import argparse, hashlib, importlib.metadata, json, shutil, subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -28,6 +28,7 @@ def main() -> None:
     ap.add_argument("--judge-reasoning", default="low")
     ap.add_argument("--ragas-model", default="gpt-6-luna")
     ap.add_argument("--ragas-reasoning", default="none")
+    ap.add_argument("--ragas-version", default="0.4.4")
     args = ap.parse_args()
 
     out = ROOT / "checkpoints/v2" / args.label
@@ -80,7 +81,8 @@ def main() -> None:
                        "provider_pin": args.provider_pin or None,
                        "reasoning_effort": args.answer_reasoning, "temperature": 0},
             "judge": {"model": args.judge_model, "reasoning_effort": args.judge_reasoning},
-            "ragas": {"model": args.ragas_model, "reasoning_effort": args.ragas_reasoning, "temperature": 0},
+            "ragas": {"model": args.ragas_model, "reasoning_effort": args.ragas_reasoning,
+                      "temperature": 0, "version": args.ragas_version, "max_tokens": 4096},
             "extraction": {"model": "gpt-6-luna (reused v1 graphs)"},
         },
         "runs": runs,
@@ -105,7 +107,7 @@ def main() -> None:
         f"**Answer model:** `{args.answer_model}` via `{args.answer_provider}`, reasoning `{args.answer_reasoning}`, temperature `0`  ",
         f"**OpenRouter provider pin:** `{args.provider_pin or 'none'}`  ",
         f"**Judge:** `{args.judge_model}` reasoning `{args.judge_reasoning}`  ",
-        f"**RAGAS:** `{args.ragas_model}` reasoning `{args.ragas_reasoning}`",
+        f"**RAGAS:** `{args.ragas_model}` reasoning `{args.ragas_reasoning}`, version `{args.ragas_version}`",
         "", "This is a v2 run: answer reasoning is explicitly disabled and temperature is 0.",
         "", "| Run | n | gold | all found | evidence | judge | RAGAS faith | RAGAS ctx |",
         "|---|---:|---:|---:|---:|---:|---:|---:|",
@@ -117,7 +119,7 @@ def main() -> None:
         "", "## Important notes",
         "",
         "- Phase 2/P3b graphs are the v1 graphs; v2 changes the answer model/protocol, not extraction.",
-        "- RAGAS with `gpt-6-luna@none` produced `No statements` warnings and NaN faithfulness on different phases for each model; RAGAS is secondary and should not be treated as a clean/comparable score.",
+        "- RAGAS 0.4.4 with `gpt-6-luna@none` produced valid scores on most questions, but a few per-phase samples were null; means ignore those nulls. RAGAS remains secondary.",
         "- v1 generated each question once; no three-run noise check was performed. v1 variance is unmeasured.",
         "- The detailed contexts archive is local and not committed: it contains MetaQA document text.",
         "", "## Files",

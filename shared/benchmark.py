@@ -3,6 +3,8 @@ Shared benchmark engine for HotpotQA evaluation.
 Used by phase1_vector_rag.benchmark and phase2_graph_rag.benchmark.
 """
 
+import importlib.metadata
+import importlib.util
 import json
 import re
 import string
@@ -400,12 +402,26 @@ def compute_llm_judge(data, dataset=None, judge_model: str | None = None,
         return None, [None] * len(data), False, [None] * len(data)
 
 
+class RagasReport:
+    """Minimal compatibility wrapper around the RAGAS 0.4 collections results."""
+    def __init__(self, frame):
+        self._frame = frame
+
+    def to_pandas(self):
+        return self._frame
+
+    def __getitem__(self, key):
+        values = self._frame[key].dropna()
+        return float(values.mean()) if len(values) else float("nan")
+
+
 def compute_ragas(data, ragas_model: str | None = None,
                   ragas_reasoning_effort: str | None = None):
     """RAGAS diagnostics: faithfulness and context recall only.
 
-    Answer Correctness was removed from the headline: it assigns ~0.24 to
-    answers identical to the ground truth (e.g. "World War II.").
+    RAGAS 0.4.4 uses the collections API and structured outputs. The old
+    ``evaluate()``/``LangchainLLMWrapper`` path is kept as a fallback for
+    environments still running RAGAS 0.1.x.
     """
     ragas_model = ragas_model or settings.RAGAS_MODEL
     ragas_reasoning_effort = ragas_reasoning_effort or settings.RAGAS_REASONING_EFFORT
@@ -417,44 +433,90 @@ def compute_ragas(data, ragas_model: str | None = None,
         return None, False
 
     try:
-        from datasets import Dataset
-        from ragas import evaluate
-        from ragas.metrics import faithfulness, context_recall
-        from ragas.llms import LangchainLLMWrapper
-        from langchain_openai import ChatOpenAI
+        import asyncio
+        import importlib.metadata
+        import numpy as np
+        import pandas as pd
+        from openai import AsyncOpenAI
+        from ragas.llms import llm_factory
+        from ragas.metrics.collections import ContextRecall, Faithfulness
 
-        llm_kwargs = {}
+        ragas_version = importlib.metadata.version("ragas")
+        print(f"  Running RAGAS {ragas_version} evaluation (faithfulness, context recall) ...")
+        client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY, timeout=120)
+        llm_kwargs = {"max_tokens": 4096}
         if ragas_reasoning_effort:
             llm_kwargs["reasoning_effort"] = ragas_reasoning_effort
-        llm = ChatOpenAI(
-            model=ragas_model,
-            api_key=settings.OPENAI_API_KEY,
-            temperature=0,
-            **llm_kwargs,
-        )
-        llm_wrapper = LangchainLLMWrapper(llm)
+        llm = llm_factory(ragas_model, provider="openai", client=client, **llm_kwargs)
+        faith = Faithfulness(llm=llm)
+        recall = ContextRecall(llm=llm)
+        semaphore = asyncio.Semaphore(8)
 
-        for metric in [faithfulness, context_recall]:
-            metric.llm = llm_wrapper
+        async def score_one(item):
+            async with semaphore:
+                try:
+                    f = await faith.ascore(
+                        user_input=item["question"],
+                        response=item["answer"],
+                        retrieved_contexts=item.get("contexts", []),
+                    )
+                    fv = f.value if hasattr(f, "value") else f
+                except Exception as error:
+                    print(f"    RAGAS faithfulness failed for {item.get('question', '')[:60]!r}: {error}")
+                    fv = None
+                try:
+                    r = await recall.ascore(
+                        user_input=item["question"],
+                        retrieved_contexts=item.get("contexts", []),
+                        reference=item["ground_truth"],
+                    )
+                    rv = r.value if hasattr(r, "value") else r
+                except Exception as error:
+                    print(f"    RAGAS context_recall failed for {item.get('question', '')[:60]!r}: {error}")
+                    rv = None
+                return fv, rv
 
-        ragas_data = {
-            "question": [item["question"] for item in data],
-            "answer": [item["answer"] for item in data],
-            "contexts": [item.get("contexts", []) for item in data],
-            "ground_truth": [item["ground_truth"] for item in data],
-        }
-        dataset = Dataset.from_dict(ragas_data)
+        async def score_all():
+            return await asyncio.gather(*(score_one(item) for item in data))
 
-        print("  Running RAGAS evaluation (faithfulness, context recall) ...")
-        ragas_results = evaluate(dataset, metrics=[faithfulness, context_recall])
-
-        print(f"  Faithfulness       : {ragas_results['faithfulness']:.4f}")
-        print(f"  Context Recall     : {ragas_results['context_recall']:.4f}")
-        return ragas_results, True
+        values = asyncio.run(score_all())
+        frame = pd.DataFrame({
+            "faithfulness": [v[0] for v in values],
+            "context_recall": [v[1] for v in values],
+        })
+        frame["faithfulness"] = pd.to_numeric(frame["faithfulness"], errors="coerce")
+        frame["context_recall"] = pd.to_numeric(frame["context_recall"], errors="coerce")
+        print(f"  Faithfulness       : {frame['faithfulness'].mean():.4f}")
+        print(f"  Context Recall     : {frame['context_recall'].mean():.4f}")
+        return RagasReport(frame), True
 
     except Exception as e:
-        print(f"  RAGAS evaluation failed: {e}")
-        return None, False
+        # Compatibility fallback for old RAGAS 0.1.x installations.
+        try:
+            from datasets import Dataset
+            from ragas import evaluate
+            from ragas.metrics import faithfulness, context_recall
+            from ragas.llms import LangchainLLMWrapper
+            from langchain_openai import ChatOpenAI
+
+            print(f"  RAGAS 0.4 path failed ({e}); trying legacy 0.1 fallback ...")
+            llm = ChatOpenAI(model=ragas_model, api_key=settings.OPENAI_API_KEY, temperature=0)
+            wrapper = LangchainLLMWrapper(llm)
+            for metric in (faithfulness, context_recall):
+                metric.llm = wrapper
+            dataset = Dataset.from_dict({
+                "question": [item["question"] for item in data],
+                "answer": [item["answer"] for item in data],
+                "contexts": [item.get("contexts", []) for item in data],
+                "ground_truth": [item["ground_truth"] for item in data],
+            })
+            result = evaluate(dataset, metrics=[faithfulness, context_recall])
+            print(f"  Faithfulness       : {result['faithfulness']:.4f}")
+            print(f"  Context Recall     : {result['context_recall']:.4f}")
+            return result, True
+        except Exception as legacy_error:
+            print(f"  RAGAS evaluation failed: {e}; legacy fallback failed: {legacy_error}")
+            return None, False
 
 
 def generate_report(phase_name, summary, per_question, ragas_ok, ragas_df, semantic_scores, judge_scores,
@@ -713,6 +775,8 @@ def run_benchmark(phase_name, data_file, output_file, report_file, runner_comman
         "judge_reasoning_effort": judge_reasoning_effort,
         "ragas_model": settings.RAGAS_MODEL,
         "ragas_reasoning_effort": settings.RAGAS_REASONING_EFFORT,
+        "ragas_version": next((importlib.metadata.version("ragas") for _ in [0]
+                               if importlib.util.find_spec("ragas")), None),
         "extraction_model": fingerprint.get("extraction_model", settings.EXTRACTION_MODEL),
         "temperature": temperature,
         "prompt_style": getattr(dataset, "prompt_style", "phase"),
