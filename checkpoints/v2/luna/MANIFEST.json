@@ -2,8 +2,8 @@
   "schema_version": 2,
   "checkpoint": "v2",
   "model_label": "luna",
-  "created_at": "2026-11-17T23:34:02+00:00",
-  "source_commit": "262f94932d66af0eead18de4928987d84be3150c",
+  "created_at": "2026-11-18T01:39:37+00:00",
+  "source_commit": "52b21ff61513e83676f2b078b03919041516471d",
   "results_tag": "luna_v2",
   "protocol": {
     "dataset": "metaqa",
@@ -35,6 +35,80 @@
     }
   },
   "runs": [
+    {
+      "run": "closed_book_luna_v2",
+      "n": 212,
+      "metrics": {
+        "num_examples": 212,
+        "gold_recall": 0.0,
+        "all_found": 0.0,
+        "evidence_recall": 0.0,
+        "exact_match": 0.0,
+        "relaxed_em": 0.0,
+        "extracted_em": 0.0,
+        "token_f1": 0.0004,
+        "semantic_similarity": 0.1601,
+        "llm_judge": 0.0
+      },
+      "fingerprint": {
+        "dataset": "metaqa",
+        "phase": 1,
+        "closed_book": true,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_v1.jsonl",
+        "eval_sha256": "824acf90381417721406146ff6263dc8ecb5bcde9f95d3dff70ed72300849cc6",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest.txt",
+          "sha256": "4e10fa73d3ae839aae6b0a0ac76c4fe6e8b4c97beb6dbe414c30bf7ca5fd1f29",
+          "files": 994
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "retrieval_variant": "none",
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "generation_provider": "default",
+        "openrouter_provider_only": null,
+        "openrouter_allow_fallbacks": null,
+        "generation_reasoning_effort": "none",
+        "judge_model": "gpt-6.1-sol",
+        "judge_reasoning_effort": "low",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": 0.0,
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "metaqa-graph"
+      },
+      "answered": 212,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "sha256": "93b6c68b7f376baeb3ae6a00e0afc87c267872af69d667bfee3691fc3d446462",
+          "bytes": 48308
+        },
+        "eval_results.json": {
+          "sha256": "d5c047d34e44891e40d8d9ef695cdd681d95edc94fffde30ad4902357fb30c7f",
+          "bytes": 84653
+        },
+        "per_question.jsonl": {
+          "sha256": "f927899cd87087ec7272be12482944f0bb87d2443904de1dd69f6a803a240105",
+          "bytes": 63602
+        },
+        "results.json": {
+          "sha256": "79320d60bdcf6196a775eb37256a658670b45c4f34621c2230360be4fa27b51c",
+          "bytes": 24135
+        },
+        "run_meta.json": {
+          "sha256": "ed6299e8550849f66af0d0e9f229efa417a8529139ef0fe2fda2dd378db4d94f",
+          "bytes": 2211
+        }
+      }
+    },
     {
       "run": "phase1_luna_v2",
       "n": 212,
@@ -107,6 +181,82 @@
         "run_meta.json": {
           "sha256": "a103f02aaaf7d088c60008d3c18751a515bf6f07d67608d7321bacac5928eed3",
           "bytes": 2151
+        }
+      }
+    },
+    {
+      "run": "phase1_p1b_luna_v2",
+      "n": 212,
+      "metrics": {
+        "num_examples": 212,
+        "gold_recall": 0.6697,
+        "all_found": 0.6226,
+        "evidence_recall": 0.7842,
+        "exact_match": 0.2406,
+        "relaxed_em": 0.4575,
+        "extracted_em": 0.2406,
+        "token_f1": 0.5072,
+        "semantic_similarity": 0.6584,
+        "llm_judge": 0.6274,
+        "ragas_faithfulness": 0.6762,
+        "ragas_context_recall": 0.6259
+      },
+      "fingerprint": {
+        "dataset": "metaqa",
+        "phase": 1,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_v1.jsonl",
+        "eval_sha256": "824acf90381417721406146ff6263dc8ecb5bcde9f95d3dff70ed72300849cc6",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest.txt",
+          "sha256": "4e10fa73d3ae839aae6b0a0ac76c4fe6e8b4c97beb6dbe414c30bf7ca5fd1f29",
+          "files": 994
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "retrieval_variant": "hybrid_rrf",
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "gpt-6-luna",
+        "generation_provider": "default",
+        "openrouter_provider_only": null,
+        "openrouter_allow_fallbacks": null,
+        "generation_reasoning_effort": "none",
+        "judge_model": "gpt-6.1-sol",
+        "judge_reasoning_effort": "low",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": 0.0,
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "metaqa-graph"
+      },
+      "answered": 212,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "sha256": "15ca1640dc587e9a37232cd1d81a49e3744234c15ff3b2e80598603d64bb9573",
+          "bytes": 62619
+        },
+        "eval_results.json": {
+          "sha256": "60adb9265c7ea203ba8a4f10d870e85052f2b594c80a422bcffc53bf3de83823",
+          "bytes": 114586
+        },
+        "per_question.jsonl": {
+          "sha256": "b3ef880b8f23cb8e871253bab071f302b754fdc13769513e18849454699c73c6",
+          "bytes": 66515
+        },
+        "results.json": {
+          "sha256": "a8354fe201350ba758f83d19b2c2dca3483880aa3cc43e3833d36eed152eafb9",
+          "bytes": 31854
+        },
+        "run_meta.json": {
+          "sha256": "3cfe8e25f0141ba67f52cff5b88be8b8b6612949a749040be54bc1dd9339526f",
+          "bytes": 2227
         }
       }
     },
@@ -344,8 +494,8 @@
   ],
   "archive": {
     "path": "checkpoints/v2/luna/archive/results_detailed_luna_v2.tar.zst",
-    "sha256": "f6ae6bf9c23dd966a1852fc32a88ad765a069e74a19443628cad940d12feccc1",
-    "bytes": 1185834,
+    "sha256": "3c92082743df94550d28844c774243d9dc53f21b5fdaef940cb6204154f6765d",
+    "bytes": 1315690,
     "tracked": false
   },
   "caveats": [

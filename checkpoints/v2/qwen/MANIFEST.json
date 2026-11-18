@@ -2,8 +2,8 @@
   "schema_version": 2,
   "checkpoint": "v2",
   "model_label": "qwen",
-  "created_at": "2026-11-17T23:34:09+00:00",
-  "source_commit": "262f94932d66af0eead18de4928987d84be3150c",
+  "created_at": "2026-11-18T01:39:39+00:00",
+  "source_commit": "52b21ff61513e83676f2b078b03919041516471d",
   "results_tag": "qwen_v2",
   "protocol": {
     "dataset": "metaqa",
@@ -35,6 +35,156 @@
     }
   },
   "runs": [
+    {
+      "run": "closed_book_qwen_v2",
+      "n": 212,
+      "metrics": {
+        "num_examples": 212,
+        "gold_recall": 0.0,
+        "all_found": 0.0,
+        "evidence_recall": 0.0,
+        "exact_match": 0.0,
+        "relaxed_em": 0.0,
+        "extracted_em": 0.0,
+        "token_f1": 0.0004,
+        "semantic_similarity": 0.1601,
+        "llm_judge": 0.0
+      },
+      "fingerprint": {
+        "dataset": "metaqa",
+        "phase": 1,
+        "closed_book": true,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_v1.jsonl",
+        "eval_sha256": "824acf90381417721406146ff6263dc8ecb5bcde9f95d3dff70ed72300849cc6",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest.txt",
+          "sha256": "4e10fa73d3ae839aae6b0a0ac76c4fe6e8b4c97beb6dbe414c30bf7ca5fd1f29",
+          "files": 994
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "retrieval_variant": "none",
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "openrouter/qwen/qwen3.5-9b",
+        "generation_provider": "openrouter",
+        "openrouter_provider_only": "primeintellect/bf16",
+        "openrouter_allow_fallbacks": false,
+        "generation_reasoning_effort": "none",
+        "judge_model": "gpt-6.1-sol",
+        "judge_reasoning_effort": "low",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": 0.0,
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "metaqa-graph"
+      },
+      "answered": 212,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "sha256": "0e92488ce265b0098f4fc5627a27ee883a338bfd6de882cd5e466ce58e99b6c2",
+          "bytes": 48308
+        },
+        "eval_results.json": {
+          "sha256": "0b9130b97a492e3466bbd1307db91197f6c2aba58fc49f5c62f387cdf29610de",
+          "bytes": 84761
+        },
+        "per_question.jsonl": {
+          "sha256": "f927899cd87087ec7272be12482944f0bb87d2443904de1dd69f6a803a240105",
+          "bytes": 63602
+        },
+        "results.json": {
+          "sha256": "79320d60bdcf6196a775eb37256a658670b45c4f34621c2230360be4fa27b51c",
+          "bytes": 24135
+        },
+        "run_meta.json": {
+          "sha256": "2953d83ab16a006ee5ecaba3749139ec98167d7d544484158de07bd1083da21d",
+          "bytes": 2285
+        }
+      }
+    },
+    {
+      "run": "phase1_p1b_qwen_v2",
+      "n": 212,
+      "metrics": {
+        "num_examples": 212,
+        "gold_recall": 0.6483,
+        "all_found": 0.5802,
+        "evidence_recall": 0.7842,
+        "exact_match": 0.2877,
+        "relaxed_em": 0.4717,
+        "extracted_em": 0.2877,
+        "token_f1": 0.5278,
+        "semantic_similarity": 0.6652,
+        "llm_judge": 0.5849,
+        "ragas_faithfulness": 0.6145,
+        "ragas_context_recall": 0.6414
+      },
+      "fingerprint": {
+        "dataset": "metaqa",
+        "phase": 1,
+        "closed_book": false,
+        "eval_file": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/metaqa_eval_v1.jsonl",
+        "eval_sha256": "824acf90381417721406146ff6263dc8ecb5bcde9f95d3dff70ed72300849cc6",
+        "corpus": {
+          "kind": "manifest",
+          "path": "/Users/caio/Caio_Things/Programacao/UFS/rag-trilogy/MetaQA/corpus_manifest.txt",
+          "sha256": "4e10fa73d3ae839aae6b0a0ac76c4fe6e8b4c97beb6dbe414c30bf7ca5fd1f29",
+          "files": 994
+        },
+        "chunk_size": 256,
+        "chunk_overlap": 32,
+        "top_k": 20,
+        "tag_movies": true,
+        "retrieval_variant": "hybrid_rrf",
+        "prompt_style": "shared",
+        "prompt_sha256": "5de2288e17855119b17760d9b5d33689e05c0e8c1f8329288513ec2d0a4b98fa",
+        "generation_model": "openrouter/qwen/qwen3.5-9b",
+        "generation_provider": "openrouter",
+        "openrouter_provider_only": "primeintellect/bf16",
+        "openrouter_allow_fallbacks": false,
+        "generation_reasoning_effort": "none",
+        "judge_model": "gpt-6.1-sol",
+        "judge_reasoning_effort": "low",
+        "extraction_model": "gpt-6-luna",
+        "embedding_model": "text-embedding-3-small",
+        "temperature": 0.0,
+        "extraction_temperature": "default",
+        "include_neighbours": null,
+        "graph_database": "metaqa-graph"
+      },
+      "answered": 212,
+      "errors": 0,
+      "empty_contexts": 0,
+      "files": {
+        "eval_report.txt": {
+          "sha256": "8b4cac605c7681d7088594a0e887ec44ccaf6bb9f1dbcb87cfab9b98237fa992",
+          "bytes": 61492
+        },
+        "eval_results.json": {
+          "sha256": "5e8a0003a6a3912df67361a11aa4c136604fe5c621c72cc63e38c7419b59ae46",
+          "bytes": 112376
+        },
+        "per_question.jsonl": {
+          "sha256": "e396711576af4a4a74e6420a48ab09d8fbf68e5608004dc349249b2c0d4a7d39",
+          "bytes": 66533
+        },
+        "results.json": {
+          "sha256": "b03ac98053dc0753b513a4f8eefaa15104d2700d053c60a318125c21c7722ca3",
+          "bytes": 30706
+        },
+        "run_meta.json": {
+          "sha256": "9d73e8b75a987d18bc96118f03607ea49f9cfcdad91b812c4d624259a22e9229",
+          "bytes": 2301
+        }
+      }
+    },
     {
       "run": "phase1_qwen_v2",
       "n": 212,
@@ -344,8 +494,8 @@
   ],
   "archive": {
     "path": "checkpoints/v2/qwen/archive/results_detailed_qwen_v2.tar.zst",
-    "sha256": "9c4ee2f4fb16fad897d9c2b52e973f25e176cb72b18100db3c324b38037d336a",
-    "bytes": 1184402,
+    "sha256": "284b669dff3043077b570544dc8444a40ad9ffe114d357bf1da92d29d5d27d99",
+    "bytes": 1311939,
     "tracked": false
   },
   "caveats": [

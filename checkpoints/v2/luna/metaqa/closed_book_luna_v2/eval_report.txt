@@ -1,0 +1,1305 @@
+================================================================================
+  Closed book (no retrieval) — Evaluation Report
+================================================================================
+
+SUMMARY
+----------------------------------------
+  Total questions     : 212
+  Deterministic metrics
+  Gold Recall (set)   : 0.0
+  All Found           : 0.0
+  Evidence Recall     : 0.0
+  Other metrics
+  Exact Match         : 0.0
+  Relaxed EM          : 0.0
+  Extracted EM        : 0.0
+  Token F1            : 0.0004
+  Semantic Similarity : 0.1601
+  LLM-as-Judge (secondary): 0.0
+
+BY GROUP (hop / evidence size)
+----------------------------------------
+  group             n  gold_recall  all_found  evid_recall   judge
+  hop 1            75        0.000      0.000        0.000   0.000
+  hop 2            67        0.000      0.000        0.000   0.000
+  hop 3            70        0.000      0.000        0.000   0.000
+  hop 2+3         137        0.000      0.000        0.000   0.000
+  evidence 1       66        0.000      0.000        0.000   0.000
+  evidence 2       64        0.000      0.000        0.000   0.000
+  evidence 3-5     63        0.000      0.000        0.000   0.000
+  evidence 6+      19        0.000      0.000        0.000   0.000
+
+PER-QUESTION BREAKDOWN
+----------------------------------------
+
+Q1: what movies did Cher act in
+  Ground truth   : Burlesque, The Witches of Eastwick, Moonstruck, Mermaids, Mask, Suspect, Faithful
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1139  Judge=INCORRECT
+
+Q2: what films did Shawn Ku act in
+  Ground truth   : Samsara
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1499  Judge=INCORRECT
+
+Q3: what films does Bonnie Gruesen appear in
+  Ground truth   : A Very Potter Musical, A Very Potter Sequel
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1597  Judge=INCORRECT
+
+Q4: what does Ted Wass appear in
+  Ground truth   : Sheena, Oh, God! You Devil
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1456  Judge=INCORRECT
+
+Q5: what films did Rebekah Johnson act in
+  Ground truth   : Latter Days
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1329  Judge=INCORRECT
+
+Q6: what movies did Alex Karras act in
+  Ground truth   : Against All Odds, Paper Lion, FM
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1144  Judge=INCORRECT
+
+Q7: what movies was Eugene Domingo an actor in
+  Ground truth   : The Woman in the Septic Tank
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1494  Judge=INCORRECT
+
+Q8: what movies was Thommy Berggren an actor in
+  Ground truth   : Giliap
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1408  Judge=INCORRECT
+
+Q9: what does Dida Diafat act in
+  Ground truth   : Mutants
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1694  Judge=INCORRECT
+
+Q10: what movies did Andrzej Bartkowiak direct
+  Ground truth   : Doom, Romeo Must Die, Cradle 2 the Grave, Exit Wounds
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1533  Judge=INCORRECT
+
+Q11: what is a film directed by Daniel Haller
+  Ground truth   : The Dunwich Horror
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1493  Judge=INCORRECT
+
+Q12: Duncan Jones directed which movies
+  Ground truth   : Source Code, Moon
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1929  Judge=INCORRECT
+
+Q13: what did Vincent Gallo direct
+  Ground truth   : Buffalo '66, The Brown Bunny
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1427  Judge=INCORRECT
+
+Q14: what films did Chuck Jones direct
+  Ground truth   : The Phantom Tollbooth, Broom-Stick Bunny
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1491  Judge=INCORRECT
+
+Q15: William H. Macy was the director of which films
+  Ground truth   : Rudderless
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1909  Judge=INCORRECT
+
+Q16: Kate Davis was the director on which movies
+  Ground truth   : Stonewall Uprising
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0820  Judge=INCORRECT
+
+Q17: which films did Abhinay Deo direct
+  Ground truth   : Delhi Belly
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1497  Judge=INCORRECT
+
+Q18: who stars in The Bride with White Hair
+  Ground truth   : Leslie Cheung, Brigitte Lin
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1144  Judge=INCORRECT
+
+Q19: who starred in Coma
+  Ground truth   : Michael Douglas, Rip Torn, Geneviève Bujold, Elizabeth Ashley
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1270  Judge=INCORRECT
+
+Q20: who acted in the movie Ax 'Em
+  Ground truth   : Michael Mfume
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1584  Judge=INCORRECT
+
+Q21: who acted in Black Dawn
+  Ground truth   : Steven Seagal
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1395  Judge=INCORRECT
+
+Q22: the movie Losing Isaiah starred who
+  Ground truth   : Halle Berry, Jessica Lange
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1410  Judge=INCORRECT
+
+Q23: who acted in The Blot
+  Ground truth   : Louis Calhern, Claire Windsor, Margaret McWade, Philip Hubbard
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1525  Judge=INCORRECT
+
+Q24: who acted in the movie In Her Shoes
+  Ground truth   : Cameron Diaz, Toni Collette
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1668  Judge=INCORRECT
+
+Q25: who starred in Pillow of Death
+  Ground truth   : Brenda Joyce
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2060  Judge=INCORRECT
+
+Q26: the movie Early Spring starred who
+  Ground truth   : Keiko Kishi
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1516  Judge=INCORRECT
+
+Q27: who directed the film RocknRolla
+  Ground truth   : Guy Ritchie
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1689  Judge=INCORRECT
+
+Q28: who directed Zone 39
+  Ground truth   : John Tatoulis
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1393  Judge=INCORRECT
+
+Q29: who is the director of A Slipping-Down Life
+  Ground truth   : Toni Kalem
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1276  Judge=INCORRECT
+
+Q30: who is the director that directed Youth of the Beast
+  Ground truth   : Seijun Suzuki
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1233  Judge=INCORRECT
+
+Q31: who is the director that directed The Honeymooners
+  Ground truth   : John Schultz
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1925  Judge=INCORRECT
+
+Q32: who directed My Voyage to Italy
+  Ground truth   : Martin Scorsese
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1703  Judge=INCORRECT
+
+Q33: who's the director of Just Buried
+  Ground truth   : Chaz Thorne
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1949  Judge=INCORRECT
+
+Q34: who is listed as director for Indiscreet
+  Ground truth   : Stanley Donen
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1904  Judge=INCORRECT
+
+Q35: what is the genre of Another Man's Poison
+  Ground truth   : Drama
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1808  Judge=INCORRECT
+
+Q36: what is the genre for the film The Princess Diaries
+  Ground truth   : Comedy
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1890  Judge=INCORRECT
+
+Q37: what kind of movie is Drones
+  Ground truth   : Comedy
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1890  Judge=INCORRECT
+
+Q38: what is the genre of the film Woman of the Year
+  Ground truth   : Drama, Comedy
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1935  Judge=INCORRECT
+
+Q39: what genre does Adventures of Don Juan fall under
+  Ground truth   : Adventure, Romance
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1733  Judge=INCORRECT
+
+Q40: what was the genre of the movie Children of the Night
+  Ground truth   : Horror
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1449  Judge=INCORRECT
+
+Q41: what genre is Eyes of Laura Mars in
+  Ground truth   : Thriller
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1616  Judge=INCORRECT
+
+Q42: what is the language spoken in the film Leprechaun
+  Ground truth   : English
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2497  Judge=INCORRECT
+
+Q43: what language is Man Bites Dog in
+  Ground truth   : French
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1729  Judge=INCORRECT
+
+Q44: what language is All Things Fair in
+  Ground truth   : Swedish
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1773  Judge=INCORRECT
+
+Q45: what language is Private Confessions in
+  Ground truth   : Swedish
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1773  Judge=INCORRECT
+
+Q46: what language is Get Out Your Handkerchiefs in
+  Ground truth   : French
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1729  Judge=INCORRECT
+
+Q47: what is the primary language in the film Naan Kadavul
+  Ground truth   : Tamil
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1363  Judge=INCORRECT
+
+Q48: what language is the movie Tentação in
+  Ground truth   : Portuguese
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1366  Judge=INCORRECT
+
+Q49: who's the writer of The Exorcist III
+  Ground truth   : William Peter Blatty
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1086  Judge=INCORRECT
+
+Q50: who was the writer of Conviction
+  Ground truth   : Pamela Gray
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1484  Judge=INCORRECT
+
+Q51: who wrote Flight of Fury
+  Ground truth   : Steven Seagal, Joe Halpin
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1371  Judge=INCORRECT
+
+Q52: who was Vera Drake written by
+  Ground truth   : Mike Leigh
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1919  Judge=INCORRECT
+
+Q53: who wrote the screenplay for The Tao of Steve
+  Ground truth   : Jenniphr Goodman, Duncan North, Greer Goodman
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1986  Judge=INCORRECT
+
+Q54: which person wrote Near Dark
+  Ground truth   : Eric Red, Kathryn Bigelow
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1453  Judge=INCORRECT
+
+Q55: the film The Kite Runner was written by who
+  Ground truth   : Khaled Hosseini
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1181  Judge=INCORRECT
+
+Q56: who is the author of Hadewijch
+  Ground truth   : Bruno Dumont
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1409  Judge=INCORRECT
+
+Q57: who is the writer of The Chasers
+  Ground truth   : Erik Løchen
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0938  Judge=INCORRECT
+
+Q58: what year was Games of Love and Chance released
+  Ground truth   : 2003
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2341  Judge=INCORRECT
+
+Q59: when was the movie The Accidental Husband released
+  Ground truth   : 2008
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2257  Judge=INCORRECT
+
+Q60: when was the movie California Solo released
+  Ground truth   : 2012
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2356  Judge=INCORRECT
+
+Q61: what was the release year of The Sheltering Sky
+  Ground truth   : 1990
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1923  Judge=INCORRECT
+
+Q62: what was the release year of the film Call Me Madam
+  Ground truth   : 1953
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1580  Judge=INCORRECT
+
+Q63: what was the release date of the movie Gallipoli
+  Ground truth   : 1981
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2052  Judge=INCORRECT
+
+Q64: what was the release date of Pandaemonium
+  Ground truth   : 2000
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2468  Judge=INCORRECT
+
+Q65: the movie The New Land, when was it released
+  Ground truth   : 1972
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1899  Judge=INCORRECT
+
+Q66: when was the film The Pirates of Penzance released
+  Ground truth   : 1983
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1828  Judge=INCORRECT
+
+Q67: what movies did Philip Gelatt write
+  Ground truth   : The Bleeding House
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1281  Judge=INCORRECT
+
+Q68: which film did Scott Prendergast write the story for
+  Ground truth   : Kabluey
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2096  Judge=INCORRECT
+
+Q69: which movie did Keith Snyder write
+  Ground truth   : Emmett's Mark
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1562  Judge=INCORRECT
+
+Q70: what movie did Val Guest write the story for
+  Ground truth   : The Quatermass Xperiment, The Day the Earth Caught Fire, When Dinosaurs Ruled the Earth, Another Man's Poison, Confessions of a Window Cleaner, Toomorrow
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1190  Judge=INCORRECT
+
+Q71: what films did Patricia Hearst write
+  Ground truth   : Patty Hearst
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0983  Judge=INCORRECT
+
+Q72: which movie did Jim Holdaway write
+  Ground truth   : Modesty Blaise
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1964  Judge=INCORRECT
+
+Q73: what is a film written by Jimmy Zeilinger
+  Ground truth   : Little Sister
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1524  Judge=INCORRECT
+
+Q74: which movie did Jukka Kärkkäinen write
+  Ground truth   : The Punk Syndrome
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1457  Judge=INCORRECT
+
+Q75: what films did William Klein write
+  Ground truth   : Mr. Freedom
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1991  Judge=INCORRECT
+
+Q76: the actor Franklyn Seales acted together with who
+  Ground truth   : Fred Ward, James Woods, Powers Boothe, Keith Carradine, Ted Danson, John Savage
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1252  Judge=INCORRECT
+
+Q77: who acted together with Graham Greene
+  Ground truth   : Fred Ward, Eric Schweig, Jodie Foster, Val Kilmer, James Garner, Sam Shepard, Mel Gibson
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1153  Judge=INCORRECT
+
+Q78: the actor George Harrison appeared in the same movie with who
+  Ground truth   : John Lennon, The Beatles, Paul McCartney
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1334  Judge=INCORRECT
+
+Q79: who acted together with Sinéad Cusack
+  Ground truth   : Peter Sellers, Jeremy Irons, Joseph Fiennes, Ruth Dunning, Jeremy Bulloch
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1251  Judge=INCORRECT
+
+Q80: the films acted by Victor Wong were directed by who
+  Ground truth   : Jon Turteltaub, Wayne Wang
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1311  Judge=INCORRECT
+
+Q81: the movies starred by Alexandra Daddario were directed by who
+  Ground truth   : John Luessenhop
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1653  Judge=INCORRECT
+
+Q82: who are the directors of the films starred by Jon Cryer
+  Ground truth   : Terry Winsor, Paul Aaron, Jerry Schatzberg, Richard Schenkman
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1350  Judge=INCORRECT
+
+Q83: who are the directors of the films starred by Rhys Wakefield
+  Ground truth   : Dennis Iliadis, Elissa Down, Alister Grierson
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1691  Judge=INCORRECT
+
+Q84: what types are the films starred by Mary McCormack
+  Ground truth   : Drama, Action, Comedy
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1803  Judge=INCORRECT
+
+Q85: what genres do the movies acted by Steven Mackintosh fall under
+  Ground truth   : Drama, Action, Crime
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1746  Judge=INCORRECT
+
+Q86: the movies starred by Hanna Schygulla were in which languages
+  Ground truth   : German
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1487  Judge=INCORRECT
+
+Q87: what are the languages spoken in the movies acted by Karin Viard
+  Ground truth   : French
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1729  Judge=INCORRECT
+
+Q88: what are the main languages in Nina Hoss acted films
+  Ground truth   : German
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1487  Judge=INCORRECT
+
+Q89: which person wrote the movies starred by William Haines
+  Ground truth   : Rida Johnson Young, E.J. Rath
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1338  Judge=INCORRECT
+
+Q90: who are the writers of the movies acted by Ulrich Tukur
+  Ground truth   : Akif Pirinçci, Martin Kluger, Florian Henckel von Donnersmarck, Martin Provost, Marc Abdelnour
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1251  Judge=INCORRECT
+
+Q91: the films acted by Ethel Waters were written by who
+  Ground truth   : Cid Ricketts Sumner, Lynn Root, Philip Dunne, Dudley Nichols
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1487  Judge=INCORRECT
+
+Q92: what were the release years of the movies acted by Jemaine Clement
+  Ground truth   : 2014
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2247  Judge=INCORRECT
+
+Q93: what were the release years the films starred by Alan Mowbray
+  Ground truth   : 1941, 1938
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0936  Judge=INCORRECT
+
+Q94: what were the release dates of Tina Majorino acted films
+  Ground truth   : 1994
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1895  Judge=INCORRECT
+
+Q95: when did the movies acted by Fabian release
+  Ground truth   : 1966, 1960, 1962
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1688  Judge=INCORRECT
+
+Q96: who acted in the movies directed by John Gulager
+  Ground truth   : Matt Bush, Danielle Panabaker, Katrina Bowden
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1475  Judge=INCORRECT
+
+Q97: who starred in the films directed by Luis Valdez
+  Ground truth   : Tyne Daly, Elizabeth Peña, Lou Diamond Phillips, Daniel Valdez, Rosanna DeSoto, Edward James Olmos, Esai Morales
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1260  Judge=INCORRECT
+
+Q98: the movies directed by Alejandro Jodorowsky starred who
+  Ground truth   : Jeremias Herskovits, Brontis Jodorowsky, Pamela Flores
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1409  Judge=INCORRECT
+
+Q99: who acted in the films directed by Udayan Prasad
+  Ground truth   : Maria Bello, Eddie Redmayne, William Hurt, Kristen Stewart
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1094  Judge=INCORRECT
+
+Q100: which directors co-directed movies with Andrew Traucki
+  Ground truth   : David Nerlich
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1554  Judge=INCORRECT
+
+Q101: who are movie co-directors of Joel Coen
+  Ground truth   : Ethan Coen
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1376  Judge=INCORRECT
+
+Q102: which directors co-directed movies with Corey Yuen
+  Ground truth   : Jeffrey Lau, Louis Leterrier
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1278  Judge=INCORRECT
+
+Q103: the films directed by Peter Werner were in which genres
+  Ground truth   : Crime
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1342  Judge=INCORRECT
+
+Q104: what are the genres of the movies directed by Howard Franklin
+  Ground truth   : Comedy
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1891  Judge=INCORRECT
+
+Q105: the films directed by Joaquim Leitão were in which languages
+  Ground truth   : Portuguese
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1366  Judge=INCORRECT
+
+Q106: what languages are the films directed by Vincent Ward in
+  Ground truth   : English
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2496  Judge=INCORRECT
+
+Q107: who is listed as screenwriter of Paul Auster directed films
+  Ground truth   : Wayne Wang
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1299  Judge=INCORRECT
+
+Q108: which person wrote the movies directed by Rolf de Heer
+  Ground truth   : David Gulpilil, Marc Rosenberg
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1282  Judge=INCORRECT
+
+Q109: the films directed by José Ferrer were written by who
+  Ground truth   : Ronald Alexander, Grace Metalious
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1369  Judge=INCORRECT
+
+Q110: what were the release dates of David Twohy directed movies
+  Ground truth   : 1996, 2002, 2000, 2004, 2009, 2013
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1730  Judge=INCORRECT
+
+Q111: when did the films directed by Robert F. Hill release
+  Ground truth   : 1933, 1921
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1205  Judge=INCORRECT
+
+Q112: what were the release years the films directed by Rémi Bezançon
+  Ground truth   : 2008, 2012
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2141  Judge=INCORRECT
+
+Q113: what were the release years the films directed by Vincent McEveety
+  Ground truth   : 1974, 1968, 1971
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1666  Judge=INCORRECT
+
+Q114: the actor of The House of the Devil also starred in which movies
+  Ground truth   : The Wife, Silent Night, Bloody Night, Scenes from the Class Struggle in Beverly Hills
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1170  Judge=INCORRECT
+
+Q115: which movies share the same actor of Double Happiness
+  Ground truth   : Sideways, Defendor
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2019  Judge=INCORRECT
+
+Q116: which movies share the same actor of The Love Guru
+  Ground truth   : Austin Powers in Goldmember, Wayne's World, So I Married an Axe Murderer, 54, Shrek 2, Wayne's World 2, Shrek the Halls, Shrek
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0870
+  Semantic=0.1435  Judge=INCORRECT
+
+Q117: the actor of The Olsen Gang on the Track also starred in which movies
+  Ground truth   : The Olsen Gang
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1438  Judge=INCORRECT
+
+Q118: the director of Toto the Hero is also the director of which films
+  Ground truth   : Mr. Nobody, The Eighth Day
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1658  Judge=INCORRECT
+
+Q119: which films share the same director of Kopps
+  Ground truth   : Zozo, Jalla! Jalla!
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1515  Judge=INCORRECT
+
+Q120: the director of The Scenesters is also the director of which films
+  Ground truth   : It's a Disaster
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2343  Judge=INCORRECT
+
+Q121: which films have the same director of F/X2
+  Ground truth   : Link, Psycho II
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2016  Judge=INCORRECT
+
+Q122: the screenwriter of A Sound of Thunder also wrote which movies
+  Ground truth   : The Wonderful Ice Cream Suit, The Illustrated Man, The Halloween Tree, Fahrenheit 451, Moby Dick, It Came from Outer Space, Something Wicked This Way Comes
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0904  Judge=INCORRECT
+
+Q123: which films have the same screenwriter of Lady in Cement
+  Ground truth   : Rough Night in Jericho, Tony Rome, Duel at Diablo
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1379  Judge=INCORRECT
+
+Q124: which movies share the screenwriter with Caged Heat
+  Ground truth   : Stop Making Sense, The Truth About Charlie
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1676  Judge=INCORRECT
+
+Q125: the movies written by Richard Eyre starred who
+  Ground truth   : Jim Broadbent, Antonio Banderas, Kate Winslet, Judi Dench, Laura Linney, Liam Neeson, Hugh Bonneville
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1142  Judge=INCORRECT
+
+Q126: who are the actors in the films written by Simon Boyes
+  Ground truth   : Max Minghella, Michael Gladis
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1498  Judge=INCORRECT
+
+Q127: who acted in the movies written by Charlie Stratton
+  Ground truth   : Jessica Lange, Will Tiao, Elizabeth Olsen, Tom Felton, James Van Der Beek, Oscar Isaac
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1364  Judge=INCORRECT
+
+Q128: who is listed as director of Enid Bagnold written films
+  Ground truth   : Ronald Neame
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1601  Judge=INCORRECT
+
+Q129: who are the directors of the films written by Walter DeLeon
+  Ground truth   : Leo McCarey, George Marshall
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1753  Judge=INCORRECT
+
+Q130: which person directed the films written by Michael Arlen
+  Ground truth   : Clarence Brown, Alexander Hall
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1879  Judge=INCORRECT
+
+Q131: the films written by Kunal Kohli were in which genres
+  Ground truth   : Drama, Comedy
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1935  Judge=INCORRECT
+
+Q132: the movies written by Apichatpong Weerasethakul were in which genres
+  Ground truth   : Drama, Romance
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1763  Judge=INCORRECT
+
+Q133: what are the main languages in Mamoru Hosoda written films
+  Ground truth   : Japanese
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1969  Judge=INCORRECT
+
+Q134: what languages are the movies written by Georges Berr in
+  Ground truth   : French
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1729  Judge=INCORRECT
+
+Q135: the movies written by Chris Sanders were in which languages
+  Ground truth   : English
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2497  Judge=INCORRECT
+
+Q136: who are film co-writers of Jean Vigo
+  Ground truth   : Jean Guinée, Albert Riéra
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1012  Judge=INCORRECT
+
+Q137: who wrote films together with Wendell Mayes
+  Ground truth   : Charles Lederer, Billy Wilder, John Melson, John D. Voelker, James Bassett
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1433  Judge=INCORRECT
+
+Q138: the screenwriter Frank Gruber co-wrote films with who
+  Ground truth   : Steve Fisher, Eric Ambler
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1512  Judge=INCORRECT
+
+Q139: the films written by Alfred Hayes were released in which years
+  Ground truth   : 1955, 1957, 1952
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1636  Judge=INCORRECT
+
+Q140: when were the movies written by Roland Kibbee released
+  Ground truth   : 1946, 1953
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1035  Judge=INCORRECT
+
+Q141: what were the release dates of Les Crutchfield written films
+  Ground truth   : 1959
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1685  Judge=INCORRECT
+
+Q142: what were the release years of the movies written by Douglas Day Stewart
+  Ground truth   : 1984, 1982, 1980
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1543  Judge=INCORRECT
+
+Q143: the films that share actors with the film Confetti are directed by who
+  Ground truth   : Debbie Isitt, Peter Greenaway, Gavin Claxton
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1621  Judge=INCORRECT
+
+Q144: who directed films that share actors with the film Wheel of Time
+  Ground truth   : Rick Ray
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1525  Judge=INCORRECT
+
+Q145: which person directed the films acted by the actors in Chronicle of an Escape
+  Ground truth   : Marcelo Piñeyro, Gustavo Cova, Walter Salles
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0834  Judge=INCORRECT
+
+Q146: who directed films that share actors with the film Hereafter
+  Ground truth   : Luc Dardenne, Eric Rochant, Alexandre Aja
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1361  Judge=INCORRECT
+
+Q147: who is listed as director of the movies starred by Alice Upside Down actors
+  Ground truth   : Jon M. Chu
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1597  Judge=INCORRECT
+
+Q148: what genres do the movies that share actors with One Man Up fall under
+  Ground truth   : Thriller
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1616  Judge=INCORRECT
+
+Q149: what types are the movies starred by actors in Sound of My Voice
+  Ground truth   : Drama, Thriller
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1794  Judge=INCORRECT
+
+Q150: what genres are the movies starred by Anatomy actors
+  Ground truth   : Action, Drama, Thriller
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1712  Judge=INCORRECT
+
+Q151: what are the languages spoken in the movies whose actors also appear in Tarzan's Greatest Adventure
+  Ground truth   : English
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2498  Judge=INCORRECT
+
+Q152: the films that share actors with the film Amsterdamned were in which languages
+  Ground truth   : Dutch
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1843  Judge=INCORRECT
+
+Q153: the films that share actors with the film Four Friends are written by who
+  Ground truth   : Brian De Palma, Tim Hunter, Charles S. Haas
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1546  Judge=INCORRECT
+
+Q154: who are the screenwriters that the actors in their movies also appear in the movie He Knows You're Alone
+  Ground truth   : Jeff Lieberman
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1718  Judge=INCORRECT
+
+Q155: who wrote films that share actors with the film Stonewall
+  Ground truth   : Dave Chappelle, Neal Brennan
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1433  Judge=INCORRECT
+
+Q156: who is listed as screenwriter of the films starred by The Miracle of Our Lady of Fatima actors
+  Ground truth   : Percy Marks, Frederica Sagor, Ernest Hemingway, John Bright, Harvey F. Thew, Eve Unsell, Mae West
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1124  Judge=INCORRECT
+
+Q157: which person wrote the movies starred by the actors in Trader Horn
+  Ground truth   : James Edward Grant, Harold Bell Wright
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1179  Judge=INCORRECT
+
+Q158: what were the release dates of movies starred by actors in Zookeeper
+  Ground truth   : 2006, 2005, 2011, 2010, 2013, 2012
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1769  Judge=INCORRECT
+
+Q159: what were the release years of the movies that share actors with the movie Madeleine
+  Ground truth   : 1932, 1957, 1947
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1225  Judge=INCORRECT
+
+Q160: what were the release years of the films that share actors with the film Easy A
+  Ground truth   : 2014, 2009, 2011, 2013, 2012
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1882  Judge=INCORRECT
+
+Q161: when did the movies starred by Tarzan's Greatest Adventure actors release
+  Ground truth   : 1969
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1978  Judge=INCORRECT
+
+Q162: the films that share actors with the film East Is East were released in which years
+  Ground truth   : 1992, 2003, 2001, 2014, 2009, 2011, 2010
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1671  Judge=INCORRECT
+
+Q163: when did the movies starred by Shirley Valentine actors release
+  Ground truth   : 2010, 1997
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1924  Judge=INCORRECT
+
+Q164: the movies directed by the director of Smashing Time starred who
+  Ground truth   : Lynn Redgrave, Peter Finch, Rita Tushingham
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1262  Judge=INCORRECT
+
+Q165: who are the actors in the movies directed by the director of Paddington
+  Ground truth   : Edward Hogg, Simon Farnaby
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1217  Judge=INCORRECT
+
+Q166: who are the actors in the movies directed by the director of Zombies of Mora Tau
+  Ground truth   : Michael Granger, Richard Denning
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1607  Judge=INCORRECT
+
+Q167: who starred in the movies whose director also directed Freezer
+  Ground truth   : Randy Quaid, Sam Claflin, Corey Sevier, Sean Bean, Morgan Freeman, Christian Slater, Minnie Driver
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1536  Judge=INCORRECT
+
+Q168: who starred films for the director of Son of the Bride
+  Ground truth   : Soledad Villamil, Ricardo Darín
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0790  Judge=INCORRECT
+
+Q169: what types are the movies directed by the director of Let's Go to Prison
+  Ground truth   : Comedy
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1890  Judge=INCORRECT
+
+Q170: what are the genres of the movies whose directors also directed Iron Man
+  Ground truth   : Comedy, Crime
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1890  Judge=INCORRECT
+
+Q171: the movies that share directors with the movie Ratcatcher were in which genres
+  Ground truth   : Drama
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1808  Judge=INCORRECT
+
+Q172: what are the genres of the films whose directors also directed Shadowboxer
+  Ground truth   : Drama, Thriller
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1794  Judge=INCORRECT
+
+Q173: what genres are the movies directed by the Iron Man 3 director
+  Ground truth   : Comedy, Crime
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1890  Judge=INCORRECT
+
+Q174: what languages are the movies that share directors with River Queen in
+  Ground truth   : English
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2497  Judge=INCORRECT
+
+Q175: what languages are the films that share directors with Pope Joan in
+  Ground truth   : German
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1487  Judge=INCORRECT
+
+Q176: what are the languages spoken in the films directed by the Fist of Legend director
+  Ground truth   : English, Japanese, Cantonese
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1704  Judge=INCORRECT
+
+Q177: what are the languages spoken in the films directed by the Utamaro and His Five Women director
+  Ground truth   : Japanese
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1968  Judge=INCORRECT
+
+Q178: who are the writers that the directors of their films also directed Eye of God
+  Ground truth   : Tim Blake Nelson, William Shakespeare, Brad Kaaya
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1430  Judge=INCORRECT
+
+Q179: who are the screenwriters that the directors of their movies also directed It All Starts Today
+  Ground truth   : Jean Cosmos, Jerzy Kromolowski, Bertrand Tavernier, Madame de La Fayette, James Lee Burke
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0914  Judge=INCORRECT
+
+Q180: who are the screenwriters that the directors of their movies also directed Green for Danger
+  Ground truth   : Bryan Forbes, Kingsley Amis
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1214  Judge=INCORRECT
+
+Q181: the films that share directors with the films Breaking and Entering are written by who
+  Ground truth   : Charles Frazier, Anthony Minghella, Patricia Highsmith, Michael Ondaatje
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.0909  Judge=INCORRECT
+
+Q182: the films that share directors with the films Take a Giant Step are written by who
+  Ground truth   : Neil Paterson
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1243  Judge=INCORRECT
+
+Q183: when did the movies release whose directors also directed Warrior of the Lost World
+  Ground truth   : 1989
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2054  Judge=INCORRECT
+
+Q184: when did the films directed by the Man with the Screaming Brain director release
+  Ground truth   : 2007
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2055  Judge=INCORRECT
+
+Q185: when did the films release whose directors also directed You, the Living
+  Ground truth   : 2014, 2000, 1975, 1970
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1595  Judge=INCORRECT
+
+Q186: what were the release dates of films directed by the director of Little Children
+  Ground truth   : 2001
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2312  Judge=INCORRECT
+
+Q187: the films that share directors with the film Two Weeks Notice were released in which years
+  Ground truth   : 2014, 2009, 2007
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1728  Judge=INCORRECT
+
+Q188: when did the movies directed by the The French Minister director release
+  Ground truth   : 1984, 1980, 1999, 1976, 1989, 2002, 2009, 2010
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1531  Judge=INCORRECT
+
+Q189: who starred in the movies whose writers also wrote A Very Potter Musical
+  Ground truth   : Joey Richter, Bonnie Gruesen, Lauren Lopez, Darren Criss
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1485  Judge=INCORRECT
+
+Q190: who are the actors in the films written by the screenwriter of Jab We Met
+  Ground truth   : Randeep Hooda, Alia Bhatt
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1317  Judge=INCORRECT
+
+Q191: who starred in the movies whose writers also wrote Fists in the Pocket
+  Ground truth   : Giovanna Mezzogiorno, Filippo Timi
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1024  Judge=INCORRECT
+
+Q192: the movies written by the screenwriter of The Pawnbroker starred who
+  Ground truth   : Madeleine Stowe
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1361  Judge=INCORRECT
+
+Q193: the movies written by the screenwriter of Captain Newman, M.D. starred who
+  Ground truth   : Jane Russell, Frank Sinatra, Groucho Marx
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1219  Judge=INCORRECT
+
+Q194: who acted in the movies written by the writer of My Forbidden Past
+  Ground truth   : Mary Astor, Bette Davis, George Brent
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1252  Judge=INCORRECT
+
+Q195: who are the directors of films whose writers also wrote Nim's Island
+  Ground truth   : Mark Levin
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1810  Judge=INCORRECT
+
+Q196: the movies written by the screenwriter of A Very Potter Musical were directed by who
+  Ground truth   : Matt Lang
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1996  Judge=INCORRECT
+
+Q197: the movies written by the screenwriter of Return to the Blue Lagoon were directed by who
+  Ground truth   : Leslie Stevens, Arthur Penn, Franklin J. Schaffner, Randal Kleiser
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1194  Judge=INCORRECT
+
+Q198: who are the directors of films whose writers also wrote How Stella Got Her Groove Back
+  Ground truth   : Forest Whitaker
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1142  Judge=INCORRECT
+
+Q199: who are the directors of movies whose writers also wrote Thank You for Smoking
+  Ground truth   : Jason Reitman
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1511  Judge=INCORRECT
+
+Q200: what types are the movies written by the screenwriter of Fuzz
+  Ground truth   : Drama, Horror, Crime
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1836  Judge=INCORRECT
+
+Q201: what types are the movies written by the writer of Exorcismus
+  Ground truth   : Horror
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1450  Judge=INCORRECT
+
+Q202: what are the genres of the films whose screenwriters also wrote Daddy Long Legs
+  Ground truth   : Drama, Comedy, Musical
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1676  Judge=INCORRECT
+
+Q203: what types are the movies written by the screenwriter of The English Patient
+  Ground truth   : Drama, Musical, Thriller
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1761  Judge=INCORRECT
+
+Q204: what languages are the movies that share screenwriters with The Princess and the Pirate in
+  Ground truth   : English
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2497  Judge=INCORRECT
+
+Q205: what languages are the movies that share screenwriters with The We and the I in
+  Ground truth   : Japanese, French
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1893  Judge=INCORRECT
+
+Q206: what are the primary languages in the movies written by the writer of The Croods
+  Ground truth   : English
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2497  Judge=INCORRECT
+
+Q207: what languages are the films that share writers with The Method in
+  Ground truth   : Spanish
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1689  Judge=INCORRECT
+
+Q208: what were the release years of the films that share writers with the film Choking Man
+  Ground truth   : 1996
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1783  Judge=INCORRECT
+
+Q209: what were the release years of the films that share writers with the film Red Salute
+  Ground truth   : 1935
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1554  Judge=INCORRECT
+
+Q210: what were the release dates of films written by the screenwriter of The Lathe of Heaven
+  Ground truth   : 2002
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.2208  Judge=INCORRECT
+
+Q211: when did the movies release whose writers also wrote Of Time and the City
+  Ground truth   : 2011, 2000, 1992, 1995, 1988
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1650  Judge=INCORRECT
+
+Q212: what were the release years of the films that share writers with the film Facing the Giants
+  Ground truth   : 2003, 2008, 2011
+  LLM answer     : I don't know
+  EM=0  RelaxedEM=0  ExtractedEM=0  F1=0.0000
+  Semantic=0.1979  Judge=INCORRECT

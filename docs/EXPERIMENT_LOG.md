@@ -112,3 +112,15 @@ The `--no-neighbours` Phase 2 ablation is allowed only as an explicitly recorded
   must be labeled by version and never compared across v1/v2 as if identical.
 - RAGAS nulls are not evenly distributed; report n valid and use the common valid
   intersection when comparing phases.
+
+### 2026-11-17 — final v2 scope update (per user instruction)
+
+- Phase 1b full answers and full closed-book were added to **both** v2 generators.
+- P1b vs P2 full-answer result: answer-level difference is not detectable in either
+  generator; P2 retains higher gold/evidence recall.
+- Truncation audit: P1/P1b always 20 contexts; P2 has 7/212 below 20; P3a has 113/212
+  below 20; P3b has 48/212 below 20. No explicit graph `truncated=True` flags.
+  Answer truncation cannot be proven retroactively because answer-call finish_reason
+  and max-token usage were not persisted.
+- The existing tag `metaqa-results-v2-luna-qwen` was force-updated once more, per the
+  user's instruction to keep one v2 tag. This is the final v2 tag move.
