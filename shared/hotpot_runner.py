@@ -109,6 +109,7 @@ def run_fingerprint(dataset, phase: int, closed_book: bool = False) -> dict:
         "chunk_overlap": dataset.chunk_overlap,
         "top_k": dataset.top_k,
         "tag_movies": dataset.tag_movies,
+        "retrieval_variant": settings.RETRIEVAL_VARIANT,
         "prompt_style": dataset.prompt_style,
         "prompt_sha256": metaqa_prompt_template_hash() if shared_prompt else None,
         "generation_model": settings.GENERATION_MODEL,
@@ -387,7 +388,8 @@ def run_phase(pipeline_func, phase: int, phase_name: str, closed_book: bool = Fa
     fingerprint = run_fingerprint(dataset, phase, closed_book)
     run_meta = {"dataset": dataset.name, "phase": phase, "top_k": dataset.top_k,
                 "eval_file": str(dataset.eval_file), "limit": args.limit,
-                "closed_book": closed_book}
+                "closed_book": closed_book,
+                "retrieval_variant": settings.RETRIEVAL_VARIANT}
     if dataset.results_file.parent.name.startswith("phase3b"):
         run_meta["variant"] = "3b"
     ingest_meta = read_ingest_meta(dataset)

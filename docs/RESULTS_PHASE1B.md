@@ -23,3 +23,18 @@ BM25 is much stronger than dense retrieval on gold-in-context coverage
 hybrids keep the evidence gain (.784) but give back some all-gold coverage (.741).
 This is a strong signal that Phase 1b is not just a formality: a lexical baseline
 deserves a full answer run before attributing the Phase 2 gain to the graph.
+
+## Full-answer P1b vs P2 (v2 protocol)
+
+P1b uses the same v2 answer protocol as the other phases.
+
+| Generator | P1b all_found | P2 all_found | P2−P1b | McNemar p |
+|---|---:|---:|---:|---:|
+| Luna | .6226 | .6179 | −.0047 [−.0519, +.0425] | 1.00 |
+| Qwen | .5802 | .6038 | +.0236 [−.0236, +.0660] | .42 |
+
+P2 has significantly higher gold/evidence recall in both generators:
+- Luna: gold +.0436, evidence +.0570
+- Qwen: gold +.0475, evidence +.0564
+
+**Interpretation:** once a lexical hybrid is introduced, the graph's answer-level advantage over vector retrieval disappears on this set. P2 still retrieves better evidence, but the generated-answer difference is not detectable. This is exactly why Phase 1b was the missing control.

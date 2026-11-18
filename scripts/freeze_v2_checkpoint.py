@@ -34,7 +34,7 @@ def main() -> None:
     out = ROOT / "checkpoints/v2" / args.label
     archive_dir = out / "archive"
     archive_dir.mkdir(parents=True, exist_ok=True)
-    source_dirs = sorted(p for p in (ROOT / "results/metaqa").glob(f"phase*_{args.tag}")
+    source_dirs = sorted(p for p in (ROOT / "results/metaqa").glob(f"*_{args.tag}")
                          if (p / "eval_results.json").exists())
     if not source_dirs:
         raise SystemExit("No results found for " + args.tag)

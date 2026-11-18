@@ -119,6 +119,8 @@ class Settings:
     # Optional suffix for results/<dataset>/phaseN<tag> (e.g. _no_neighbours),
     # so an ablation never overwrites the baseline results directory.
     RESULTS_TAG: str = os.getenv("RESULTS_TAG", "").strip().strip("_")
+    # "dense" for the original Phase 1; "hybrid_rrf" for Phase 1b; "none" for closed-book.
+    RETRIEVAL_VARIANT: str = os.getenv("RETRIEVAL_VARIANT", "dense").strip()
     # One chunk size for every MetaQA phase so the phases stay comparable
     METAQA_CHUNK_SIZE: int = int(os.getenv("METAQA_CHUNK_SIZE", "256"))
     METAQA_CHUNK_OVERLAP: int = int(os.getenv("METAQA_CHUNK_OVERLAP", "32"))

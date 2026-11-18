@@ -1,6 +1,6 @@
 # RAG Trilogy — v2 full MetaQA (Luna + Qwen)
 
-**Status:** provisional — v2 is not complete. The current tag
+**Status:** v2 scope complete (P1/P1b/P2/P3a/P3b + closed-book); the current tag
 `metaqa-results-v2-luna-qwen` was force-moved after being pushed; do not move it
 again. Final tag will be a new name (e.g. `metaqa-results-v2.1`) only after Phase 1b,
 closed-book, noise, and judge-sensitivity checks.  
@@ -25,9 +25,11 @@ Both runs use:
 | Phase | Luna all found | Luna judge | Luna RAGAS 0.4.4 faith/ctx | Qwen all found | Qwen judge | Qwen RAGAS 0.4.4 faith/ctx |
 |---|---:|---:|---:|---:|---:|---:|
 | P1 | .4717 | .4764 | .6303 / .5156 | .4670 | .4717 | .5879 / .5142 |
+| **P1b hybrid** | **.6226** | **.6274** | **.6762 / .6259** | **.5802** | **.5849** | **.6145 / .6414** |
 | P2 | .6179 | .6226 | .7319 / .7441 | .6038 | .6085 | .6877 / .7374 |
 | P3a | .7736 | .7783 | .8036 / .8833 | .7264 | .7406 | .7308 / .8812 |
 | P3b | .6415 | .6462 | .7667 / .7530 | .6462 | .6604 | .6986 / .7723 |
+| Closed book | .0000 | .0000 | n/a | .0000 | .0000 | n/a |
 
 RAGAS coverage: 206–212/212 valid per phase; the means ignore the few null samples.
 
@@ -62,17 +64,18 @@ large detailed-context archives are local because they contain MetaQA document t
 
 ## Not yet run
 
-- **Phase 1b full answers** (both generators); only retrieval-only screening exists
-- Full closed-book under v2
-- Three-run v2 noise check / flip-rate report
-- Judge sensitivity (old judge on a subset)
-- Mini-track v2 runs
+- Three-run v2 noise check / flip-rate report (deliberately deferred)
+- Judge sensitivity (old judge on a subset; deferred)
+- Mini-track v2 runs (deferred)
 - Any Qwen extraction re-ingest (Qwen is an answer model here; graphs are v1)
 
 Qwen answer runs record provider, reasoning=none, temperature=0, provider pin and
 allow_fallbacks. **Answer `max_tokens` was not set or recorded**; only the RAGAS
 `max_tokens=4096` is recorded. The 0-reasoning-token check was a probe, not persisted
 per benchmark answer.
+
+Truncation audit: `docs/RESULTS_TRUNCATION.md`. P1b vs P2 full-answer comparison:
+`docs/RESULTS_PHASE1B.md`.
 
 ## v1 limitation
 
